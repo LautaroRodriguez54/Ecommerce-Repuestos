@@ -3,7 +3,133 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  address   Address?
+  cart      Cart?
+  orders    Order[]
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  province   String
+  city       String
+  postalCode String
+  street     String
+  number     String
+  apartment  String?
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Brand {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  models    Model[]
+}
+
+model Model {
+  id        String    @id @default(cuid())
+  name      String
+  brandId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  brand     Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  products  Product[]
+
+  @@unique([brandId, name])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id             String      @id @default(cuid())
+  name           String
+  sku            String      @unique
+  description    String
+  price          Decimal     @db.Decimal(10, 2)
+  stock          Int
+  image          String?
+  compatibleYear Int
+  isActive       Boolean     @default(true)
+  categoryId     String
+  modelId        String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+  category       Category    @relation(fields: [categoryId], references: [id])
+  model          Model       @relation(fields: [modelId], references: [id])
+
+  @@index([categoryId])
+  @@index([modelId])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  cartId    String
+  productId String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@index([productId])
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  status    OrderStatus @default(PENDING)
+  total     Decimal     @db.Decimal(10, 2)
+  userId    String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+
+  @@index([userId])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  orderId   String
+  productId String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
+  @@index([productId])
 }
 
 enum Role {
@@ -18,162 +144,4 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
-}
-
-model User {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(CLIENT)
-
-  address Address?
-  cart    Cart?
-  orders  Order[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Address {
-  id String @id @default(cuid())
-
-  province   String
-  city       String
-  postalCode String
-  street     String
-  number     String
-  apartment  String?
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Brand {
-  id   String @id @default(cuid())
-  name String @unique
-
-  models Model[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Model {
-  id   String @id @default(cuid())
-  name String
-
-  brandId String
-  brand   Brand  @relation(fields: [brandId], references: [id], onDelete: Cascade)
-
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([brandId, name])
-}
-
-model Category {
-  id   String @id @default(cuid())
-  name String @unique
-
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Product {
-  id String @id @default(cuid())
-
-  name        String
-  sku         String  @unique
-  description String  @db.Text
-  price       Decimal @db.Decimal(10, 2)
-  stock       Int
-
-  image String?
-
-  compatibleYear String
-
-  isActive Boolean @default(true)
-
-  categoryId String
-  modelId    String
-
-  category Category @relation(fields: [categoryId], references: [id])
-  model    Model    @relation(fields: [modelId], references: [id])
-
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([sku])
-  @@index([categoryId])
-  @@index([modelId])
-}
-
-model Cart {
-  id String @id @default(cuid())
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  items CartItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CartItem {
-  id String @id @default(cuid())
-
-  quantity Int
-  price    Decimal @db.Decimal(10, 2)
-
-  cartId    String
-  productId String
-
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  @@unique([cartId, productId])
-  @@index([productId])
-}
-
-model Order {
-  id String @id @default(cuid())
-
-  status OrderStatus @default(PENDING)
-
-  total Decimal @db.Decimal(10, 2)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  items OrderItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-}
-
-model OrderItem {
-  id String @id @default(cuid())
-
-  quantity Int
-  price    Decimal @db.Decimal(10, 2)
-
-  orderId   String
-  productId String
-
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  @@unique([orderId, productId])
-  @@index([productId])
 }
