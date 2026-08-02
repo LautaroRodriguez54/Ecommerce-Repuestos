@@ -1,5 +1,9 @@
-//import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
+
+import type {
+  CreateProductInput,
+  UpdateProductInput,
+} from "@/validators/product.schema";
 
 const productInclude = {
   category: true,
@@ -82,9 +86,28 @@ export async function existsProduct(id: string) {
 /**
  * Crea un producto.
  */
-export async function createProduct(data: any) {
+export async function createProduct(
+  data: CreateProductInput
+) {
+  const { categoryId, modelId, ...productData } = data;
+
   return prisma.product.create({
-    data,
+    data: {
+      ...productData,
+
+      category: {
+        connect: {
+          id: categoryId,
+        },
+      },
+
+      model: {
+        connect: {
+          id: modelId,
+        },
+      },
+    },
+
     include: productInclude,
   });
 }
@@ -94,19 +117,45 @@ export async function createProduct(data: any) {
  */
 export async function updateProduct(
   id: string,
-  data: any
+  data: UpdateProductInput
 ) {
+  const { categoryId, modelId, ...productData } = data;
+
   return prisma.product.update({
     where: {
       id,
     },
-    data,
+
+    data: {
+      ...productData,
+
+      ...(categoryId
+        ? {
+            category: {
+              connect: {
+                id: categoryId,
+              },
+            },
+          }
+        : {}),
+
+      ...(modelId
+        ? {
+            model: {
+              connect: {
+                id: modelId,
+              },
+            },
+          }
+        : {}),
+    },
+
     include: productInclude,
   });
 }
 
 /**
- * Soft Delete.
+ * Realiza un Soft Delete.
  */
 export async function deleteProduct(id: string) {
   return prisma.product.update({

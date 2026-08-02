@@ -9,21 +9,11 @@ import {
   deleteProduct as repositoryDeleteProduct,
 } from "@/repositories/product/product.repository";
 
+import type { ProductInput } from "@/validators/product.schema";
+
 import { ERROR_MESSAGES } from "@/constants/messages";
 
-/**
- * Verifica que un producto exista.
- * Lanza un error si no existe.
- */
-async function requireProduct(id: string) {
-  const product = await findProductById(id);
 
-  if (!product) {
-    throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
-  }
-
-  return product;
-}
 
 /**
  * Obtiene todos los productos.
@@ -43,15 +33,16 @@ export async function getActiveProducts() {
 
 /**
  * Obtiene un producto por ID.
+ * Devuelve null si no existe.
  */
 export async function getProductById(id: string) {
-  return requireProduct(id);
+  return findProductById(id);
 }
 
 /**
  * Crea un nuevo producto.
  */
-export async function createProduct(data: any) {
+export async function createProduct(data: ProductInput) {
   const existingProduct = await findProductBySku(data.sku);
 
   if (existingProduct) {
@@ -66,9 +57,13 @@ export async function createProduct(data: any) {
  */
 export async function updateProduct(
   id: string,
-  data: any
+  data: Partial<ProductInput>
 ) {
-  const product = await requireProduct(id);
+  const product = await findProductById(id);
+
+  if (!product) {
+    return null;
+  }
 
   if (data.sku && data.sku !== product.sku) {
     const existingProduct = await findProductBySku(data.sku);
@@ -85,7 +80,11 @@ export async function updateProduct(
  * Realiza un Soft Delete del producto.
  */
 export async function deleteProduct(id: string) {
-  await requireProduct(id);
+  const product = await findProductById(id);
+
+  if (!product) {
+    return null;
+  }
 
   return repositoryDeleteProduct(id);
 }
