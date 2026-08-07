@@ -14,8 +14,12 @@ export const brandSchema = z.object({
 /**
  * Tipos inferidos.
  */
+export const createBrandSchema = brandSchema;
+
+export const updateBrandSchema = brandSchema.partial();
+
 export type BrandInput = z.infer<typeof brandSchema>;
 
-export type CreateBrandInput = BrandInput;
+export type CreateBrandInput = z.infer<typeof createBrandSchema>;
 
-export type UpdateBrandInput = Partial<CreateBrandInput>;
+export type UpdateBrandInput = z.infer<typeof updateBrandSchema>;

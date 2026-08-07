@@ -4,7 +4,10 @@ import {
   deleteBrand,
 } from "@/services/brand/brand.service";
 
-import { brandSchema } from "@/validators/brand.schema";
+import { 
+  updateBrandSchema, 
+  createBrandSchema 
+} from "@/validators/brand.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -50,7 +53,7 @@ export async function PUT(
 
     const body = await request.json();
 
-    const validation = brandSchema.safeParse(body);
+    const validation = updateBrandSchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

@@ -14,10 +14,12 @@ export const categorySchema = z.object({
 /**
  * Tipos inferidos.
  */
-export type CategoryFormData = z.infer<typeof categorySchema>;
+export const createCategorySchema = categorySchema;
+
+export const updateCategorySchema = categorySchema.partial();
 
 export type CategoryInput = z.infer<typeof categorySchema>;
 
-export type CreateCategoryInput = CategoryInput;
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 
-export type UpdateCategoryInput = Partial<CreateCategoryInput>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

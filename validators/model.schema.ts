@@ -16,13 +16,12 @@ export const modelSchema = z.object({
     .min(1, "La marca es obligatoria."),
 });
 
-/**
- * Tipos inferidos.
- */
 export type ModelInput = z.infer<typeof modelSchema>;
 
-export type CreateModelInput = ModelInput;
+export const createModelSchema = modelSchema;
 
 export const updateModelSchema = modelSchema.partial();
+
+export type CreateModelInput = z.infer<typeof createModelSchema>;
 
 export type UpdateModelInput = z.infer<typeof updateModelSchema>;

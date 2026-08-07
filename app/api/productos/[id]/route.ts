@@ -1,4 +1,8 @@
-import { productSchema } from "@/validators/product.schema";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "@/validators/product.schema";
+
 import { ERROR_MESSAGES } from "@/constants/messages";
 import {
   getProductById,
@@ -53,7 +57,7 @@ export async function PUT(
 
     const body = await request.json();
 
-    const validation = productSchema.safeParse(body);
+    const validation = updateProductSchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

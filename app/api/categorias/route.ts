@@ -3,7 +3,10 @@ import {
   createCategory,
 } from "@/services/category/category.service";
 
-import { categorySchema } from "@/validators/category.schema";
+import { 
+  createCategorySchema, 
+  updateCategorySchema 
+} from "@/validators/category.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -37,7 +40,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const validation = categorySchema.safeParse(body);
+    const validation = createCategorySchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

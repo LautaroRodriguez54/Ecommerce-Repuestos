@@ -3,7 +3,10 @@ import {
   createBrand,
 } from "@/services/brand/brand.service";
 
-import { brandSchema } from "@/validators/brand.schema";
+import { 
+  updateBrandSchema, 
+  createBrandSchema 
+} from "@/validators/brand.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -37,7 +40,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const validation = brandSchema.safeParse(body);
+    const validation = createBrandSchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

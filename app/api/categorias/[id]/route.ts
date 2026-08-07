@@ -4,8 +4,11 @@ import {
   deleteCategory,
 } from "@/services/category/category.service";
 
-import { categorySchema } from "@/validators/category.schema";
-
+import { 
+  createCategorySchema, 
+  updateCategorySchema 
+} from "@/validators/category.schema";
+  
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 import {
@@ -52,7 +55,7 @@ export async function PUT(
 
     const body = await request.json();
 
-    const validation = categorySchema.safeParse(body);
+    const validation = updateCategorySchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

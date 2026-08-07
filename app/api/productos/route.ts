@@ -1,4 +1,7 @@
-import { productSchema } from "@/validators/product.schema";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "@/validators/product.schema";
 
 import {
   createProduct,
@@ -32,7 +35,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const validation = productSchema.safeParse(body);
+    const validation = createProductSchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

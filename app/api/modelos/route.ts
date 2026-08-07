@@ -3,7 +3,10 @@ import {
   createModel,
 } from "@/services/model/model.service";
 
-import { modelSchema } from "@/validators/model.schema";
+import {
+  createModelSchema,
+  updateModelSchema,
+} from "@/validators/model.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -38,7 +41,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const validation = modelSchema.safeParse(body);
+    const validation = createModelSchema.safeParse(body);
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);

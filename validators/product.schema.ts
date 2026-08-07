@@ -57,10 +57,12 @@ export const productSchema = z.object({
     .min(1, "Debe seleccionar un modelo."),
 });
 
-export type ProductFormData = z.infer<typeof productSchema>;
+export const createProductSchema = productSchema;
+
+export const updateProductSchema = productSchema.partial();
 
 export type ProductInput = z.infer<typeof productSchema>;
 
-export type CreateProductInput = z.infer<typeof productSchema>;
+export type CreateProductInput = z.infer<typeof createProductSchema>;
 
-export type UpdateProductInput = Partial<CreateProductInput>;
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;

@@ -5,7 +5,7 @@ import {
 } from "@/services/model/model.service";
 
 import {
-  modelSchema,
+  createModelSchema,
   updateModelSchema,
 } from "@/validators/model.schema";
 
