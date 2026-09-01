@@ -37,14 +37,31 @@ export const userSchema = z.object({
 });
 
 /**
- * Datos requeridos para crear un usuario.
+ * Datos requeridos para crear un usuario desde administración.
+ *
+ * Permite definir role e isActive.
  */
 export const createUserSchema = userSchema;
 
 /**
- * Datos permitidos para actualizar un usuario.
+ * Datos permitidos para actualizar un usuario
+ * desde administración.
  */
 export const updateUserSchema = userSchema.partial();
+
+/**
+ * Datos permitidos para el registro público.
+ *
+ * El usuario solamente puede proporcionar sus
+ * datos personales y contraseña.
+ *
+ * role e isActive serán definidos por el sistema.
+ */
+export const registerUserSchema = userSchema.pick({
+  name: true,
+  email: true,
+  password: true,
+});
 
 /**
  * Tipos inferidos.
@@ -54,3 +71,5 @@ export type UserInput = z.infer<typeof userSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+
+export type RegisterUserInput = z.infer<typeof registerUserSchema>;
