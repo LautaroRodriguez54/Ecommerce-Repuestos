@@ -64,6 +64,25 @@ export const registerUserSchema = userSchema.pick({
 });
 
 /**
+ * Datos necesarios para iniciar sesión.
+ */
+export const loginUserSchema = z.object({
+  email: z
+    .string({
+      error: "El email es obligatorio.",
+    })
+    .trim()
+    .email("El email no es válido.")
+    .max(150, "El email no puede superar los 150 caracteres."),
+
+  password: z
+    .string({
+      error: "La contraseña es obligatoria.",
+    })
+    .min(1, "La contraseña es obligatoria."),
+});
+
+/**
  * Tipos inferidos.
  */
 export type UserInput = z.infer<typeof userSchema>;
@@ -73,3 +92,5 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
+
+export type LoginUserInput = z.infer<typeof loginUserSchema>;

@@ -19,4 +19,8 @@ export const ERROR_MESSAGES = {
   BRAND_ALREADY_EXISTS: "La marca ya existe.",
   BRAND_HAS_MODELS:
     "No se puede eliminar la marca porque tiene modelos asociados.",
-} as const;
+
+  INVALID_CREDENTIALS: "Email o contraseña incorrectos.",
+  USER_INACTIVE: "El usuario está inactivo.",
+
+  } as const;
