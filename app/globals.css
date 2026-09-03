@@ -1,13 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background-dark: #1f1f1f;
+  --color-text-secondary: #363333;
+  --color-background-light: #ffffff;
+  --color-primary: #de1125;
+  --color-secondary: #fe3e41;
+  --color-brand-yellow: #face00;
+  --color-navigation: #e0cd38;
+  --color-background: #f0f3f2;
+  --color-background-secondary: #f8f8f8;
+  --color-border: #d9d9d9;
+  --color-text-muted: #919191;
+
+  --global-font: var(--font-inter);
+  --title-font: var(--font-oswald);
+  --midium-font-size:1.5rem;
+  --title-font-size-secundary:clamp(8px, 1.2vw, 15px);
+  --bold:500;
+
+  --menu-padding: 0.5rem 1.5rem;
+  --menu-height:63px;
+  
+  --button-padding: 0.5rem 1rem;
+  --button-radius: 50px;
+
+  --icon-size:clamp(18px, 1.5vw, 1.5vw);
+}
+*{
+  box-sizing: border-box;
+  margin: 0px; padding: 0px;
+  
+}
+html,body {
+  width: 100%; height: 100%;
+  font-family: var(--global-font);
+  background-color: var(--color-background);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--title-font);
+}
+
+button{
+  background-color: transparent;
+  border: none;
+  margin: 3px;
+}
+ul{
+  list-style: none;
+}
+a{
+  text-decoration: none;
+  color:inherit
+}
+img {
+    user-select: none;
+    -webkit-user-drag: none;
 }

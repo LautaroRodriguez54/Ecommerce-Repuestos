@@ -1,0 +1,187 @@
+.menu,
+.overlay,
+.menuList {
+  width: 100%;
+}
+.altamiraLogo,
+.overlay {
+  height: 100%;
+}
+
+.iconBar,
+.iconXMark,
+.menuList {
+  color: var(--color-navigation);
+}
+
+.brand,
+.userSection,
+.userButtons,
+.menuList {
+  display: flex;
+  align-items: center;
+}
+.navBarWrapper,
+.menu {
+  display: grid;
+  padding: var(--menu-padding);
+  background-color: var(--color-background-dark);
+}
+.menu,
+.overlay {
+  top: var(--menu-height);
+  left: 0;
+}
+.brand,
+.userButtons {
+  justify-content: center;
+}
+.navBarWrapper,
+.menuList {
+  border-bottom: 1px solid var(--color-navigation);
+}
+.iconCart,
+.userName,
+.loginButton,
+.bigClientButton {
+  color: var(--color-background-light);
+}
+.navBarWrapper {
+  padding: var(--menu-padding);
+  background-color: var(--color-background-dark);
+  height: var(--menu-height);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "icon brand userSection";
+  align-items: center;
+  position: relative;
+}
+.iconBar {
+  grid-area: icon;
+  justify-self: left;
+  transition: transform 0.3s ease;
+}
+.iconBarActive{
+    transform: rotate(90deg);
+}
+.brand {
+  grid-area: brand;
+  height: clamp(1.5rem, 5vw, 2.5rem);
+}
+.altamiraLogo {
+  width: auto;
+}
+.userSection {
+  grid-area: userSection;
+
+  justify-content: end;
+  gap: 2vw;
+}
+.iconCart {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.userName {
+  font-size: var(--title-font-size-secundary);
+}
+
+.iconChevronDown {
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-muted);
+}
+
+.menu {
+  height: 60vh;
+  background-color: var(--color-background-dark);
+  padding: var(--menu-padding);
+  position: absolute;
+  top: var(--menu-height);
+  left: 0;
+  grid-template-columns: 10% repeat(2, 1fr) 10%;
+  grid-template-rows: 5% 1fr 15%;
+  grid-template-areas:
+    ". . . xMark"
+    "menuItems menuItems menuItems menuItems"
+    "clientButton clientButton loginButton loginButton";
+  z-index: 20;
+}
+.iconXMark {
+  grid-area: xMark;
+  justify-self: end;
+}
+.menuList {
+  grid-area: menuItems;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.menuItem {
+  font-family: var(--title-font);
+  font-size: var(--midium-font-size);
+  text-transform: uppercase;
+  
+}
+.clientButton {
+  grid-area: clientButton;
+  color: var(--color-secondary);
+  
+}
+.loginButton {
+  grid-area: loginButton;
+  
+}
+.overlay {
+  position: fixed;
+  top: var(--menu-height);
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.bigClientButton,
+.bigLoginButton {
+  padding: var(--button-padding);
+  border-radius: var(--button-radius);
+  font-size: var(--title-font-size-secundary);
+}
+.bigClientButton {
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-background-light);
+}
+.bigLoginButton {
+  background-color: var(--color-background-light);
+  color: var(--color-background-dark);
+}
+
+@media (orientation: landscape) {
+  .menu {
+    height: calc(100vh - var(--menu-height));
+    grid-template-rows: 5% 1fr 20%;
+    padding-bottom: 0;
+  }
+}
+@media (max-width: 699px) {
+
+}
+@media (min-width: 700px) {
+  .menu {
+    height: auto;
+    background-color: var(--color-navigation);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: auto;
+    padding: 3px;
+  }
+  .menuList {
+    color: var(--color-background-dark);
+    border-bottom: none;
+    justify-content: center;
+    flex-direction: row;
+    gap: 2vw;
+  }
+  .menuItem {
+    font-family: var(--global-font);
+    font-size: var(--title-font-size-secundary);
+    font-weight: var(--bold);
+  }
+}
