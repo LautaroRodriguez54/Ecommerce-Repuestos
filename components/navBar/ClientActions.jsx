@@ -1,8 +1,9 @@
 import styles from "./navBar.module.css";
 import Link from "next/link";
-const ClientActions = ({isMobile}) => {
- const clientBtn = isMobile ? styles.clientButton : styles.bigClientButton;
-  const loginBtn = isMobile ? styles.loginButton : styles.bigLoginButton;
+const ClientActions = ({type}) => {
+ const clientBtn = type === "mobile" ? styles.clientButton : styles.bigClientButton;
+ const loginBtn = type === "mobile"   ? styles.loginButton : styles.bigLoginButton;
+ 
   return (
     <>
       <button className={clientBtn}>Quiero ser Cliente</button>

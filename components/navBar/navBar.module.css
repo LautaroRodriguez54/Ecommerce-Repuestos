@@ -76,7 +76,6 @@
 }
 .userSection {
   grid-area: userSection;
-
   justify-content: end;
   gap: 2vw;
 }
@@ -110,6 +109,7 @@
     "clientButton clientButton loginButton loginButton";
   z-index: 20;
 }
+
 .iconXMark {
   grid-area: xMark;
   justify-self: end;
@@ -128,13 +128,10 @@
 .clientButton {
   font-size: inherit;
 }
+.loginButton{grid-area: loginButton;}
 .clientButton {
-  grid-area: clientButton;
   color: var(--color-secondary);
-  
-}
-.loginButton {
-  grid-area: loginButton;   
+  grid-area: clientButton;
 }
 .overlay {
   position: fixed;
@@ -166,8 +163,10 @@
   }
 }
 @media (max-width: 699px) {
+
 }
 @media (min-width: 700px) {
+
   .menu {
     left: 0;
     height: auto;
