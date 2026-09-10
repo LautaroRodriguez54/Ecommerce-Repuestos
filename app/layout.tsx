@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es-AR"
       className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
       <body>
         <header>

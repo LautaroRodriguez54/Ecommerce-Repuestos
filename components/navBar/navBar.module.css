@@ -17,7 +17,9 @@
 .brand,
 .userSection,
 .userButtons,
-.menuList {
+.menuList,
+.clientButton,
+.loginButton {
   display: flex;
   align-items: center;
 }
@@ -33,7 +35,9 @@
   left: 0;
 }
 .brand,
-.userButtons {
+.userButtons, 
+.clientButton,
+.loginButton {
   justify-content: center;
 }
 .navBarWrapper,
@@ -60,8 +64,8 @@
   justify-self: left;
   transition: transform 0.3s ease;
 }
-.iconBarActive{
-    transform: rotate(90deg);
+.iconBarActive {
+  transform: rotate(90deg);
 }
 .brand {
   grid-area: brand;
@@ -97,7 +101,7 @@
   padding: var(--menu-padding);
   position: absolute;
   top: var(--menu-height);
-  left: 0;
+  left: -100%;
   grid-template-columns: 10% repeat(2, 1fr) 10%;
   grid-template-rows: 5% 1fr 15%;
   grid-template-areas:
@@ -119,7 +123,10 @@
   font-family: var(--title-font);
   font-size: var(--midium-font-size);
   text-transform: uppercase;
-  
+}
+.loginButton,
+.clientButton {
+  font-size: inherit;
 }
 .clientButton {
   grid-area: clientButton;
@@ -127,8 +134,7 @@
   
 }
 .loginButton {
-  grid-area: loginButton;
-  
+  grid-area: loginButton;   
 }
 .overlay {
   position: fixed;
@@ -160,10 +166,10 @@
   }
 }
 @media (max-width: 699px) {
-
 }
 @media (min-width: 700px) {
   .menu {
+    left: 0;
     height: auto;
     background-color: var(--color-navigation);
     display: flex;

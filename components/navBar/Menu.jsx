@@ -1,8 +1,9 @@
 import styles from "./navBar.module.css";
+import Link from "next/link";
 const menuItems = [
-  { label: "Nosotros", href: "#" },
-  { label: "Catalogo", href: "#" },
-  { label: "Revista", href: "#" },
+  { label: "Nosotros", href: "/nosotros" },
+  { label: "Catalogo", href: "/productos" },
+  { label: "Revista", href: "/revista" },
   { label: "Contacto", href: "#" },
 ];
 const Menu = () => {
@@ -11,7 +12,7 @@ const Menu = () => {
     <ul className={styles.menuList}>
       {menuItems.map((item, index) => (
         <li className={styles.menuItem} key={index}>
-          <a href={item.href}>{item.label}</a>
+          <Link href={item.href}>{item.label}</Link>
         </li>
       ))}
     </ul>
