@@ -10,7 +10,7 @@ const NavBar = () => {
   const [mobile, setMobile] = useState(null);
   useEffect(() => {
     const checkScreen = () => {
-      setMobile(window.innerWidth <= 699);
+      setMobile(window.innerWidth <= 914);
     };
 
     checkScreen();

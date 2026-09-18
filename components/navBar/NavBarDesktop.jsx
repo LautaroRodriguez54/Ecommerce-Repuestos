@@ -2,11 +2,11 @@
 import styles from "./navBar.module.css";
 import Cart from "../icon/Cart.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
-import { ClientActions } from "./ClientActions.jsx";
+import Button from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
 
-export const NavBarDesktop = ({ user }) => {
+const NavBarDesktop = ({ user }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(user);
   return (
     <>
@@ -26,7 +26,10 @@ export const NavBarDesktop = ({ user }) => {
             </button>
           </>
         ) : (
-          <ClientActions type={"desktop"} />
+          <>
+          <Button buttonText={"Quiero ser Cliente"} variant={'redButton'}/>
+          <Button buttonText={"Iniciar Sesión"} variant={'whiteButton'} isButton={false} linkHref = {"/login"}/>
+          </>
         )}
       </div>
 

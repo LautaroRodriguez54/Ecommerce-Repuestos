@@ -13,26 +13,41 @@
 
   --global-font: var(--font-inter);
   --title-font: var(--font-oswald);
-  --midium-font-size:1.5rem;
-  --title-font-size-secundary:clamp(8px, 1.2vw, 15px);
-  --bold:500;
+
+  --body-fz: clamp(13px, 1.1vw, 16px);
+  --head-fz: clamp(32px, 2.5vw, 36px);
+  --head-m-fz: clamp(24px, 2.2vw, 30px);
+  --head-sm-fz:clamp(20px, 1.7vw, 24px);
+  --head-msm-fz: clamp(18px, 1.4vw, 20px);
+  --interactive-fz: clamp(14px, 1.1vw, 16px);
+  --caption-fz:clamp(12px, 1vw, 14px);
+  --sm-fz:clamp(10px, 1vw, 14px);
+  --bold: 500;
 
   --menu-padding: 0.5rem 1.5rem;
-  --menu-height:63px;
-  
-  --button-padding: 0.5rem 1rem;
+  --menu-height: 63px;
+
+  --button-padding:9px 16px;
   --button-radius: 50px;
 
-  --icon-size:clamp(18px, 1.5vw, 1.5vw);
+  --icon-size: clamp(18px, 1.5vw, 1.5vw);
+
+  --general-shadow: 0 0.5rem 1rem 0.5rem #eae9e6;
+  --bottom-shadow: 0 0.5rem 1rem 0.5rem rgba(0, 0, 0, 0.28);
+
+  --modal-padding: 10px;
 }
-*{
+* {
   box-sizing: border-box;
-  margin: 0px; padding: 0px;
-  
+  margin: 0px;
+  padding: 0px;
 }
-html,body {
-  width: 100%; height: 100%;
+html,
+body {
+  width: 100%;
+  height: 100%;
   font-family: var(--global-font);
+  font-size: var(--body-fz);
   background-color: var(--color-background);
 }
 
@@ -44,20 +59,45 @@ h5,
 h6 {
   font-family: var(--title-font);
 }
-
-button{
+h1 {
+  font-size: var(--title-fz);
+  color: var(--color-background-dark);
+}
+button {
   background-color: transparent;
   border: none;
   margin: 3px;
 }
-ul{
+ul {
   list-style: none;
 }
-a{
+a {
   text-decoration: none;
-  color:inherit
+  color: inherit;
+}
+a:focus {
+  outline: none;
 }
 img {
-    user-select: none;
-    -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+textarea{height: 90%; width: 100% !important;}
+.dotted {
+  background-color: #1a1a1a;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.14) 2px, transparent 2px),
+    radial-gradient(circle, rgba(0, 0, 0, 0.25) 2px, transparent 2px);
+  background-size: 14px 14px;
+  background-position:
+    0 0,
+    7px 7px;
 }

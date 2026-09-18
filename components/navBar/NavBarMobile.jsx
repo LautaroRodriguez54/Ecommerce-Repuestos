@@ -4,12 +4,12 @@ import Bars from "../icon/Bars.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
 
 import XMark from "../icon/XMark.jsx";
-import { ClientActions } from "./ClientActions.jsx";
+import Button from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
 import { motion, AnimatePresence } from "motion/react";
 
-export const NavBarMobile = ({ user }) => {
+const NavBarMobile = ({ user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(user);
 
@@ -47,7 +47,12 @@ export const NavBarMobile = ({ user }) => {
                 <XMark />
               </div>
               <Menu />
-              {!isLoggedIn ? <ClientActions type={"mobile"} /> : undefined}
+              {!isLoggedIn ? 
+              (<>
+                <Button buttonText={"Quiero ser Cliente"} isMobile={true}  variant={'redButton'}/>
+                <Button buttonText={"Iniciar Sesión"} variant={'whiteButton'} isMobile={true} isButton={false} linkHref = {"/login"}/>
+              </>)
+              : undefined}
             </motion.nav>
           </div>
         )}

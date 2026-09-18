@@ -1,0 +1,55 @@
+.loginButton,
+.clientButton {
+  font-size: var(--interactive-fz);
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+.loginButton {
+  grid-area: loginButton;
+  color: var(--color-background-light);
+}
+.clientButton {
+  color: var(--color-secondary);
+  grid-area: clientButton;
+}
+.blackButton,.redButton,.whiteButton{
+  padding: var(--button-padding);
+  border-radius: var(--button-radius);
+  font-size: var(--interactive-fz);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.blackButton{
+  background-color: var(--color-background-dark);
+  color:var(--color-background-light);
+}
+.redButton{
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-background-light);
+  color:var(--color-background-light);
+}
+.whiteButton{
+  background-color: var(--color-background-light);
+  color: var(--color-background-dark);
+  border: 1px solid var(--color-background-dark);
+}
+.input{
+  font-family: var(--global-font);
+  padding: 9px;
+  font-size: var(--sm-fz);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  width: 48%;
+  flex-grow: 1;
+}
+.input:hover,
+.input:active {
+  outline: none;
+  box-shadow: none;
+}
+.input:focus {
+  border-color:var(--color-background-dark);
+}

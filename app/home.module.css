@@ -1,0 +1,156 @@
+.home,
+.client,
+.question {
+  min-height: 100vh;
+}
+
+.home {
+  display: grid;
+  grid-template-rows: 62vh 3vh 1fr;
+  grid-template-areas:
+    "banner"
+    "notice"
+    "new";
+}
+
+.banner {
+  grid-area: banner;
+  background-color: black;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--color-primary);
+  box-shadow: var(--bottom-shadow);
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+}
+
+.group p {
+  white-space: nowrap;
+  margin: 0;
+  color: var(--color-background-light);
+}
+
+.new {
+  grid-area: new;
+}
+
+.client {
+  display: flex;
+  align-items: end;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.clientSlider,
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.clientSlider {
+  height: calc(100vh - var(--menu-height));
+  align-items: center;
+}
+
+.viewClient,
+.formClient {
+  width: 100vw;
+  flex: 0 0 100vw;
+}
+
+.viewClient {
+  background-image: url("/main-clients.webp");
+  background-size: auto 25%;
+  height: 100vh;
+  gap: 2rem;
+  padding: 10px;
+}
+
+.viewClient,
+.formClient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.viewClient p,
+.viewClient h1,
+.formClient > p:first-child {
+  color: var(--color-background-light);
+  text-align: center;
+  max-width: 800px;
+}
+
+.viewClient h1 {
+  font-family: var(--global-font);
+  font-size: var(--head-m-fz);
+}
+
+.formClient {
+  gap: 1.5rem;
+  padding: 0 var(--modal-padding);
+}
+
+.modalWrap {
+  width: 85%;
+  height: 70vh;
+  min-width: 319px;
+  max-width: 800px;
+}
+
+.formContainerWrap {
+  display: grid;
+  gap: 1rem;
+  height: 100%;
+  grid-template-rows: repeat(2, auto) 1fr 50px;
+}
+
+.personalData,
+.companyData,
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formFieldWrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-flow: row wrap;
+}
+
+.areaName {
+  align-self: flex-start;
+  color: var(--color-text-secondary);
+}
+
+.formContainerWrap label {
+  display: none;
+}
+
+.buttonZone {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.question {
+  background: var(--color-text-secondary);
+}
+
+@media (min-width: 700px),
+       (orientation: landscape) {
+  .viewClient {
+    background-size: 100% auto;
+  }
+}
