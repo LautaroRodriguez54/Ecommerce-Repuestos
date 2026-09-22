@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import type {
   CreateProductInput,
   UpdateProductInput,
-} from "@/validators/product.schema";
+} from "@/validators/product/product.schema";
 
 const productInclude = {
   category: true,

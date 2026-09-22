@@ -101,7 +101,6 @@ model Cart {
 model CartItem {
   id        String  @id @default(cuid())
   quantity  Int
-  price     Decimal @db.Decimal(10, 2)
   cartId    String
   productId String
   cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)

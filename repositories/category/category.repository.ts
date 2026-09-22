@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import {
   CreateCategoryInput,
   UpdateCategoryInput,
-} from "@/validators/category.schema";
+} from "@/validators/category/category.schema";
 
 /**
  * Obtiene todas las categorías.

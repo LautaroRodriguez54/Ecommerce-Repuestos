@@ -1,5 +1,7 @@
 import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
 
+import { getOrCreateCart } from "@/services/cart/cart.service";
+
 import {
   success,
   unauthorized,
@@ -14,13 +16,9 @@ export async function GET() {
       return unauthorized("No hay una sesión válida.");
     }
 
-    return success({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      isActive: user.isActive,
-    });
+    const cart = await getOrCreateCart(user.id);
+
+    return success(cart);
   } catch {
     return serverError();
   }

@@ -1,7 +1,7 @@
 import {
   createProductSchema,
   updateProductSchema,
-} from "@/validators/product.schema";
+} from "@/validators/product/product.schema";
 
 import {
   createProduct,

@@ -6,7 +6,7 @@ import {
 import { 
   createCategorySchema, 
   updateCategorySchema 
-} from "@/validators/category.schema";
+} from "@/validators/category/category.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

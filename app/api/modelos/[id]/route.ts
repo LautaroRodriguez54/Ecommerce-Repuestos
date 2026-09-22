@@ -7,7 +7,7 @@ import {
 import {
   createModelSchema,
   updateModelSchema,
-} from "@/validators/model.schema";
+} from "@/validators/model/model.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

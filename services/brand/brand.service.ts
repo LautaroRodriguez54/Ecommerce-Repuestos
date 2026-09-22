@@ -13,7 +13,7 @@ import {
 import {
   CreateBrandInput,
   UpdateBrandInput,
-} from "@/validators/brand.schema";
+} from "@/validators/brand/brand.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
