@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { NavBarDesktop } from "./NavBarDesktop.jsx";
 import { NavBarMobile } from "./NavBarMobile.jsx";
-const userName = "";
-const NavBar = () => {
+const userName = "sadas";
+export const NavBar = () => {
   const [mobile, setMobile] = useState(null);
   useEffect(() => {
     const checkScreen = () => {
@@ -43,4 +43,3 @@ const NavBar = () => {
     </div>
   );
 };
-export { NavBar };

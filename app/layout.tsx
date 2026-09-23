@@ -2,6 +2,7 @@ import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import type { Metadata } from "next";
 import {NavBar} from "../components/navBar/NavBar";
+import {Footer} from "../components/footer/Footer.jsx";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer>
-          
+          <Footer />
         </footer>
       </body>
     </html>

@@ -2,11 +2,11 @@
 import styles from "./navBar.module.css";
 import Cart from "../icon/Cart.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
-import Button from "../ui/Button/Button.jsx";
+import {Button} from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
 
-const NavBarDesktop = ({ user }) => {
+export const NavBarDesktop = ({ user }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(user);
   return (
     <>
@@ -39,4 +39,3 @@ const NavBarDesktop = ({ user }) => {
     </>
   );
 };
-export { NavBarDesktop };

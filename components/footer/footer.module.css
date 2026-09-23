@@ -1,0 +1,139 @@
+.footer,
+.contactInfo,
+.contact,
+.footerLinks,
+.contact,
+.ubication {
+  min-height: 30vh;
+}
+.footer,
+.footerLinks,
+.contact,
+.contact div {
+  flex-direction: column;
+}
+.footer {
+  background-color: var(--color-background-dark);
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-rows: 1fr 3vh;
+  grid-template-areas:
+    "footer"
+    "legal";
+}
+.footer div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ubication iframe,
+.mainFooter {
+  height: 100%;
+}
+.mainFooter {
+  grid-area: footer;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.contact,
+.navigation,
+.socialMedia,
+.ubication {
+  padding: 10px;
+}
+.navigation,
+.socialMedia,
+.links,
+.ubication,
+.ubication iframe {
+  width: 100%;
+}
+.contact,
+.contact div,
+.links,
+.navigation .links div {
+  align-items: flex-start !important;
+}
+.contact {
+  width: auto;
+  gap: 1rem;
+
+  h1 {
+    font-size: var(--head-msm-fz);
+    color: var(--color-secondary);
+    white-space: nowrap;
+  }
+  p {
+    font-size: var(--caption-fz);
+    color: var(--color-background-light);
+  }
+}
+
+.footerLinks {
+  flex-grow: 1;
+  max-width: 900px;
+}
+.legal {
+  background-color: var(--color-secondary);
+  grid-area: legal;
+
+  p {
+    color: var(--color-background-light);
+    padding: 5px;
+    font-size: var(--sm-fz);
+  }
+}
+
+.navigation {
+  height: 25vh;
+}
+.icon {
+  color: var(--color-secondary);
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+.links {
+  justify-content: space-around !important;
+}
+.navigation .links div {
+  flex-direction: column;
+  gap: 0.5rem;
+  h1,
+  a {
+    color: var(--color-background-light);
+    white-space: nowrap;
+  }
+  h1 {
+    font-size: var(--head-msm-fz);
+  }
+}
+.socialMedia {
+  height: 5vh;
+  justify-content: flex-end !important;
+  gap: 1rem;
+}
+@media (min-width: 800px) {
+  .contactInfo {
+    justify-content: flex-end !important;
+  }
+  .footerLinks {
+    align-items: flex-start !important;
+  }
+  .contactInfo,
+  .links {
+    gap: 2rem;
+  }
+  .ubication {
+    height: 30vh;
+    width: 30vh;
+  }
+}
+.ubication {
+  height: 200px;
+}
+
+.ubication iframe {
+  border-radius: var(--br-general);
+}

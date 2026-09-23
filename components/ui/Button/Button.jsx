@@ -1,13 +1,13 @@
 import Link from "next/link";
 import styles from '../ui.module.css'
-export default function Button({
+export const Button=({
   buttonText,
   linkHref = false,
   isMobile = false,
   isButton = true,
   variant ='blackButton',
   onClic = ()=>{}
-}) {
+}) => {
   const clientBtn = isMobile ? styles.clientButton : styles[variant];
 
   const loginBtn = isMobile ? styles.loginButton : styles[variant];

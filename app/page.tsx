@@ -1,28 +1,12 @@
 "use client";
 import styles from "./home.module.css";
 import { motion } from "motion/react";
-import Button from "../components/ui/Button/Button.jsx";
-import ModalContainer from "../components/ui/modal/ModalContainer.jsx";
+import {Button} from "../components/ui/Button/Button.jsx";
+import {ModalContainer} from "../components/ui/modal/ModalContainer.jsx";
 import { FormField } from "../components/ui/form/FormField.jsx";
 import { useState } from "react";
 import "./home.css";
-const arrayMessages = [
-  "HORARIO DE ATENCIÓN: LUNES A VIERNES DE 7:30 A 17:00 HORAS",
-  "•",
-  "HASTA 50% DE DESCUENTO EN TU PRIMERA COMPRA",
-  "•",
-  "ENVÍOS A TODO EL PAÍS",
-  "•",
-];
-const arrayForm = [
-  { nameLabel: "Nombre", placeHolder: "Nombre Completo" },
-  { nameLabel: "Teléfono", placeHolder: "Teléfono" },
-  { nameLabel: "Nombre", placeHolder: "Nombre" },
-  { nameLabel: "CUIT", placeHolder: "CUIT" },
-  { nameLabel: "Localidad", placeHolder: "Localidad" },
-  { nameLabel: "Dirección", placeHolder: "Dirección" },
-  { nameLabel: "Mensaje", placeHolder: "Escribe aquí tu mensaje" },
-];
+import {arrayMessages, arrayForm} from '../components/pageData.js';
 export default function Page() {
   const [showForm, setShowForm] = useState(false);
   return (

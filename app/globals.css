@@ -30,12 +30,13 @@
   --button-padding:9px 16px;
   --button-radius: 50px;
 
-  --icon-size: clamp(18px, 1.5vw, 1.5vw);
+  --icon-size: clamp(18px, 3vw, 24px);
 
   --general-shadow: 0 0.5rem 1rem 0.5rem #eae9e6;
   --bottom-shadow: 0 0.5rem 1rem 0.5rem rgba(0, 0, 0, 0.28);
 
   --modal-padding: 10px;
+  --br-general: 8px;
 }
 * {
   box-sizing: border-box;
@@ -60,7 +61,7 @@ h6 {
   font-family: var(--title-font);
 }
 h1 {
-  font-size: var(--title-fz);
+  font-size: var(--head-fz);
   color: var(--color-background-dark);
 }
 button {

@@ -1,5 +1,5 @@
 import style from './modal.module.css';
-export default function ModalContainer({title, children}){
+export const ModalContainer = ({title, children}) => {
     return (
         <>
         <div className={style.ModalContainer}>

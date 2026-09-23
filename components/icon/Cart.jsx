@@ -8,13 +8,12 @@ export default function Cart() {
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart"
+      className="lucide lucide-shopping-cart preview-icon"
     >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-      <path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-      <path d="M17 17h-11v-14h-2" />
-      <path d="M6 5l14 1l-1 7h-13" />
+      <path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18" />
+      <path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25" />
+      <circle cx="18" cy="20" r="2" />
+      <circle cx="8" cy="20" r="2" />
     </svg>
   );
 }

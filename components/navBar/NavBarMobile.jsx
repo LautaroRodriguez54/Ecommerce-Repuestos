@@ -4,12 +4,12 @@ import Bars from "../icon/Bars.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
 
 import XMark from "../icon/XMark.jsx";
-import Button from "../ui/Button/Button.jsx";
+import {Button} from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
 import { motion, AnimatePresence } from "motion/react";
 
-const NavBarMobile = ({ user }) => {
+export const NavBarMobile = ({ user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(user);
 
@@ -60,4 +60,3 @@ const NavBarMobile = ({ user }) => {
     </>
   );
 };
-export { NavBarMobile };
