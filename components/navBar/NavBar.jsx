@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { NavBarDesktop } from "./NavBarDesktop.jsx";
 import { NavBarMobile } from "./NavBarMobile.jsx";
-const userName = "sadas";
+const userName = "";
 export const NavBar = () => {
   const [mobile, setMobile] = useState(null);
   useEffect(() => {

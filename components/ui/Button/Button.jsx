@@ -5,7 +5,7 @@ export const Button=({
   linkHref = false,
   isMobile = false,
   isButton = true,
-  variant ='blackButton',
+  variant ='secundary',
   onClic = ()=>{}
 }) => {
   const clientBtn = isMobile ? styles.clientButton : styles[variant];
@@ -20,3 +20,4 @@ export const Button=({
     </Link>
   );
 }
+ 

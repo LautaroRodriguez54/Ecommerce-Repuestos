@@ -35,7 +35,7 @@
   --general-shadow: 0 0.5rem 1rem 0.5rem #eae9e6;
   --bottom-shadow: 0 0.5rem 1rem 0.5rem rgba(0, 0, 0, 0.28);
 
-  --modal-padding: 10px;
+  --modal-padding: 25px 20px 15px 20px;
   --br-general: 8px;
 }
 * {
@@ -91,7 +91,10 @@ header {
   z-index: 1000;
 }
 
-textarea{height: 90%; width: 100% !important;}
+textarea{
+  height: 13vh !important;
+  width: 100%;
+}
 .dotted {
   background-color: #1a1a1a;
   background-image:

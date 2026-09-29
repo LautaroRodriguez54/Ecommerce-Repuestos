@@ -1,4 +1,4 @@
-import style from '../ui.module.css'
+import style from './form.module.css'
 export const FormField = ({
     type = "text",
     nameLabel,
@@ -6,7 +6,6 @@ export const FormField = ({
     element = "input",
 }) => {
     const Element = element;
-    /*nameLabel nombre del dato que se enviará en el formulario*/
     return(
         <>
         <label className={style.label} htmlFor={nameLabel}></label>

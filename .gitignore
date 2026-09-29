@@ -3,6 +3,7 @@
 /.pnp
 .pnp.*
 .yarn/*
+*.yaml
 
 # Keep Yarn releases/plugins if used
 !.yarn/patches

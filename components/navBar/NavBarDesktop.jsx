@@ -27,8 +27,8 @@ export const NavBarDesktop = ({ user }) => {
           </>
         ) : (
           <>
-          <Button buttonText={"Quiero ser Cliente"} variant={'redButton'}/>
-          <Button buttonText={"Iniciar Sesión"} variant={'whiteButton'} isButton={false} linkHref = {"/login"}/>
+          <Button buttonText={"Quiero ser Cliente"} variant={'accent'}/>
+          <Button buttonText={"Iniciar Sesión"} variant={'outline'} isButton={false} linkHref = {"/login"}/>
           </>
         )}
       </div>

@@ -49,8 +49,8 @@ export const NavBarMobile = ({ user }) => {
               <Menu />
               {!isLoggedIn ? 
               (<>
-                <Button buttonText={"Quiero ser Cliente"} isMobile={true}  variant={'redButton'}/>
-                <Button buttonText={"Iniciar Sesión"} variant={'whiteButton'} isMobile={true} isButton={false} linkHref = {"/login"}/>
+                <Button buttonText={"Quiero ser Cliente"} isMobile={true}  variant={'accent'}/>
+                <Button buttonText={"Iniciar Sesión"} variant={'outline'} isMobile={true} isButton={false} linkHref = {"/login"}/>
               </>)
               : undefined}
             </motion.nav>

@@ -13,43 +13,42 @@
   color: var(--color-secondary);
   grid-area: clientButton;
 }
-.blackButton,.redButton,.whiteButton{
+.secundary,.accent,.outline, .primary{
   padding: var(--button-padding);
   border-radius: var(--button-radius);
   font-size: var(--interactive-fz);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: var(--bold);
   
 }
-.blackButton{
-  background-color: var(--color-background-dark);
-  color:var(--color-background-light);
+.primary, .secundary,.accent{
+  color:var(--color-background-light)
 }
-.redButton{
+.primary{
+  background-color: var(--color-secondary);
+}
+.secundary{
+  background-color: var(--color-background-dark);
+}
+.accent{
   background-color: var(--color-primary);
   border: 1px solid var(--color-background-light);
-  color:var(--color-background-light);
 }
-.whiteButton{
+.outline{
   background-color: var(--color-background-light);
   color: var(--color-background-dark);
   border: 1px solid var(--color-background-dark);
 }
-.input{
-  font-family: var(--global-font);
-  padding: 9px;
-  font-size: var(--sm-fz);
-  border: 1px solid var(--color-border);
-  border-radius: 3px;
-  width: 48%;
-  flex-grow: 1;
-}
-.input:hover,
-.input:active {
-  outline: none;
-  box-shadow: none;
-}
-.input:focus {
-  border-color:var(--color-background-dark);
+.contentWrapper{
+  height: calc(100vh - var(--menu-height) - 20px);
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  h1{
+    margin: 3vh 0 0 7vw  ;
+    color: var(--color-background-light);
+  }
 }
