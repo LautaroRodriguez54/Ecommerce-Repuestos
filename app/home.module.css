@@ -53,12 +53,12 @@
 .clientSlider,
 .track {
   display: flex;
-  width: max-content;
 }
 
 .clientSlider {
-  height: calc(100vh - var(--menu-height));
+  height: calc(100vh - var(--menu-height) - 20px);
   align-items: center;
+  width: 100%;
 }
 
 .viewClient,
@@ -95,24 +95,21 @@
   font-family: var(--global-font);
   font-size: var(--head-m-fz);
 }
-
-.formClient {
+.formContainerWrap {
+  display: grid;
   gap: 1.5rem;
+  height: auto;
+  grid-template-rows: repeat(2, auto) 1fr 50px;
+}
+.formClient {
+  gap: 3rem;
   padding: 0 var(--modal-padding);
 }
 
 .modalWrap {
-  width: 85%;
-  height: 70vh;
+  width: 65%;
   min-width: 319px;
   max-width: 800px;
-}
-
-.formContainerWrap {
-  display: grid;
-  gap: 1rem;
-  height: 100%;
-  grid-template-rows: repeat(2, auto) 1fr 50px;
 }
 
 .personalData,
@@ -123,33 +120,13 @@
   gap: 0.5rem;
 }
 
-.formFieldWrap {
-  display: flex;
-  gap: 0.5rem;
-  flex-flow: row wrap;
-}
-
-.areaName {
-  align-self: flex-start;
-  color: var(--color-text-secondary);
-}
-
-.formContainerWrap label {
-  display: none;
-}
-
 .buttonZone {
   display: flex;
   align-items: center;
   justify-content: end;
 }
 
-.question {
-  background: var(--color-text-secondary);
-}
-
-@media (min-width: 700px),
-       (orientation: landscape) {
+@media (min-width: 700px), (orientation: landscape) {
   .viewClient {
     background-size: 100% auto;
   }

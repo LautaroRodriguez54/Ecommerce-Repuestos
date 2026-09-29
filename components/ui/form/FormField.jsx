@@ -1,12 +1,11 @@
-import style from '../ui.module.css'
-const FormField=({
+import style from './form.module.css'
+export const FormField = ({
     type = "text",
     nameLabel,
     placeHolder,
     element = "input",
-})=>{
+}) => {
     const Element = element;
-    /*nameLabel nombre del dato que se enviará en el formulario*/
     return(
         <>
         <label className={style.label} htmlFor={nameLabel}></label>
@@ -18,4 +17,3 @@ const FormField=({
         </>
     );
 };
-export {FormField};

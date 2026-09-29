@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { NavBarDesktop } from "./NavBarDesktop.jsx";
 import { NavBarMobile } from "./NavBarMobile.jsx";
 const userName = "";
-const NavBar = () => {
+export const NavBar = () => {
   const [mobile, setMobile] = useState(null);
   useEffect(() => {
     const checkScreen = () => {
@@ -43,4 +43,3 @@ const NavBar = () => {
     </div>
   );
 };
-export { NavBar };

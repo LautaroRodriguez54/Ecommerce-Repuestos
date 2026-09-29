@@ -77,7 +77,7 @@
 .userSection {
   grid-area: userSection;
   justify-content: end;
-  gap: 2vw;
+  gap: 1.5vw;
 }
 .iconCart {
   width: var(--icon-size);

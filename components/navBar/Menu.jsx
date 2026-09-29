@@ -6,7 +6,7 @@ const menuItems = [
   { label: "Revista", href: "/revista" },
   { label: "Contacto", href: "#" },
 ];
-const Menu = () => {
+export const Menu = () => {
 
   return (
     <ul className={styles.menuList}>
@@ -19,4 +19,4 @@ const Menu = () => {
   );
 };
 
-export { Menu };
+

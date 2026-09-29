@@ -1,0 +1,102 @@
+.main {
+  padding: calc(var(--menu-height) + 24px) 0 0;
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 350px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--br-general);
+  background: var(--color-background-light);
+  box-shadow: var(--bottom-shadow);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px;
+}
+
+.texto h1 {
+  color: var(--color-primary);
+  font-size: var(--head-sm-fz);
+  text-transform: uppercase;
+}
+
+.texto p {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.imagen {
+  position: relative;
+  min-height: 350px;
+}
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  gap: 16px;
+  min-height: 180px;
+  margin: 16px auto 0;
+  padding: 24px;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/almacen.webp");
+  background-position: center;
+  background-size: cover;
+  color: white;
+  text-align: center;
+}
+
+.cifras div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cifras strong,
+.cifras span {
+  font-family: var(--title-font);
+  text-transform: uppercase;
+}
+
+.cifras strong {
+  font-size: var(--head-sm-fz);
+}
+
+.cifras span {
+  font-size: var(--head-msm-fz);
+}
+.valores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  min-height: auto;
+  padding: 20px 24px 32px;
+}
+
+.valores article {
+  min-height: 220px;
+  padding: 28px;
+  border-radius: var(--br-general);
+  background: var(--color-background-light);
+  box-shadow: var(--bottom-shadow);
+  text-align: center;
+}
+
+.valores h2 {
+  margin-bottom: 16px;
+  color: var(--color-primary);
+  font-size: var(--head-msm-fz);
+  text-transform: uppercase;
+}
+
+.valores p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
