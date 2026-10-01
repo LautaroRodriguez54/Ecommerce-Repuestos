@@ -15,7 +15,11 @@ export const Button=({
   return isButton ? (
     <button className={clientBtn} onClick={onClic}>{buttonText}</button>
   ) : (
+    buttonText === 'Iniciar Sesión' ? 
     <Link href={linkHref} className={loginBtn}>
+      {buttonText}
+    </Link> :
+    <Link href={linkHref} className={clientBtn}>
       {buttonText}
     </Link>
   );

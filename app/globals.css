@@ -50,6 +50,7 @@ body {
   font-family: var(--global-font);
   font-size: var(--body-fz);
   background-color: var(--color-background);
+  min-width: 338px;
 }
 
 h1,

@@ -1,0 +1,146 @@
+.authLayout,
+.container {
+  width: 100%;
+  display: flex;
+}
+.authLayout {
+  height: 100vh;
+  scroll-snap-align: start;
+  background-color: var(--color-background-dark);
+}
+.container {
+  flex-wrap: wrap;
+  align-self: flex-end;
+  height: calc(100vh - var(--menu-height));
+  h1 {
+    font-size: var(--head-m-fz);
+  }
+}
+.form,
+.formWrapper,
+.data,
+.authHero {
+  display: flex;
+  flex-direction: column;
+}
+
+.authForm,
+.authHero {
+  flex-basis: 100%;
+}
+.authForm {
+  order: 2;
+  background-color: var(--color-background-light);
+  border-radius: var(--br-general) var(--br-general) 0 0;
+  height: 75%;
+  padding: 30px clamp(30px, 10vw, 20vh);
+  display: grid;
+  gap: 0.5rem;
+  grid-template-rows: clamp(20px, 5vw, 38px) 1fr;
+  grid-template-areas: "brand" "formTitle";
+  h1 {
+    font-size: var(--head-sm-fz);
+  }
+  p,
+  a, label {
+    font-size: var(--sm-fz);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  grid-area: brand;
+  height: clamp(20px, 5vw, 38px);
+}
+.form {
+  gap: 0.5rem;
+}
+.formWrapper {
+  gap: 1rem;
+  height: 100%;
+}
+.formHead {
+  justify-self: flex-start;
+}
+.formHead > p,
+.form > a {
+  color: var(--color-text-muted);
+}
+.form > a {
+  align-self: flex-end;
+}
+.data {
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  div {
+    gap: 0;
+  }
+}
+.buttonZone {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  button {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+}
+.authHero {
+  order: 1;
+  background-image: url("/car-bg.webp");
+  background-position: center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  height: 25%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+  gap: 1rem;
+
+  p {
+    line-height: 2rem;
+  }
+  h1,
+  p {
+    color: var(--color-background-light);
+  }
+}
+.radio {
+  display: flex;
+  label {
+    order: 2;
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .authForm,
+  .authHero {
+    flex-basis: 50%;
+    flex-grow: 1;
+    height: auto;
+  }
+  .authForm {
+    order: 1;
+    border-radius: none;
+    gap: 4rem;
+  }
+
+  .authHero {
+    order: 2;
+  }
+  .container {
+    height: calc(100vh - 22px - var(--menu-height));
+    h1 {
+      font-size: var(--head-fz);
+    }
+  }
+  .authForm {
+    border-radius: 0;
+  }
+  .formWrapper{
+    gap: 2rem;
+  }
+}

@@ -2,9 +2,10 @@
 import styles from "./navBar.module.css";
 import Cart from "../icon/Cart.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
-import {Button} from "../ui/Button/Button.jsx";
+import { Button } from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
+import Link from "next/link";
 
 export const NavBarDesktop = ({ user }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(user);
@@ -27,8 +28,15 @@ export const NavBarDesktop = ({ user }) => {
           </>
         ) : (
           <>
-          <Button buttonText={"Quiero ser Cliente"} variant={'accent'}/>
-          <Button buttonText={"Iniciar Sesión"} variant={'outline'} isButton={false} linkHref = {"/login"}/>
+            <Link href="/#cliente">
+              <Button buttonText="Quiero ser Cliente" variant="accent" />
+            </Link>
+            <Button
+              buttonText={"Iniciar Sesión"}
+              variant={"outline"}
+              isButton={false}
+              linkHref={"/login"}
+            />
           </>
         )}
       </div>

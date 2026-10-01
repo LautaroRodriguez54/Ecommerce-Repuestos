@@ -41,7 +41,7 @@ export default function Page() {
         </div>
         <div className={styles.new}></div>
       </section>
-      <section className={`dotted ${styles.client}`}>
+      <section id="cliente" className={`dotted ${styles.client}`}>
         <motion.div
           className={styles.clientSlider}
           animate={{

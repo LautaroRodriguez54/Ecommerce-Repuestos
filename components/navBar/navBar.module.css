@@ -69,7 +69,7 @@
 }
 .brand {
   grid-area: brand;
-  height: clamp(1.5rem, 5vw, 2.5rem);
+  height: clamp(1.8rem, 5vw, 2.5rem);
 }
 .altamiraLogo {
   width: auto;
