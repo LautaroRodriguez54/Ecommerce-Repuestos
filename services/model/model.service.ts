@@ -16,7 +16,7 @@ import { existsBrand } from "@/repositories/brand/brand.repository";
 import {
   CreateModelInput,
   UpdateModelInput,
-} from "@/validators/model.schema";
+} from "@/validators/model/model.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

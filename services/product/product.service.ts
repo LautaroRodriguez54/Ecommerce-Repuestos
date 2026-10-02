@@ -9,7 +9,7 @@ import {
   deleteProduct as repositoryDeleteProduct,
 } from "@/repositories/product/product.repository";
 
-import type { ProductInput } from "@/validators/product.schema";
+import type { ProductInput } from "@/validators/product/product.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

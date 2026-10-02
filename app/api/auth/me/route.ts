@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
+import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
 
-import { getSessionByToken } from "@/services/session/session.service";
 import {
   success,
   unauthorized,
@@ -9,25 +8,18 @@ import {
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("session");
+    const user = await getAuthenticatedUser();
 
-    if (!sessionCookie) {
-      return unauthorized("No hay una sesión activa.");
-    }
-
-    const session = await getSessionByToken(sessionCookie.value);
-
-    if (!session) {
-      return unauthorized("La sesión no es válida.");
+    if (!user) {
+      return unauthorized("No hay una sesión válida.");
     }
 
     return success({
-      id: session.user.id,
-      name: session.user.name,
-      email: session.user.email,
-      role: session.user.role,
-      isActive: session.user.isActive,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
     });
   } catch {
     return serverError();
