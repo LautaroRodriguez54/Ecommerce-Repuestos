@@ -12,7 +12,7 @@ import {
 import {
   CreateCategoryInput,
   UpdateCategoryInput,
-} from "@/validators/category.schema";
+} from "@/validators/category/category.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

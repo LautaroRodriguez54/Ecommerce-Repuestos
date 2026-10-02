@@ -3,7 +3,7 @@ import {
   createUser,
 } from "@/services/user/user.service";
 
-import { createUserSchema } from "@/validators/user.schema";
+import { createUserSchema } from "@/validators/user/user.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

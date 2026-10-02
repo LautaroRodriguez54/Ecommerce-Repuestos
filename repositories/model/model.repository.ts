@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import type {
   CreateModelInput,
   UpdateModelInput,
-} from "@/validators/model.schema";
+} from "@/validators/model/model.schema";
 
 const modelInclude = {
   brand: true,
