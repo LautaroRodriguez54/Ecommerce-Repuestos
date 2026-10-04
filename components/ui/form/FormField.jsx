@@ -1,6 +1,7 @@
 import style from './form.module.css'
 export const FormField = ({
     type = "text",
+    name='',
     nameLabel,
     placeHolder,
     element = "input",
@@ -8,11 +9,12 @@ export const FormField = ({
     const Element = element;
     return(
         <>
-        <label className={style.label} htmlFor={nameLabel}></label>
+        <label className={style.label} htmlFor={name}></label>
         <Element
         className={style.input}
         type={type}
         placeholder={placeHolder}
+        name={name}
       />
         </>
     );
