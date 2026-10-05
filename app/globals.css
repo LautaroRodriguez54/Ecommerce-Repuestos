@@ -17,17 +17,17 @@
   --body-fz: clamp(13px, 1.1vw, 16px);
   --head-fz: clamp(32px, 2.5vw, 36px);
   --head-m-fz: clamp(24px, 2.2vw, 30px);
-  --head-sm-fz:clamp(20px, 1.7vw, 24px);
+  --head-sm-fz: clamp(20px, 1.7vw, 24px);
   --head-msm-fz: clamp(18px, 1.4vw, 20px);
   --interactive-fz: clamp(14px, 1.1vw, 16px);
-  --caption-fz:clamp(12px, 1vw, 14px);
-  --sm-fz:clamp(10px, 1vw, 14px);
+  --caption-fz: clamp(12px, 1vw, 14px);
+  --sm-fz: clamp(10px, 1vw, 14px);
   --bold: 500;
 
   --menu-padding: 0.5rem 1.5rem;
   --menu-height: 63px;
 
-  --button-padding:9px 16px;
+  --button-padding: 9px 16px;
   --button-radius: 50px;
 
   --icon-size: clamp(18px, 3vw, 24px);
@@ -91,7 +91,10 @@ header {
   z-index: 1000;
 }
 
-textarea{height: 90%; width: 100% !important;}
+textarea {
+  height: 90%;
+  width: 100% !important;
+}
 .dotted {
   background-color: #1a1a1a;
   background-image:
@@ -101,4 +104,11 @@ textarea{height: 90%; width: 100% !important;}
   background-position:
     0 0,
     7px 7px;
+}
+.siteHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }

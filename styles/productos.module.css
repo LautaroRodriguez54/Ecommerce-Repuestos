@@ -1,0 +1,84 @@
+.catalogo {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 130px 40px 50px;
+  display: grid;
+  grid-template-columns: 225px minmax(0, 1fr);
+  gap: 36px;
+}
+
+.filtros {
+  background-color: var(--color-background-light);
+  border-radius: 16px;
+  padding: 24px;
+  align-self: start;
+}
+
+.filtros h2 {
+  font-size: var(--head-msm-fz);
+  margin-bottom: 24px;
+}
+
+.filtros h3 {
+  font-size: var(--body-fz);
+  margin: 24px 0 12px;
+}
+
+.filtros li {
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+
+.buscador {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  background-color: var(--color-background-light);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font: inherit;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.tarjeta {
+  background-color: var(--color-background-light);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.imagenProducto {
+  position: relative;
+  height: 150px;
+  margin-bottom: 16px;
+}
+
+.foto {
+  object-fit: contain;
+}
+
+.tarjeta p {
+  margin-bottom: 12px;
+}
+.verDetalle {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-primary);
+  font-size: var(--caption-fz);
+}
+.imagenProducto {
+  display: block;
+  cursor: pointer;
+}
+
+:global(html):has(.catalogo),
+:global(body):has(.catalogo),
+:global(main):has(.catalogo),
+.catalogo {
+  scroll-snap-type: none;
+}

@@ -1,0 +1,247 @@
+.pagina {
+  max-width: 1400px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 130px 40px 50px;
+}
+
+.distribucion {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.columna {
+  display: grid;
+  gap: 24px;
+}
+
+.panel {
+  padding: 24px;
+  background-color: var(--color-background-light);
+  border-radius: 18px;
+}
+
+.panel h1,
+.panel h2 {
+  font-family: var(--global-font);
+  font-size: var(--head-msm-fz);
+  font-weight: 500;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.encabezado,
+.fila {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 95px 110px 28px;
+  gap: 12px;
+  align-items: center;
+}
+
+.encabezado {
+  padding-bottom: 12px;
+  font-size: var(--caption-fz);
+}
+
+.fila {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.seleccion {
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.producto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.producto p {
+  font-size: var(--caption-fz);
+  margin-bottom: 6px;
+}
+
+.producto small {
+  color: var(--color-text-muted);
+}
+
+.foto {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.cantidad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+}
+
+.cantidad button {
+  width: 28px;
+  padding: 6px 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cantidad button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.cantidad span {
+  min-width: 24px;
+  text-align: center;
+}
+
+.precio {
+  font-size: var(--caption-fz);
+  white-space: nowrap;
+}
+
+.eliminar {
+  margin: 0;
+  font-size: 24px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.avisoEnvio {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.lineaResumen,
+.total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.lineaResumen {
+  margin-bottom: 24px;
+}
+
+.total {
+  padding-top: 20px;
+  margin-top: 30px;
+  border-top: 1px solid var(--color-border);
+}
+
+.realizarPedido {
+  display: block;
+  margin: 30px auto 0;
+  padding: 12px 28px;
+  border-radius: 50px;
+  background-color: var(--color-secondary);
+  color: var(--color-background-light);
+  font: inherit;
+  cursor: pointer;
+}
+
+.realizarPedido:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.vacio {
+  padding: 24px 0;
+}
+
+.vacio p {
+  margin-bottom: 16px;
+}
+
+.vacio a {
+  color: var(--color-primary);
+}
+
+.relacionados {
+  margin-top: 32px;
+  padding: 28px;
+  background-color: var(--color-background-secondary);
+  border-radius: 20px;
+}
+
+.relacionados h2 {
+  font-size: var(--head-msm-fz);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.grillaRelacionados {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.tarjetaRelacionada {
+  padding: 20px;
+  text-align: center;
+  background-color: var(--color-background-light);
+  border-radius: 12px;
+}
+
+.fotoRelacionada {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+.confirmacion {
+  position: fixed;
+  width: min(360px, 90vw);
+  margin: auto;
+  padding: 36px 28px 24px;
+  border: none;
+  border-radius: 18px;
+  background-color: var(--color-background-light);
+  text-align: center;
+}
+
+.confirmacion::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.confirmacion p {
+  margin-bottom: 10px;
+}
+
+.confirmacion small {
+  color: var(--color-text-muted);
+}
+
+.cerrarConfirmacion {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  margin: 0;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.aceptar {
+  display: block;
+  margin: 22px auto 0;
+  padding: 8px 24px;
+  border-radius: 50px;
+  background-color: var(--color-background-dark);
+  color: var(--color-background-light);
+  font: inherit;
+  cursor: pointer;
+}
+:global(html):has(.pagina),
+:global(body):has(.pagina),
+:global(main):has(.pagina),
+.pagina {
+  scroll-snap-type: none;
+}
