@@ -5,7 +5,7 @@ import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
 import Link from "next/link";
 import { Button } from "../../components/ui/Button/Button";
-import { useState } from "react";
+import { useState,  type SubmitEvent } from "react";
 import { login } from "../../lib/auth";
 
 type Usuario = {
@@ -16,7 +16,7 @@ type Usuario = {
 export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setLoading(true);
