@@ -3,7 +3,6 @@ import Instagram from "./icon/Instagram.jsx";
 import Gmail from "./icon/Gmail.jsx";
 import Facebook from "./icon/Facebook.jsx";
 
-
 export const arrayMessages = [
   "HORARIO DE ATENCIÓN: LUNES A VIERNES DE 7:30 A 17:00 HORAS",
   "•",
@@ -13,13 +12,13 @@ export const arrayMessages = [
   "•",
 ];
 export const arrayForm = [
-  { nameLabel: "Nombre", placeHolder: "Nombre Completo" },
-  { nameLabel: "Teléfono", placeHolder: "Teléfono" },
-  { nameLabel: "Nombre", placeHolder: "Nombre" },
-  { nameLabel: "CUIT", placeHolder: "CUIT" },
-  { nameLabel: "Localidad", placeHolder: "Localidad" },
-  { nameLabel: "Dirección", placeHolder: "Dirección" },
-  { nameLabel: "Mensaje", placeHolder: "Escribe aquí tu mensaje" },
+  { nameLabel: "Nombre", placeHolder: "Nombre Completo", name: "name" },
+  { nameLabel: "Teléfono", placeHolder: "Teléfono", name: "phone" },
+  { nameLabel: "Nombre", placeHolder: "Nombre", name: "company" },
+  { nameLabel: "CUIT", placeHolder: "CUIT", name: "cuit" },
+  { nameLabel: "Localidad", placeHolder: "Localidad", name: "locality" },
+  { nameLabel: "Dirección", placeHolder: "Dirección", name: "address" },
+  {nameLabel: "Mensaje", placeHolder: "Escribe aquí tu mensaje", name: "message"},
 ];
 export const contactData = [
   {
