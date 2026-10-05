@@ -4,8 +4,9 @@ import styles from "../../components/auth/auth.module.css";
 import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
 import { Button } from "../../components/ui/Button/Button";
-import { useState, type SubmitEvent} from "react";
+import { useState, type SubmitEvent } from "react";
 import { register } from "../../lib/auth";
+import { PopUp } from "../../components/ui/modal/PopUp.jsx";
 
 type Usuario = {
   name: string;
@@ -14,11 +15,11 @@ type Usuario = {
 };
 
 export default function Page() {
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError(null);
+
     setLoading(true);
     const formData = new FormData(event.currentTarget);
     const usuario: Usuario = {
@@ -27,10 +28,15 @@ export default function Page() {
       password: formData.get("password") as string,
     };
     try {
-      await register(usuario.name, usuario.email, usuario.password);
-      console.log("Usuario registrado correctamente");
+      const result = await register(
+        usuario.name,
+        usuario.email,
+        usuario.password,
+      );
+
+      setPopupMessage(result.message);
     } catch (error) {
-      setError(
+      setPopupMessage(
         error instanceof Error
           ? error.message
           : "No se pudo registrar el usuario",
@@ -74,8 +80,10 @@ export default function Page() {
             variant={"primary"}
           />
         </div>
-        {error && <p className={styles.error}> {error} </p>}
       </form>
+      {popupMessage && (
+        <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
+      )}
     </Auth>
   );
 }

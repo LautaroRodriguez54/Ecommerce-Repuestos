@@ -5,8 +5,9 @@ import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
 import Link from "next/link";
 import { Button } from "../../components/ui/Button/Button";
-import { useState,  type SubmitEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { login } from "../../lib/auth";
+import { PopUp } from "../../components/ui/modal/PopUp.jsx";
 
 type Usuario = {
   email: string;
@@ -14,11 +15,10 @@ type Usuario = {
 };
 
 export default function Page() {
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError(null);
     setLoading(true);
     const formData = new FormData(event.currentTarget);
     const usuario: Usuario = {
@@ -29,7 +29,9 @@ export default function Page() {
       await login(usuario.email, usuario.password);
       console.log("Inicio de sesión correcto");
     } catch (error) {
-      setError(
+      console.log("Error al iniciar sesión:", error);
+
+      setPopupMessage(
         error instanceof Error ? error.message : "No se pudo iniciar sesión",
       );
     } finally {
@@ -56,15 +58,16 @@ export default function Page() {
           />
         </ComponentData>
         <Link href={"#"}>¿Olvidaste tu contraseña?</Link>
-        {error && <p>{error}</p>}
         <div className={styles.buttonZone}>
-          
           <Button
             buttonText={loading ? "Ingresando..." : "Enviar"}
             variant={"primary"}
           />
         </div>
       </form>
+      {popupMessage && (
+        <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
+      )}
     </Auth>
   );
 }

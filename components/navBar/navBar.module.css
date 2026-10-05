@@ -126,9 +126,7 @@
 }
 .overlay {
   position: fixed;
-  top: var(--menu-height);
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--bg-overlay);
   z-index: 10;
 }
 
