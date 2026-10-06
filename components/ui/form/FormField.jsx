@@ -2,9 +2,9 @@ import style from './form.module.css'
 export const FormField = ({
     type = "text",
     name='',
-    nameLabel,
     placeHolder,
     element = "input",
+    required = false,
 }) => {
     const Element = element;
     return(
@@ -15,6 +15,7 @@ export const FormField = ({
         type={type}
         placeholder={placeHolder}
         name={name}
+        required={required}
       />
         </>
     );

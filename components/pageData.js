@@ -12,13 +12,13 @@ export const arrayMessages = [
   "•",
 ];
 export const arrayForm = [
-  { nameLabel: "Nombre", placeHolder: "Nombre Completo", name: "name" },
-  { nameLabel: "Teléfono", placeHolder: "Teléfono", name: "phone" },
-  { nameLabel: "Nombre", placeHolder: "Nombre", name: "company" },
-  { nameLabel: "CUIT", placeHolder: "CUIT", name: "cuit" },
-  { nameLabel: "Localidad", placeHolder: "Localidad", name: "locality" },
-  { nameLabel: "Dirección", placeHolder: "Dirección", name: "address" },
-  {nameLabel: "Mensaje", placeHolder: "Escribe aquí tu mensaje", name: "message"},
+  { placeHolder: "Nombre Completo", name: "name" },
+  { placeHolder: "Teléfono", name: "phone" },
+  { placeHolder: "Nombre", name: "company" },
+  { placeHolder: "CUIT", name: "cuit" },
+  { placeHolder: "Localidad", name: "locality" },
+  { placeHolder: "Dirección", name: "address" },
+  { placeHolder: "Escribe aquí tu mensaje", name: "message" },
 ];
 export const contactData = [
   {

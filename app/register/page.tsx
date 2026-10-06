@@ -33,12 +33,13 @@ export default function Page() {
         usuario.email,
         usuario.password,
       );
-
-      setPopupMessage(result.message);
+      
+      result && setPopupMessage('Usuario registrado correctamente');
+      
     } catch (error) {
       setPopupMessage(
         error instanceof Error
-          ? error.message
+          ? `No se pudo registrar el usuario:\n${error.message}`
           : "No se pudo registrar el usuario",
       );
     } finally {
@@ -50,22 +51,22 @@ export default function Page() {
     <Auth title={"CREAR USUARIO"} subtitle={"Ingresá los datos del usuario"}>
       <form className={styles.form} action="" onSubmit={handleSubmit}>
         <ComponentData dataArea={styles.data} areaName={"Nombre"}>
-          <FormField nameLabel={"Nombre"} placeHolder={""} name={"name"} />
+          <FormField placeHolder={""} name={"name"} required />
         </ComponentData>
         <ComponentData dataArea={styles.data} areaName={"E-mail"}>
           <FormField
             type={"email"}
-            nameLabel={"E-mail"}
             placeHolder={""}
             name={"email"}
+            required
           />
         </ComponentData>
         <ComponentData dataArea={styles.data} areaName={"Contraseña"}>
           <FormField
             type={"password"}
-            nameLabel={"Contraseña"}
             placeHolder={""}
             name={"password"}
+            required
           />
         </ComponentData>
         {/*<ComponentData dataArea={styles.data} areaName={"Rol"}>

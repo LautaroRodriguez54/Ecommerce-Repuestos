@@ -9,14 +9,18 @@ import { Form } from "../components/ui/form/Form.jsx";
 import { ComponentData } from "../components/ui/form/ComponentData.jsx";
 import "./home.css";
 import { arrayMessages, arrayForm } from "../components/pageData.js";
+import { sendContactForm } from "@/lib/contact";
+import { PopUp } from "../components/ui/modal/PopUp.jsx";
 export default function Page() {
   const [showForm, setShowForm] = useState(false);
-  function handleSubmitCompany(event: SubmitEvent<HTMLFormElement>) {
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  async function handleSubmitCompany(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
-    const datosEmpresa = {
+    const companyData = {
+      tipo: "client",
       nombre: formData.get("name"),
       telefono: formData.get("phone"),
       empresa: formData.get("company"),
@@ -26,14 +30,24 @@ export default function Page() {
       mensaje: formData.get("message"),
     };
 
-    console.log("Datos del formulario:", datosEmpresa);
+    try {
+      const result = await sendContactForm(companyData);
+      result && setPopupMessage(result.message ?? "Formulario enviado con éxito");
+    } catch (error) {
+      setPopupMessage(
+        error instanceof Error
+          ? `Error al enviar el formulario:\n${error.message}`
+          : "Error al enviar el formulario",
+      );
+    }
   }
-  function handleSubmitContact(event: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmitContact(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
-    const datosContacto = {
+    const contactData = {
+      tipo: "contact",
       nombre: formData.get("name"),
       telefono: formData.get("phone"),
       empresa: formData.get("company"),
@@ -41,7 +55,16 @@ export default function Page() {
       mensaje: formData.get("message"),
     };
 
-    console.log("Datos del formulario de contacto:", datosContacto);
+    try {
+      const result = await sendContactForm(contactData);
+      result && setPopupMessage("Formulario enviado con éxito");
+    } catch (error) {
+      setPopupMessage(
+        error instanceof Error
+          ? `Error al enviar el formulario:\n${error.message}`
+          : "Error al enviar el formulario",
+      );
+    }
   }
   return (
     <>
@@ -109,9 +132,9 @@ export default function Page() {
                       {arrayForm.slice(0, 2).map((item, index) => (
                         <FormField
                           key={index}
-                          nameLabel={item.nameLabel}
                           placeHolder={item.placeHolder}
                           name={item.name}
+                          required
                         />
                       ))}
                     </ComponentData>
@@ -123,9 +146,9 @@ export default function Page() {
                       {arrayForm.slice(2, 6).map((item, index) => (
                         <FormField
                           key={index}
-                          nameLabel={item.nameLabel}
                           placeHolder={item.placeHolder}
                           name={item.name}
+                          required
                         />
                       ))}
                     </ComponentData>
@@ -135,11 +158,11 @@ export default function Page() {
                     >
                       <FormField
                         element="textarea"
-                        nameLabel={arrayForm[arrayForm.length - 1].nameLabel}
                         placeHolder={
                           arrayForm[arrayForm.length - 1].placeHolder
                         }
                         name={arrayForm[arrayForm.length - 1].name}
+                        required
                       />
                     </ComponentData>
 
@@ -173,9 +196,9 @@ export default function Page() {
                       {arrayForm.slice(0, 2).map((item, index) => (
                         <FormField
                           key={index}
-                          nameLabel={item.nameLabel}
                           placeHolder={item.placeHolder}
                           name={item.name}
+                          required
                         />
                       ))}
                     </ComponentData>
@@ -184,12 +207,12 @@ export default function Page() {
                       dataArea={styles.companyData}
                       areaName={"Datos de la Empresa"}
                     >
-                      {[arrayForm[1], arrayForm[3]].map((item, index) => (
+                      {[arrayForm[2], arrayForm[3]].map((item, index) => (
                         <FormField
                           key={index}
-                          nameLabel={item.nameLabel}
                           placeHolder={item.placeHolder}
                           name={item.name}
+                          required
                         />
                       ))}
                     </ComponentData>
@@ -199,11 +222,11 @@ export default function Page() {
                     >
                       <FormField
                         element="textarea"
-                        nameLabel={arrayForm[arrayForm.length - 1].nameLabel}
                         placeHolder={
                           arrayForm[arrayForm.length - 1].placeHolder
                         }
                         name={arrayForm[arrayForm.length - 1].name}
+                        required
                       />
                     </ComponentData>
 
@@ -217,6 +240,9 @@ export default function Page() {
           </div>
         </ContentSection>
       </section>
+      {popupMessage && (
+        <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
+      )}
     </>
   );
 }

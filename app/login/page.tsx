@@ -29,10 +29,8 @@ export default function Page() {
       await login(usuario.email, usuario.password);
       console.log("Inicio de sesión correcto");
     } catch (error) {
-      console.log("Error al iniciar sesión:", error);
-
       setPopupMessage(
-        error instanceof Error ? error.message : "No se pudo iniciar sesión",
+        error instanceof Error ? `No se pudo iniciar sesión:\n${error.message}` : "No se pudo iniciar sesión",
       );
     } finally {
       setLoading(false);
@@ -44,17 +42,17 @@ export default function Page() {
         <ComponentData dataArea={styles.data} areaName={"E-mail"}>
           <FormField
             type={"email"}
-            nameLabel={"E-mail"}
             placeHolder={""}
             name={"email"}
+            required
           />
         </ComponentData>
         <ComponentData dataArea={styles.data} areaName={"Contraseña"}>
           <FormField
             type={"password"}
-            nameLabel={"Contraseña"}
             placeHolder={""}
             name={"password"}
+            required
           />
         </ComponentData>
         <Link href={"#"}>¿Olvidaste tu contraseña?</Link>

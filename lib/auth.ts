@@ -11,9 +11,9 @@ export async function login(email: string, password: string) {
   });
 
   const result = await response.json();
-
+  
   if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo iniciar sesión");
+    throw new Error(result.error ?? result.message ?? "No se pudo iniciar sesión");
   }
 
   return result.data;
@@ -65,7 +65,7 @@ export async function register(
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo registrar el usuario");
+    throw new Error(result.error ?? result.message ?? "No se pudo registrar el usuario");
   }
 
   return result.data;
