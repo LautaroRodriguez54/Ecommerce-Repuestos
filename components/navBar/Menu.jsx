@@ -4,7 +4,7 @@ const menuItems = [
   { label: "Nosotros", href: "/nosotros" },
   { label: "Catalogo", href: "/productos" },
   { label: "Revista", href: "/revista" },
-  { label: "Contacto", href: "#" },
+  { label: "Contacto", href: "/#cliente" },
 ];
 export const Menu = () => {
 

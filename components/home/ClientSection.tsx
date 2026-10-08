@@ -1,5 +1,5 @@
 "use client";
-import styles from "../../app/home.module.css";
+import styles from "./home.module.css";
 import { motion } from "motion/react";
 import { Button } from "../ui/Button/Button.jsx";
 import { FormField } from "../ui/form/FormField.jsx";

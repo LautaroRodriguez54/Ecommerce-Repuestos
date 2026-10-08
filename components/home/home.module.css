@@ -15,9 +15,65 @@
 
 .banner {
   grid-area: banner;
-  background-color: black;
+  background-color: var(--color-background-dark);
+  position: relative;
+  overflow: hidden;
+}
+.bBottom,
+.bTop {
+  inset: 0;
+  background-size: auto 100%;
+}
+.bBottom,
+.bTop,
+.laptop,
+.phone {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
+.bBottom {
+  background-image: url("/banner-bottom.webp");
+  z-index: 1;
+}
+
+.bTop {
+  background-image: url("/banner-top.webp");
+  z-index: 2;
+}
+
+.laptop,
+.phone {
+  background-size: 100% auto;
+}
+.laptop {
+  background-image: url("/laptop.webp");
+  z-index: 3;
+  left: 40vw;
+  top: calc(50% - 65px);
+  width: 40vh;
+  height: 40vh;
+}
+.phone {
+  background-image: url("/phone.webp");
+  z-index: 4;
+  left: 66%;
+  top: 39%;
+  width: 7vh;
+  height: 17vh;
+}
+.catalogBtn {
+  position: absolute;
+  z-index: 5;
+  left: calc(50% - 185px);
+  top: 70%;
+  box-shadow: 0 0.5rem 1rem 0.5rem var(--color-secondary);
+  border-radius: var(--button-radius);
+  button {
+    margin: 0;
+  }
+}
 .notice {
   display: flex;
   align-items: center;
@@ -37,6 +93,7 @@
   white-space: nowrap;
   margin: 0;
   color: var(--color-background-light);
+  font-size: var(--caption-fz);
 }
 
 .new {
@@ -102,7 +159,7 @@
   grid-template-rows: repeat(2, auto) 1fr 50px;
 }
 .formClient {
-  gap: 3rem;
+  gap: 1rem;
   padding: 0 var(--modal-padding);
 }
 
@@ -125,9 +182,30 @@
   align-items: center;
   justify-content: end;
 }
-
+.QASection {
+  background: var(--color-navigation);
+  background: linear-gradient(
+    150deg,
+    var(--color-navigation) 0%,
+    var(--color-background) 58%
+  );
+  /*
+  background: linear-gradient(
+    1deg,
+    var(--color-navigation) 0%,
+    var(--color-background) 20%,
+    var(--color-background) 60%,
+    var(--color-navigation) 100%
+  );*/
+  h1 {
+    color: var(--color-background-dark);
+  }
+}
 @media (min-width: 700px), (orientation: landscape) {
   .viewClient {
     background-size: 100% auto;
+  }
+  .laptop {
+    left: 55vw;
   }
 }

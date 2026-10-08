@@ -33,7 +33,7 @@
 
   --icon-size: clamp(18px, 3vw, 24px);
 
-  --general-shadow: 0 0.5rem 1rem 0.5rem #eae9e6;
+  --general-shadow: 0 0.5rem 1rem 0.5rem #bdbcb8;
   --bottom-shadow: 0 0.5rem 1rem 0.5rem rgba(0, 0, 0, 0.28);
 
   --modal-padding: 25px 20px 15px 20px;

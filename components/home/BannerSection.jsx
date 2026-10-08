@@ -1,32 +1,50 @@
 "use client";
-import styles from "../../app/home.module.css";
-import { motion } from "motion/react";
+import styles from "./home.module.css";
+import { motion, AnimatePresence } from "motion/react";
 import "../../app/home.css";
-import { arrayMessages} from "../pageData.js";
-
+import { arrayMessages } from "../pageData.js";
+import { Button } from "../ui/Button/Button";
+import { useRouter } from "next/navigation";
+import {NoticeSection} from './NoticeSection'
 export const BannerSection = () => {
+  const router = useRouter();
   return (
     <section className={styles.home}>
-      <div className={styles.banner}></div>
-      <div className={styles.notice}>
-        <motion.div
-          className={styles.track}
-          animate={{ x: "-50%" }}
-          transition={{
-            duration: 25,
-            ease: "linear",
-            repeat: Infinity,
-          }}
-        >
-          {[1, 2].map((group) => (
-            <div className={styles.group} aria-hidden={group === 2} key={group}>
-              {[...arrayMessages, ...arrayMessages].map((message, index) => (
-                <p key={`${group}-${index}`}>{message}</p>
-              ))}
-            </div>
-          ))}
-        </motion.div>
-      </div>
+      <AnimatePresence>
+        <div className={styles.banner}>
+          <motion.div
+            className={styles.bBottom}
+            initial={{ y: "-100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+
+          <motion.div
+            className={styles.bTop}
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+
+          <motion.div
+            className={styles.laptop}
+            initial={{ y: "100vh" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className={styles.phone} />
+          </motion.div>
+          <motion.div
+            className={styles.catalogBtn}
+            initial={{ x: "-100vw" }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Button buttonText={"▶ ▶ Ver Destacados"} variant="accent" onClic={() => router.push("/productos")}/>
+          </motion.div>
+        </div>
+      </AnimatePresence>
+      <NoticeSection />
       <div className={styles.new}></div>
     </section>
   );
