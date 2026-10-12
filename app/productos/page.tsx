@@ -1,41 +1,88 @@
-import styles from "../../styles/productos.module.css";
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-const imagenes = [
-  "/horquilla1.webp",
-  "/horquilla2.webp",
-  "/horquilla3.webp",
-  "/horquilla4.webp",
-];
+import { useEffect, useState } from "react";
+import styles from "../../styles/productos.module.css";
+import ProductList from "../../components/products/ProductList";
+import ProductFilters, {
+  type ProductFiltersValue,
+} from "../../components/products/ProductFilters";
+import {
+  fetchProducts,
+  type CatalogProduct,
+} from "../../services/product/product.api";
 
 export default function Page() {
+  const [products, setProducts] = useState<CatalogProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+
+  const [filters, setFilters] = useState<ProductFiltersValue>({
+    brands: [],
+    categories: [],
+  });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadProducts() {
+      try {
+        const data = await fetchProducts(controller.signal);
+
+        if (!controller.signal.aborted) {
+          setProducts(data);
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Ocurrió un error al cargar el catálogo.",
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadProducts();
+
+    return () => controller.abort();
+  }, []);
+
+  const brands = Array.from(
+    new Set(products.map((product) => product.brand).filter(Boolean)),
+  ).sort();
+
+  const categories = Array.from(
+    new Set(products.map((product) => product.category).filter(Boolean)),
+  ).sort();
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
+
+    const matchesBrand =
+      filters.brands.length === 0 || filters.brands.includes(product.brand);
+
+    const matchesCategory =
+      filters.categories.length === 0 ||
+      filters.categories.includes(product.category);
+
+    return matchesSearch && matchesBrand && matchesCategory;
+  });
+
   return (
     <main className={styles.catalogo}>
-      <aside className={styles.filtros}>
-        <h2>Filtros aplicados</h2>
-
-        <h3>Especialidad</h3>
-        <ul>
-          <li>Freno y embrague</li>
-          <li>Lubricentro</li>
-        </ul>
-
-        <h3>Línea</h3>
-        <ul>
-          <li>Mercedes</li>
-          <li>Renault</li>
-          <li>Fiat</li>
-          <li>Ford</li>
-        </ul>
-
-        <h3>Rubro</h3>
-        <ul>
-          <li>Accesorios</li>
-          <li>Admisión y escape</li>
-          <li>Aire acondicionado</li>
-        </ul>
-      </aside>
+      <ProductFilters
+        filters={filters}
+        brands={brands}
+        categories={categories}
+        onChange={setFilters}
+      />
 
       <div>
         <input
@@ -43,39 +90,19 @@ export default function Page() {
           type="search"
           placeholder="Buscar repuestos..."
           aria-label="Buscar repuestos"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
         />
 
-        <div className={styles.grilla}>
-          {Array.from({ length: 8 }, (_, index) => (
-            <article className={styles.tarjeta} key={index}>
-              <Link
-                href={`/productos/${(index % imagenes.length) + 1}`}
-                className={styles.imagenProducto}
-                aria-label={`Ver detalle de la horquilla ${
-                  (index % imagenes.length) + 1
-                }`}
-              >
-                <Image
-                  src={imagenes[index % imagenes.length]}
-                  alt="Horquilla de embrague"
-                  fill
-                  sizes="250px"
-                  className={styles.foto}
-                />
-              </Link>
-
-              <p>Horquilla de embrague</p>
-              <strong>$ 23.000</strong>
-
-              <Link
-                href={`/productos/${(index % imagenes.length) + 1}`}
-                className={styles.verDetalle}
-              >
-                Ver detalle →
-              </Link>
-            </article>
-          ))}
-        </div>
+        {loading ? (
+          <p role="status">Cargando productos...</p>
+        ) : error ? (
+          <p role="alert">{error}</p>
+        ) : filteredProducts.length === 0 ? (
+          <p role="status">No se encontraron productos con esos filtros.</p>
+        ) : (
+          <ProductList products={filteredProducts} />
+        )}
       </div>
     </main>
   );

@@ -1,10 +1,15 @@
 .catalogo {
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 130px 40px 50px;
   display: grid;
   grid-template-columns: 225px minmax(0, 1fr);
   gap: 36px;
+}
+
+.catalogo > div {
+  min-width: 0;
 }
 
 .filtros {
@@ -29,6 +34,18 @@
   margin-bottom: 10px;
 }
 
+.filtros label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.filtros input[type="checkbox"] {
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+}
+
 .buscador {
   width: 100%;
   max-width: 400px;
@@ -47,6 +64,7 @@
 }
 
 .tarjeta {
+  min-width: 0;
   background-color: var(--color-background-light);
   border-radius: 12px;
   padding: 16px;
@@ -54,8 +72,10 @@
 
 .imagenProducto {
   position: relative;
+  display: block;
   height: 150px;
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .foto {
@@ -64,18 +84,90 @@
 
 .tarjeta p {
   margin-bottom: 12px;
+  overflow-wrap: anywhere;
 }
+
 .verDetalle {
   display: block;
   margin-top: 12px;
   color: var(--color-primary);
   font-size: var(--caption-fz);
 }
-.imagenProducto {
-  display: block;
-  cursor: pointer;
+
+/* Escritorios más pequeños */
+@media (max-width: 1200px) {
+  .catalogo {
+    padding-inline: 24px;
+    gap: 24px;
+  }
+
+  .grilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
+/* Tablet y navegación móvil */
+@media (max-width: 914px) {
+  .catalogo {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: calc(var(--menu-height) + 24px);
+  }
+
+  .filtros {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .filtros h2 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .filtros h3 {
+    margin-top: 0;
+  }
+
+  .buscador {
+    max-width: none;
+  }
+}
+
+/* Celular */
+@media (max-width: 600px) {
+  .catalogo {
+    padding-inline: 16px;
+    gap: 20px;
+  }
+
+  .filtros {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px;
+  }
+
+  .grilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .tarjeta {
+    padding: 12px;
+  }
+
+  .imagenProducto {
+    height: 120px;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 380px) {
+  .grilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Mantener el scroll libre en el catálogo */
 :global(html):has(.catalogo),
 :global(body):has(.catalogo),
 :global(main):has(.catalogo),
