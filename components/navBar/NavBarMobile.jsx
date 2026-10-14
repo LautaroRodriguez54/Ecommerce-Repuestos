@@ -2,17 +2,18 @@
 import styles from "./navBar.module.css";
 import Bars from "../icon/Bars.jsx";
 import ChevronDown from "../icon/ChevronDown.jsx";
-
 import XMark from "../icon/XMark.jsx";
-import {Button} from "../ui/Button/Button.jsx";
+import { Button } from "../ui/Button/Button.jsx";
 import { useState } from "react";
 import { Menu } from "./Menu.jsx";
 import { motion, AnimatePresence } from "motion/react";
-
-export const NavBarMobile = ({ user }) => {
+import { DropDown } from "./DropDown.jsx";
+export const NavBarMobile = ({ user, loading }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(user);
-
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const handleDropDownOpen=()=>{
+    setDropDownOpen((prev) => !prev);
+  }
   return (
     <>
       <button
@@ -21,20 +22,21 @@ export const NavBarMobile = ({ user }) => {
       >
         <Bars />
       </button>
-      {isLoggedIn ? (
+      {!loading && user && (
         <div className={styles.userSection}>
-          <button className={styles.userButtons}>
-            <p className={styles.userName}>{user}</p>
+          <button className={styles.userButtons} onClick={handleDropDownOpen}>
+            <p className={styles.userName}>{user.name}</p>
             <div className={styles.iconChevronDown}>
               <ChevronDown />
             </div>
           </button>
+          <DropDown carrito={true} dropDownOpen={dropDownOpen}  onClickDropDown={() => setDropDownOpen(false)}/>
         </div>
-      ) : undefined}
+      )}
 
       <AnimatePresence>
         {menuOpen && (
-          <div onClick={() => setMenuOpen(false)}>
+          <div className={styles.mobileMenuContainer} onClick={() => setMenuOpen(false)}>
             <motion.div className={styles.overlay} />
             <motion.nav
               className={styles.menu}
@@ -47,12 +49,22 @@ export const NavBarMobile = ({ user }) => {
                 <XMark />
               </div>
               <Menu />
-              {!isLoggedIn ? 
-              (<>
-                <Button buttonText={"Quiero ser Cliente"} isMobile={true} isButton={false} linkHref="/#cliente"/>
-                <Button buttonText={"Iniciar Sesión"} isMobile={true} isButton={false} linkHref = {"/login"}/>
-              </>)
-              : undefined}
+              {!loading && !user && (
+                <>
+                  <Button
+                    buttonText={"Quiero ser Cliente"}
+                    isMobile={true}
+                    isButton={false}
+                    linkHref="/#cliente"
+                  />
+                  <Button
+                    buttonText={"Iniciar Sesión"}
+                    isMobile={true}
+                    isButton={false}
+                    linkHref={"/login"}
+                  />
+                </>
+              )}
             </motion.nav>
           </div>
         )}

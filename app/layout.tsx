@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { NavBar } from "../components/navBar/NavBar";
 import { Footer } from "../components/footer/Footer.jsx";
+import { AuthProviderWrapper } from "../components/auth/AuthProviderWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,15 +31,17 @@ export default function RootLayout({
       lang="es-AR"
       className={`${inter.variable} ${oswald.variable} h-full antialiased`}
     >
-      <body>
-        <header>
-          <NavBar />
-        </header>
-        <main>{children}</main>
-        <footer>
-          <Footer />
-        </footer>
-      </body>
+      <AuthProviderWrapper>
+        <body>
+          <header>
+            <NavBar />
+          </header>
+          <main>{children}</main>
+          <footer>
+            <Footer />
+          </footer>
+        </body>
+      </AuthProviderWrapper>
     </html>
   );
 }

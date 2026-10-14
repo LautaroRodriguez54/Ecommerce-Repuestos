@@ -8,6 +8,8 @@ import { Button } from "../../components/ui/Button/Button";
 import { useState, type SubmitEvent } from "react";
 import { login } from "../../lib/auth";
 import { PopUp } from "../../components/ui/modal/PopUp.jsx";
+import { useAuth } from "../../components/auth/AuthContext";
+import { useRouter } from "next/navigation";
 
 type Usuario = {
   email: string;
@@ -17,6 +19,9 @@ type Usuario = {
 export default function Page() {
   const [loading, setLoading] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const { refreshUser } = useAuth();
+  const router = useRouter();
+
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -27,10 +32,13 @@ export default function Page() {
     };
     try {
       await login(usuario.email, usuario.password);
-      console.log("Inicio de sesión correcto");
+      await refreshUser();
+      router.push("/");
     } catch (error) {
       setPopupMessage(
-        error instanceof Error ? `No se pudo iniciar sesión:\n${error.message}` : "No se pudo iniciar sesión",
+        error instanceof Error
+          ? `No se pudo iniciar sesión:\n${error.message}`
+          : "No se pudo iniciar sesión",
       );
     } finally {
       setLoading(false);
@@ -40,12 +48,7 @@ export default function Page() {
     <Auth title={"INICIAR SESIÓN"} subtitle={"Ingresá tus datos"}>
       <form className={styles.form} action="" onSubmit={handleSubmit}>
         <ComponentData dataArea={styles.data} areaName={"E-mail"}>
-          <FormField
-            type={"email"}
-            placeHolder={""}
-            name={"email"}
-            required
-          />
+          <FormField type={"email"} placeHolder={""} name={"email"} required />
         </ComponentData>
         <ComponentData dataArea={styles.data} areaName={"Contraseña"}>
           <FormField

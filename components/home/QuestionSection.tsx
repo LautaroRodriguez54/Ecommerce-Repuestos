@@ -39,7 +39,7 @@ export const QuestionSection = () => {
     }
   }
     return(
-         <section className={`dotted ${styles.client}`}>
+         <section id='contacto' className={`dotted ${styles.client}`}>
         <ContentSection title={"¿ALGUNA DUDA?"}>
           <div className={styles.formClient}>
             <div className={styles.modalWrap}>
