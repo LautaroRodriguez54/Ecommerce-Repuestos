@@ -30,6 +30,7 @@
 
   --button-padding: 9px 16px;
   --button-radius: 50px;
+  --general-radius: 10px;
 
   --icon-size: clamp(18px, 3vw, 20px);
 

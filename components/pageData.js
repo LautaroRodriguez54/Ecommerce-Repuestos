@@ -2,6 +2,8 @@ import Location from "./icon/Location.jsx";
 import Instagram from "./icon/Instagram.jsx";
 import Gmail from "./icon/Gmail.jsx";
 import Facebook from "./icon/Facebook.jsx";
+import Users from '../components/icon/Users.jsx';
+import Order from "../components/icon/Order.jsx";
 
 export const arrayMessages = [
   "HORARIO DE ATENCIÓN: LUNES A VIERNES DE 7:30 A 17:00 HORAS",
@@ -123,3 +125,12 @@ export const Banks = [
     cbu: "0001493-01400205061771",
   },
 ];
+export const adminActions = [
+  { buttonName: "Pedidos", type: "admin",  Icon: Users },
+  { buttonName: "Usuarios", type: "admin", Icon: Order },
+];
+export const magazineOptions = [
+  { buttonName: "Precios", type: "client",  Icon: Users },
+  { buttonName: "Nuevos Ingresos", type: "client",  Icon: Users },
+  { buttonName: "Catálogo de Juntas", type: "client",  Icon: Users },
+]
