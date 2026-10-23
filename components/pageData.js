@@ -126,8 +126,8 @@ export const Banks = [
   },
 ];
 export const adminActions = [
-  { buttonName: "Pedidos", type: "admin",  Icon: Users },
-  { buttonName: "Usuarios", type: "admin", Icon: Order },
+  { id:'orders', buttonName: "Pedidos", type: "admin",  Icon: Order },
+  { id:'users', buttonName: "Usuarios", type: "admin", Icon: Users },
 ];
 export const magazineOptions = [
   { buttonName: "Precios", type: "client",  Icon: Users },

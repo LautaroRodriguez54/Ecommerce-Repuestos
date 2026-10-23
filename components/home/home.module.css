@@ -160,7 +160,7 @@
 }
 .formClient {
   gap: 1rem;
-  padding: 0 var(--modal-padding);
+  padding: var(--modal-padding);
 }
 
 .modalWrap {

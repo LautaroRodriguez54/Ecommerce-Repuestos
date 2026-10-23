@@ -114,6 +114,11 @@
     margin-left: 1rem;
   }
 }
+@media (min-width: 914px) {
+  .container{
+    height: calc(100vh - 22px - var(--menu-height));
+  }
+}
 
 @media (min-width: 700px) {
   .authForm,
@@ -132,7 +137,6 @@
     order: 2;
   }
   .container {
-    height: calc(100vh - 22px - var(--menu-height));
     h1 {
       font-size: var(--head-fz);
     }

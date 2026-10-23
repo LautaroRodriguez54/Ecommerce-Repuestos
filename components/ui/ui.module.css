@@ -13,91 +13,81 @@
   color: var(--color-secondary);
   grid-area: clientButton;
 }
-.secundary,.accent,.outline, .primary,
-.darkButton,
-.basicButton,
-.selectedButton{
+.secundary,
+.accent,
+.outline,
+.primary,
+.selected {
   padding: var(--button-padding);
   font-size: var(--interactive-fz);
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: var(--bold);
-}
-.secundary,.accent,.outline, .primary{
+  border: 1px solid var(--color-background-light);
   border-radius: var(--button-radius);
 }
-.primary, .secundary,.accent{
-  color:var(--color-background-light)
+
+.primary,
+.secundary,
+.accent {
+  color: var(--color-background-light);
 }
-.primary{
+.primary {
   background-color: var(--color-secondary);
 }
-.secundary{
+.secundary, .selected {
   background-color: var(--color-background-dark);
 }
-.accent{
+.accent {
   background-color: var(--color-primary);
-  border: 1px solid var(--color-background-light);
 }
-.darkButton,
-.basicButton,
-.selectedButton{
+.selected {
+  background-color: var(--color-navigation);
+}
+.squaredBtn {
   border-radius: 5px;
-  border: 1px solid var(--color-border);
-  gap:1rem;
+  gap: 1rem;
   font-weight: var(--bold);
   justify-content: flex-start;
   align-items: center;
+  width: 45%;
 }
-.basicButton{
-  background-color: var(--color-background-light);
-  color:var(--color-background-dark);
+.roundedBtn {
+  width: 35px;
+  height: 35px;
+  padding: 8px;
+  border-radius: 100%;
 }
-.selectedButton{
-  background-color: var(--color-navigation);
-  color: var(--color-background-dark);
-  
-}
-.darkButton{
-  color: var(--color-background-light);
-  background-color: var(--color-background-dark);
-  .iconNameButton{
-    color:var(--color-background-light);
+.secundary {
+  .iconNameButton {
+    color: var(--color-background-light);
   }
 }
-.iconNameButton{
+.iconNameButton {
   width: var(--icon-size);
   height: var(--icon-size);
-  color:var(--color-background-dark);
+  color: var(--color-background-dark);
 }
-.outline{
+.outline {
   background-color: var(--color-background-light);
   color: var(--color-background-dark);
   border: 1px solid var(--color-background-dark);
 }
-.contentWrapper{
+.contentWrapper {
   height: calc(100vh - var(--menu-height) - 20px);
   width: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
 
-  h1{
-    margin: 3vh 0 0 7vw  ;
+  h1 {
+    margin: 3vh 0 0 7vw;
     color: var(--color-background-light);
   }
 }
-.clientSideBar,
-.adminSideBar{
-  background-color: var(--color-background-light);
-  border-radius: 20px;
-  margin: 15px 10px;
-  padding: 2rem;
-  grid-area: sideNavBar;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.adminSideBar{
-  background-color: var(--color-background-dark);
+
+@media (min-width: 700px) {
+  .squaredBtn {
+    width: clamp(150px, 20vw, 220px);
+  }
 }

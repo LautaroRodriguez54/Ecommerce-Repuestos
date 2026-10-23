@@ -1,9 +1,13 @@
-import {SideBarLayout} from '../../components/ui/sideBarLayout/SideBarLayout.jsx';
-import { adminActions } from '@/components/pageData.js';
+"use client";
+import { UserContent } from "@/components/admin/UserContent";
+import { OrderContent } from "@/components/admin/OrderContent";
+import { useState } from "react";
 export default function Page() {
+  const [selectedButton, setSelectedButton] = useState("orders");
   return (
-    <SideBarLayout page='admin'buttons={adminActions} >
-      <></>
-    </SideBarLayout>
+    <>
+      {selectedButton === "users" && <UserContent />}
+      {selectedButton === "orders" && <OrderContent />}
+    </>
   );
 }

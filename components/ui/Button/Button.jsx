@@ -1,28 +1,57 @@
 import Link from "next/link";
 import styles from "../ui.module.css";
+
 export const Button = ({
   buttonText,
-  linkHref = false,
+  linkHref = "",
   isMobile = false,
   isButton = true,
   variant = "secundary",
-  onClic = () => {},
+  rounded = false,
+  squared = false,
+  Icon = null,
+  isSelected = false,
+  type,
+  onClick = () => {},
 }) => {
-  const clientBtn = isMobile ? styles.clientButton : styles[variant];
+  const buttonVariant = isSelected
+    ? "selected"
+    : type
+      ? type === "admin"
+        ? "secundary"
+        : "outline"
+      : variant;
 
-  const loginBtn = isMobile ? styles.loginButton : styles[variant];
+  const shapeClass = rounded
+    ? styles.roundedBtn
+    : squared
+      ? styles.squaredBtn
+      : "";
+
+  const baseClass = isMobile
+    ? styles.clientButton
+    : styles[buttonVariant];
+
+  const className = `${baseClass} ${shapeClass}`;
+
+  const content = (
+    <>
+      {Icon && (
+        <span className={styles.iconNameButton}>
+          <Icon />
+        </span>
+      )}
+      {buttonText}
+    </>
+  );
 
   return isButton ? (
-    <button className={clientBtn} onClick={onClic}>
-      {buttonText}
+    <button className={className} onClick={onClick}>
+      {content}
     </button>
-  ) : buttonText === "Iniciar Sesión" ? (
-    <Link href={linkHref} className={loginBtn}>
-      {buttonText}
-    </Link>
   ) : (
-    <Link href={linkHref} className={clientBtn}>
-      {buttonText}
+    <Link href={linkHref} className={className}>
+      {content}
     </Link>
   );
 };

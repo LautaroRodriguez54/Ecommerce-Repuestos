@@ -31,3 +31,43 @@
 .formContainerWrap label {
   display: none;
 }
+.searchBox{
+  width: 100%;
+  max-width: 350px;
+  .input{
+    width: 100%;
+    border-radius: var(--general-radius);
+  }
+}
+.iconSearch{
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-muted);
+  position: absolute;
+  right: 12px;
+  top: 7;
+}
+.icon{
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-muted);
+}
+.inputWrapper{
+  position:relative;
+}
+.selectBox{
+  max-width: 300px;
+  display: flex;
+  .input{
+    width: 150px;
+    margin-left: 5px;
+    border-radius: var(--general-radius);
+  }
+  label{
+    display: flex;
+    align-items: center;
+    gap:0.5rem;
+    
+  }
+}
+
