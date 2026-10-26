@@ -6,8 +6,8 @@ export default function Page() {
   const [selectedButton, setSelectedButton] = useState("orders");
   return (
     <>
-      {selectedButton === "users" && <UserContent />}
       {selectedButton === "orders" && <OrderContent />}
+      {selectedButton === "users" && <UserContent />}
     </>
   );
 }

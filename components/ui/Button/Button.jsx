@@ -11,7 +11,7 @@ export const Button = ({
   squared = false,
   Icon = null,
   isSelected = false,
-  type,
+  type='',
   onClick = () => {},
 }) => {
   const buttonVariant = isSelected
@@ -29,8 +29,10 @@ export const Button = ({
       : "";
 
   const baseClass = isMobile
-    ? styles.clientButton
-    : styles[buttonVariant];
+  ? buttonText === "Iniciar Sesión"
+    ? styles.loginButton
+    : styles.clientButton
+  : styles[buttonVariant];
 
   const className = `${baseClass} ${shapeClass}`;
 

@@ -5,8 +5,7 @@ import styles from "../admin/admin.module.css";
 import { Button } from "../ui/Button/Button";
 import Filter from "../icon/Filter";
 import { Table } from "../ui/table/Table";
-import Delete from "../icon/Delete.jsx";
-import Edit from '../icon/Edit.jsx';
+import {Pagination} from '../ui/Pagination';
 const option = ["Cliente", "Administrador"];
 const title = ["ID", "NOMBRE", "EMAIL", "TIPO", "ACCIONES"];
 const data = [
@@ -41,6 +40,8 @@ const data = [
     tipo: "Cliente",
   },
 ];
+const itemsPerPage = 8;
+const maxPageButtons = 3;
 export const UserContent = () => {
   return (
     <>
@@ -53,9 +54,17 @@ export const UserContent = () => {
           isButton={false}
           linkHref={"/register"}
         />
-
       </div>
-      <Table title={title} data={data} showActions />
+       <Pagination itemsPerPage={itemsPerPage} maxPageButtons={maxPageButtons} data={data} >
+        {(currentData) => (
+          <Table
+            title={title}
+            data={currentData}
+            showActions
+          />
+        )}
+      </Pagination>
+      
     </>
   );
 };

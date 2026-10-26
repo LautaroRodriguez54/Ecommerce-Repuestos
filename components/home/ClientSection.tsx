@@ -59,7 +59,7 @@ export const ClientSection = () => {
           <Button
             buttonText="Quiero ser Cliente"
             variant={"accent"}
-            onClic={() => setShowForm(true)}
+            onClick={() => setShowForm(true)}
           />
         </div>
         <div className={styles.formClient}>
@@ -112,7 +112,7 @@ export const ClientSection = () => {
                     <Button
                       buttonText="Cancelar"
                       variant={"outline"}
-                      onClic={() => setShowForm(false)}
+                      onClick={() => setShowForm(false)}
                     />
                     <Button buttonText="Enviar" variant={"primary"} />
                   </div>

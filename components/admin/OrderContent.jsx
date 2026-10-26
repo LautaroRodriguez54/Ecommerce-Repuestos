@@ -4,7 +4,7 @@ import styles from "../admin/admin.module.css";
 import { Button } from "../ui/Button/Button";
 import { Table } from "../ui/table/Table";
 import { useState } from "react";
-
+import { Pagination } from "../ui/Pagination";
 const title = ["ID", "FECHA", "CLIENTE", "ARTÍCULOS", "TOTAL", "ESTADO"];
 const data = [
   {
@@ -45,27 +45,36 @@ const data = [
     cliente: "Mateo Torres",
     articulos: 4,
     total: 56300,
-    estado: "Cancelado",
+    estado: "Pendiente",
   },
 ];
 const states = ["Todos", "Pendiente", "Preparando", "Enviado"];
-
+const itemsPerPage = 8;
+const maxPageButtons = 3;
 export const OrderContent = () => {
-  const [estadoActivo, setEstadoActivo] = useState("Todos");
+  const[activeStatus, setActiveStatus] = useState("Todos");
   return (
     <>
       <div className={styles.filterWrapper}>
         <SearchBox placeholder={"busca"} />
-        {states.map((estado) => (
+        {states.map((status) => (
           <Button
-            key={estado}
-            buttonText={estado}
-            variant={estadoActivo === estado ? "secundary" : "outline"}
-            onClick={() => setEstadoActivo(estado)}
+            key={status}
+            buttonText={status}
+            variant={activeStatus === status ? "secundary" : "outline"}
+            onClick={() => setActiveStatus(status)}
           />
         ))}
       </div>
-      <Table title={title} data={data} />
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        maxPageButtons={maxPageButtons}
+        data={data}
+      >
+        {(currentData) => (
+          <Table title={title} data={currentData} />
+        )}
+      </Pagination>
     </>
   );
 };
