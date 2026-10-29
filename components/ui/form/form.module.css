@@ -36,7 +36,7 @@
   max-width: 350px;
   .input{
     width: 100%;
-    border-radius: var(--general-radius);
+    border-radius: 6px;
   }
 }
 .iconSearch{
@@ -60,14 +60,13 @@
   display: flex;
   .input{
     width: 150px;
-    margin-left: 5px;
-    border-radius: var(--general-radius);
+    border-radius: 6px;
   }
   label{
     display: flex;
     align-items: center;
     gap:0.5rem;
-    
+    margin-right: 5px;
   }
 }
 

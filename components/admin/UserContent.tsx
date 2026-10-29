@@ -13,17 +13,12 @@ import { ModalContainer } from "../ui/modal/ModalContainer";
 import { ComponentData } from "../ui/form/ComponentData";
 import { FormField } from "../ui/form/FormField";
 import { PopUp } from "../ui/modal/PopUp";
-import { getUsuarios, updateUsuario, deleteUsuario } from "@/lib/api/usuarios";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-};
+import { getUsuarios, updateUsuario } from "@/lib/api/usuarios";
+import type { User } from "@/types/api";
 
 const option = ["Cliente", "Administrador"];
-const title = ["ID", "NOMBRE", "EMAIL", "ROL", "ACCIONES"];
+const activeOption = ["Activo", "Inactivo"];
+const title = ["ID", "NOMBRE", "EMAIL", "ROL", "ESTADO", "ACCIONES"];
 const itemsPerPage = 8;
 const maxPageButtons = 3;
 
@@ -37,6 +32,7 @@ export const UserContent = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    isActive: true,
   });
   const showPopUp = (message: string) => {
     setError(message);
@@ -57,11 +53,11 @@ export const UserContent = () => {
           name: user.name,
           email: user.email,
           role: user.role,
+          isActive: user.isActive,
         }));
         setUsers(formattedUsers);
         setUsersLength(data.length);
       } catch (error: unknown) {
-        
         showPopUp(
           `No se pudieron cargar los usuarios:\n${getErrorMessage(
             error,
@@ -77,6 +73,7 @@ export const UserContent = () => {
     setFormData({
       name: user.name,
       email: user.email,
+      isActive: user.isActive,
     });
     setIsModalOpen(true);
   };
@@ -94,7 +91,6 @@ export const UserContent = () => {
     if (!selectedUser) return;
     try {
       await updateUsuario(selectedUser.id, formData);
-      
       setUsers((prev) =>
         prev.map((user) =>
           user.id === selectedUser.id ? { ...user, ...formData } : user,
@@ -104,22 +100,9 @@ export const UserContent = () => {
       setSelectedUser(null);
       showPopUp("El usuario se actualizó correctamente.");
     } catch (error: unknown) {
+      console.log(error);
       showPopUp(
         `No se pudo actualizar el usuario:\n${getErrorMessage(
-          error,
-          "Error desconocido",
-        )}`,
-      );
-    }
-  };
-  const handleDelete = async (user: User) => {
-    try {
-      const response = await deleteUsuario(user.id);
-      setUsers((prev) => prev.filter((item) => item.id !== user.id));
-      showPopUp(response.message);
-    } catch (error: unknown) {
-      showPopUp(
-        `No se pudo eliminar el usuario:\n${getErrorMessage(
           error,
           "Error desconocido",
         )}`,
@@ -142,7 +125,7 @@ export const UserContent = () => {
         itemsPerPage={itemsPerPage}
         maxPageButtons={maxPageButtons}
         data={users}
-        totalRecords = {usersLength}
+        totalRecords={usersLength}
       >
         {(currentData) => (
           <Table
@@ -150,11 +133,8 @@ export const UserContent = () => {
             data={currentData}
             showActions
             onEdit={handleEdit}
-            onDelete={handleDelete}
           />
-          
         )}
-        
       </Pagination>
       {isModalOpen && (
         <ModalContainer onClose={() => setIsModalOpen(false)}>
@@ -177,6 +157,18 @@ export const UserContent = () => {
                   value={formData.email ?? ""}
                   onChange={handleChange}
                   required
+                />
+              </ComponentData>
+              <ComponentData dataArea={sylesAuth.data} areaName={"Estado"}>
+                <SelectBox
+                  option={activeOption}
+                  value={formData.isActive ? "Activo" : "Inactivo"}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: e.target.value === "Activo",
+                    }))
+                  }
                 />
               </ComponentData>
               <div className={sylesAuth.buttonZone}>

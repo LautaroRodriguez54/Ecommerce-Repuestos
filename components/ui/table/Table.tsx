@@ -1,34 +1,24 @@
 import styles from "./table.module.css";
 import { Button } from "../Button/Button";
 import Edit from "@/components/icon/Edit";
-import Delete from "@/components/icon/Delete";
-type Status = "Pendiente" | "Completado" | "Preparando" | "Enviado";
-const statusClasses: Record<Status, string> = {
+import type { OrderStatus, UserStatus, TableProps } from "@/types/pagination";
+
+const orderStatusClasses: Record<OrderStatus, string> = {
   Pendiente: styles.pending,
   Completado: styles.completed,
   Preparando: styles.preparing,
   Enviado: styles.sent,
 };
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
+const userStatusClasses: Record<UserStatus, string> = {
+  Activo: styles.sent,
+  Inactivo: styles.pending,
 };
 
-type TableProps = {
-  title: string[];
-  data: User[];
-  showActions?: boolean;
-  onEdit?: (user: User) => void;
-  onDelete?: (user: User) => void;
-};
 export const Table = ({
   title,
   data,
   showActions = false,
   onEdit,
-  onDelete,
 }: TableProps) => {
   return (
     <div className={styles.tableContainer}>
@@ -46,15 +36,28 @@ export const Table = ({
               <tr key={item.id}>
                 {Object.entries(item).map(([key, value]) => (
                   <td key={key}>
-                    {key === "estado" ? (
+                    {/*{key === "estado" ? (
                       <span
                         className={`${styles.status} ${
-                          typeof value === "string" && value in statusClasses
-                            ? statusClasses[value as Status]
+                          typeof value === "string" && value in orderStatusClasses
+                            ? orderStatusClasses[value as OrderStatus ]
                             : ""
                         }`}
                       >
                         {value}
+                      </span>
+                    ) : (
+                      value
+                    )}*/}
+                    {key === "isActive" ? (
+                      <span
+                        className={`${styles.status} ${
+                          value
+                            ? userStatusClasses["Activo"]
+                            : userStatusClasses["Inactivo"]
+                        }`}
+                      >
+                        {value ? "Activo" : "Inactivo"}
                       </span>
                     ) : (
                       value
@@ -69,7 +72,6 @@ export const Table = ({
                       rounded
                       onClick={() => onEdit?.(item)}
                     />
-                    <Button buttonText={<Delete />} rounded onClick={() => onDelete?.(item)}/>
                   </td>
                 )}
               </tr>
