@@ -5,10 +5,10 @@ import { Button } from "../Button/Button.jsx";
 
 export const PopUp = ({ message, onClose }) => {
   return (
-    <div className={style.modalBackground} onClick={onClose}>
+    <div className={style.popUp}>
       <ModalContainer onClose={onClose}>
         <p style={{ whiteSpace: "pre-line" }}>{message}</p>
-        <Button buttonText="Aceptar" onClic={onClose}/>
+        <Button buttonText="Aceptar" onClick={onClose} />
       </ModalContainer>
     </div>
   );

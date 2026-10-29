@@ -3,56 +3,46 @@ import { SearchBox } from "../ui/form/SearchBox";
 import styles from "../admin/admin.module.css";
 import { Button } from "../ui/Button/Button";
 import { Table } from "../ui/table/Table";
-import { useState } from "react";
 import { Pagination } from "../ui/Pagination";
+import { useEffect, useState } from "react";
+import { getOrdenes } from "@/lib/api/ordenes";
+
+
+type Order = {
+  id: string;
+  customer: string;
+  date: string;
+  status: string;
+};
+
 const title = ["ID", "FECHA", "CLIENTE", "ARTÍCULOS", "TOTAL", "ESTADO"];
-const data = [
-  {
-    id: "PED-001",
-    fecha: "2026-10-15",
-    cliente: "Juan Pérez",
-    articulos: 3,
-    total: 45000,
-    estado: "Pendiente",
-  },
-  {
-    id: "PED-002",
-    fecha: "2026-10-16",
-    cliente: "María González",
-    articulos: 2,
-    total: 18500,
-    estado: "Completado",
-  },
-  {
-    id: "PED-003",
-    fecha: "2026-10-17",
-    cliente: "Lucas Fernández",
-    articulos: 5,
-    total: 72000,
-    estado: "Preparando",
-  },
-  {
-    id: "PED-004",
-    fecha: "2026-10-18",
-    cliente: "Sofía Ramírez",
-    articulos: 1,
-    total: 12500,
-    estado: "Enviado",
-  },
-  {
-    id: "PED-005",
-    fecha: "2026-10-19",
-    cliente: "Mateo Torres",
-    articulos: 4,
-    total: 56300,
-    estado: "Pendiente",
-  },
-];
 const states = ["Todos", "Pendiente", "Preparando", "Enviado"];
 const itemsPerPage = 8;
 const maxPageButtons = 3;
+
 export const OrderContent = () => {
-  const[activeStatus, setActiveStatus] = useState("Todos");
+  const [activeStatus, setActiveStatus] = useState("Todos");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const data = await getOrdenes();
+        console.log("Orders received:", data);
+        setOrders(data);
+      } catch (error) {
+        setError(
+          error instanceof Error ? error.message : "Failed to fetch orders",
+        );
+      }
+    }
+
+    fetchOrders();
+  }, []);
+
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <>
       <div className={styles.filterWrapper}>
@@ -69,12 +59,12 @@ export const OrderContent = () => {
       <Pagination
         itemsPerPage={itemsPerPage}
         maxPageButtons={maxPageButtons}
-        data={data}
+        data={orders}
       >
-        {(currentData) => (
-          <Table title={title} data={currentData} />
-        )}
+        {(currentData) => <Table title={title} data={currentData} />}
       </Pagination>
+
+      
     </>
   );
 };

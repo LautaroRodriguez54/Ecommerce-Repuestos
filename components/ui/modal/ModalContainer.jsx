@@ -6,7 +6,10 @@ export const ModalContainer = ({
   children,
 }) => {
   return (
-    <div
+    <div className={
+        title ? '': style.modalBackground
+      } onClick={onClose}>
+      <div
       className={
         title ? style.ModalContainer : style.ModalContainerWithoutTitle
       }
@@ -23,5 +26,7 @@ export const ModalContainer = ({
       </div>
       <div className={style.form}>{children}</div>
     </div>
+    </div>
+    
   );
 };

@@ -4,12 +4,22 @@ import ChevronLeft from "../icon/ChevronLeft";
 import ChevronRight from "../icon/ChevronRight";
 import styles from "../admin/admin.module.css";
 import { Button } from "../ui/Button/Button";
-export const Pagination = ({
+
+type PaginationProps<T> = {
+  itemsPerPage: number;
+  maxPageButtons: number;
+  data: T[];
+  totalRecords: number;
+  children: (currentData: T[]) => React.ReactNode;
+};
+
+export function Pagination<T>({
   itemsPerPage,
   maxPageButtons,
   data,
+  totalRecords,
   children,
-}) => {
+}: PaginationProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -30,6 +40,7 @@ export const Pagination = ({
   return (
     <>
       {children(currentData)}
+      <p style={{color:'var(--color-text-muted)'}}>Registros Encontrados: {totalRecords}</p>
       {totalPages > 1 && (
         <div className={styles.pagination}>
           <Button
@@ -63,4 +74,4 @@ export const Pagination = ({
       )}
     </>
   );
-};
+}

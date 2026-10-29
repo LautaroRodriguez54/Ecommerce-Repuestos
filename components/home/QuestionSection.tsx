@@ -2,7 +2,7 @@
 import styles from "./home.module.css";
 import { Button } from "../ui/Button/Button.jsx";
 import { ContentSection } from "../ui/ContentSection.jsx";
-import { FormField } from "../ui/form/FormField.jsx";
+import { FormField } from "../ui/form/FormField";
 import { useState, type SubmitEvent } from "react";
 import { Form } from "../ui/form/Form.jsx";
 import { ComponentData } from "../ui/form/ComponentData.jsx";

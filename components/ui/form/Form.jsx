@@ -5,8 +5,7 @@ export const Form = ({title, children}) => {
   return (
     <ModalContainer title={title}>
       <div className={styles.formContainerWrap}>
-        {children}
-        
+        {children} 
       </div>
     </ModalContainer>
   );

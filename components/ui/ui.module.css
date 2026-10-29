@@ -88,6 +88,6 @@
 
 @media (min-width: 700px) {
   .squaredBtn {
-    width: clamp(150px, 20vw, 220px);
+    width: 100%;
   }
 }
