@@ -13,42 +13,81 @@
   color: var(--color-secondary);
   grid-area: clientButton;
 }
-.secundary,.accent,.outline, .primary{
+.secundary,
+.accent,
+.outline,
+.primary,
+.selected {
   padding: var(--button-padding);
-  border-radius: var(--button-radius);
   font-size: var(--interactive-fz);
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: var(--bold);
-  
+  border: 1px solid var(--color-background-light);
+  border-radius: var(--button-radius);
 }
-.primary, .secundary,.accent{
-  color:var(--color-background-light)
+
+.primary,
+.secundary,
+.accent {
+  color: var(--color-background-light);
 }
-.primary{
+.primary {
   background-color: var(--color-secondary);
 }
-.secundary{
+.secundary, .selected {
   background-color: var(--color-background-dark);
 }
-.accent{
+.accent {
   background-color: var(--color-primary);
-  border: 1px solid var(--color-background-light);
 }
-.outline{
+.selected {
+  background-color: var(--color-navigation);
+}
+.squaredBtn {
+  border-radius: 5px;
+  gap: 1rem;
+  font-weight: var(--bold);
+  justify-content: flex-start;
+  align-items: center;
+  width: 45%;
+}
+.roundedBtn {
+  width: 35px;
+  height: 35px;
+  padding: 8px;
+  border-radius: 100%;
+}
+.secundary {
+  .iconNameButton {
+    color: var(--color-background-light);
+  }
+}
+.iconNameButton {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: var(--color-background-dark);
+}
+.outline {
   background-color: var(--color-background-light);
   color: var(--color-background-dark);
   border: 1px solid var(--color-background-dark);
 }
-.contentWrapper{
+.contentWrapper {
   height: calc(100vh - var(--menu-height) - 20px);
   width: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
 
-  h1{
-    margin: 3vh 0 0 7vw  ;
+  h1 {
+    margin: 3vh 0 0 7vw;
     color: var(--color-background-light);
+  }
+}
+
+@media (min-width: 700px) {
+  .squaredBtn {
+    width: 100%;
   }
 }

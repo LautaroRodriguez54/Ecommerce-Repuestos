@@ -1,8 +1,10 @@
 import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import type { Metadata } from "next";
-import {NavBar} from "../components/navBar/NavBar";
-import {Footer} from "../components/footer/Footer.jsx";
+import { NavBar } from "../components/navBar/NavBar";
+import { Footer } from "../components/footer/Footer.jsx";
+import { AuthProviderWrapper } from "../components/auth/AuthProviderWrapper";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -15,7 +17,8 @@ const oswald = Oswald({
 
 export const metadata: Metadata = {
   title: "Altamira Group S.A.",
-  description: "Altamira Group S.A. es una empresa dedicada a la importación y distribución de repuestos automotrices",
+  description:
+    "Altamira Group S.A. es una empresa dedicada a la importación y distribución de repuestos automotrices",
 };
 
 export default function RootLayout({
@@ -26,18 +29,19 @@ export default function RootLayout({
   return (
     <html
       lang="es-AR"
-      className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
-      <body>
-        <header>
-          <NavBar />
-        </header>
-        <main>
-          {children}
-        </main>
-        <footer>
-          <Footer />
-        </footer>
-      </body>
+      className={`${inter.variable} ${oswald.variable} h-full antialiased`}
+    >
+      <AuthProviderWrapper>
+        <body>
+          <header>
+            <NavBar />
+          </header>
+          <main>{children}</main>
+          <footer>
+            <Footer />
+          </footer>
+        </body>
+      </AuthProviderWrapper>
     </html>
   );
 }

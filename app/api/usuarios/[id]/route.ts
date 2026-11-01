@@ -6,7 +6,7 @@ import {
 
 import {
   updateUserSchema,
-} from "@/validators/user.schema";
+} from "@/validators/user/user.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

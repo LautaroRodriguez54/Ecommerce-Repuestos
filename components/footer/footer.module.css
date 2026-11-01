@@ -16,7 +16,7 @@
   background-color: var(--color-background-dark);
   scroll-snap-align: start;
   display: grid;
-  grid-template-rows: 1fr 3vh;
+  grid-template-rows: 1fr auto;
   grid-template-areas:
     "footer"
     "legal";

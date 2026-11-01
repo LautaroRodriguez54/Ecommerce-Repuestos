@@ -1,6 +1,6 @@
 import { loginUser } from "@/services/auth/auth.service";
 
-import { loginUserSchema } from "@/validators/user.schema";
+import { loginUserSchema } from "@/validators/user/user.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -40,6 +40,8 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
+    console.error("ERROR LOGIN:", error);
+
     if (
       error instanceof Error &&
       error.message === ERROR_MESSAGES.INVALID_CREDENTIALS

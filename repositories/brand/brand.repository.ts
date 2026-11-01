@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import {
   CreateBrandInput,
   UpdateBrandInput,
-} from "@/validators/brand.schema";
+} from "@/validators/brand/brand.schema";
 
 /**
  * Obtiene todas las marcas.

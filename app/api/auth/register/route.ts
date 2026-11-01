@@ -1,6 +1,6 @@
 import { registerUser } from "@/services/auth/auth.service";
 
-import { registerUserSchema } from "@/validators/user.schema";
+import { registerUserSchema } from "@/validators/user/user.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
 

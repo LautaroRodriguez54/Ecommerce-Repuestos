@@ -35,7 +35,7 @@
   left: 0;
 }
 .brand,
-.userButtons, 
+.userButtons,
 .clientButton,
 .loginButton {
   justify-content: center;
@@ -69,7 +69,7 @@
 }
 .brand {
   grid-area: brand;
-  height: clamp(1.5rem, 5vw, 2.5rem);
+  height: clamp(1.8rem, 5vw, 2.5rem);
 }
 .altamiraLogo {
   width: auto;
@@ -80,18 +80,51 @@
   gap: 1.5vw;
 }
 .iconCart {
-  width: var(--icon-size);
-  height: var(--icon-size);
+  width: 13px;
+  height: 13px;
 }
 
 .userName {
-  font-size: var(--caption-fz);
+  font-size: var(--interactive-fz);
+  font-weight: var(--bold);
+  width: 75px;
+  padding: 0 1rem;
+  position: relative;
 }
 
 .iconChevronDown {
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   color: var(--color-text-muted);
+}
+.dropDown {
+  position: absolute;
+  top: calc(var(--menu-height) - 1px);
+  right: 0;
+  background-color: var(--color-background-dark);
+  padding: 0.5rem;
+  gap: 1rem;
+  width: 115px;
+  z-index: 20;
+  border-radius: 0 0 0 var(--br-general);
+  border: 1px solid var(--color-border);
+  border-right: none;
+
+  li {
+    display: flex;
+    color: var(--color-background-light);
+    padding: 1rem;
+    font-size: var(--sm-fz);
+    font-weight: var(--bold);
+    &:hover {
+      background-color: var(--color-text-secondary);
+      border-radius: var(--br-general);
+    }
+  }
+}
+.dropDownItem {
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .menu {
@@ -126,10 +159,15 @@
 }
 .overlay {
   position: fixed;
-  top: var(--menu-height);
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--bg-overlay);
   z-index: 10;
+}
+.mobileMenuContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
 }
 
 @media (orientation: landscape) {
@@ -139,9 +177,19 @@
     padding-bottom: 0;
   }
 }
-
+@media (min-width: 700px) {
+  .userName {
+    width: 100px;
+  }
+  .dropDown {
+    width: 150px;
+  }
+}
 @media (min-width: 914px) {
-
+  .iconCart {
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
   .menu {
     left: 0;
     height: auto;

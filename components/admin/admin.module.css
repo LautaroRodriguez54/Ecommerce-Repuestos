@@ -1,0 +1,37 @@
+.contentWrapper,
+.content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.title {
+  font-size: var(--head-m-fz);
+}
+.content {
+  border-radius: var(--container-radius);
+  background-color: var(--color-background-light);
+  padding: 20px;
+}
+.filterWrapper,
+.orderButtonsWrapper,
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filterWrapper {
+  padding: 15px;
+  background-color: var(--color-background);
+  border-radius: var(--container-radius);
+  align-items: center;
+  gap: 0.5rem;
+}
+.orderButtonsWrapper {
+  width: auto;
+}
+.pagination {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}

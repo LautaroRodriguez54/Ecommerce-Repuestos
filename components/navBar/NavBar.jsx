@@ -5,9 +5,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { NavBarDesktop } from "./NavBarDesktop.jsx";
 import { NavBarMobile } from "./NavBarMobile.jsx";
-const userName = "";
+import { useAuth } from "../auth/AuthContext";
+
 export const NavBar = () => {
   const [mobile, setMobile] = useState(null);
+  const { user, loading } = useAuth();
+
   useEffect(() => {
     const checkScreen = () => {
       setMobile(window.innerWidth <= 914);
@@ -21,8 +24,6 @@ export const NavBar = () => {
       window.removeEventListener("resize", checkScreen);
     };
   }, []);
-  if (mobile === null) return null;
-
   return (
     <div className={styles.navBarWrapper}>
       <Link href="/" className={styles.brand}>
@@ -36,9 +37,9 @@ export const NavBar = () => {
         />
       </Link>
       {mobile ? (
-        <NavBarMobile user={userName} />
+        <NavBarMobile user={loading ? null : user} loading={loading} />
       ) : (
-        <NavBarDesktop user={userName} />
+        <NavBarDesktop user={loading ? null : user} loading={loading} />
       )}
     </div>
   );
