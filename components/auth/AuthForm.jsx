@@ -1,7 +1,7 @@
 import styles from "./auth.module.css";
 import stylesNB from "../navBar/navBar.module.css";
 import Image from "next/image";
-export const AuthForm = ({ title, subtitle, children }) => {
+export const AuthForm = ({ title, subtitle ='', children }) => {
   return (
     <div className={styles.authForm}>
       <div className={styles.brand}>

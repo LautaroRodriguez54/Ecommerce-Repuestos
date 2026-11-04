@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout.jsx";
 import { adminActions } from "@/components/pageData.js";
 import styles from "../../components/admin/admin.module.css";
-import { UserContent } from "@/components/admin/UserContent";
-import { OrderContent } from "@/components/admin/OrderContent";
+import { UserContent } from "@/components/admin/User/UserContent";
+import { OrderContent } from "@/components/admin/Order/OrderContent";
 
 export default function AdminLayout({
   children,
