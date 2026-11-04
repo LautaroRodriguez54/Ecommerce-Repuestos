@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { logout } from "../../lib/auth.ts";
 import { useAuth } from "../../components/auth/AuthContext";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export const DropDown = ({
   carrito = false,
@@ -63,9 +64,9 @@ export const DropDown = ({
               className={styles.dropDownItem}
               onClick={() => handleNavigateAndClose("/carrito")}
             >
-              <button className={styles.iconCart}>
+              <Link className={styles.iconCart} href="/carrito">
                 <Cart />
-              </button>
+              </Link>
               Carrito
             </li>
           )}

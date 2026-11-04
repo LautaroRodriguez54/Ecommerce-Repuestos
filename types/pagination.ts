@@ -1,15 +1,15 @@
-import type {User} from './api';
 import type { ReactNode, ChangeEvent } from "react";
-/**Table */
-export type OrderStatus = "Pendiente" | "Completado" | "Preparando" | "Enviado";
-export type UserStatus = "Activo" | "Inactivo";
+/** Table */
+export type TableRow = {
+  id: string;
+  [key: string]: ReactNode;
+};
+
 export type TableProps = {
   title: string[];
-  data: User[];
-  showActions?: boolean;
-  onEdit?: (user: User) => void;
+  data: TableRow[];
 };
-/* SelectBox*/
+/* SelectBox */
 export type SelectBoxProps = {
   option: string[];
   label?: string;

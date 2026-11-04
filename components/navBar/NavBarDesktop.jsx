@@ -18,9 +18,9 @@ export const NavBarDesktop = ({ user, loading }) => {
       <div className={styles.userSection}>
         {loading ? null : user ? (
           <>
-            <button className={styles.iconCart}>
+            <Link className={styles.iconCart} href="/carrito">
               <Cart />
-            </button>
+            </Link>
 
             <button className={styles.userButtons} onClick={handleDropDownOpen}>
               <p className={styles.userName}>{user.name}</p>

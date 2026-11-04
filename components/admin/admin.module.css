@@ -33,5 +33,35 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-top: 24px;
+}
+.pending {
+  color: #b91c1c;
+  background-color: #ffd9d9;
+}
+.completed {
+  color: #166534;
+  background-color: #ddffea;
+}
+.preparing {
+  color: #946200;
+  background-color: #fff4df;
+}
+.sent {
+  color: #1d4ed8;
+  background-color: #e1e9ff;
+}
+.paid{
+  color: #7e22ce;
+  background-color: #eedbff;
+}
+.canceled{
+  color: #000000;
+  background-color:#dedcdc
+}
+.itemsModalContainer {
+  height: 100%;
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
