@@ -9,15 +9,20 @@ type FormFieldProps = {
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
+  onKeyDown?: React.KeyboardEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  >;
 };
 export const FormField = ({
   type = "text",
   name = "",
   placeHolder,
+
   element = "input",
   required = false,
   value,
   onChange,
+  onKeyDown,
 }: FormFieldProps) => {
   const Element = element;
   return (
@@ -31,6 +36,7 @@ export const FormField = ({
         required={required}
         {...(value !== undefined ? { value } : {})}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
     </>
   );

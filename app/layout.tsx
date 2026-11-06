@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { NavBar } from "../components/navBar/NavBar";
 import { Footer } from "../components/footer/Footer.jsx";
 import { AuthProviderWrapper } from "../components/auth/AuthProviderWrapper";
-
+import { ChatBot } from "../components/chatBot/ChatBot";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -36,7 +36,10 @@ export default function RootLayout({
           <header>
             <NavBar />
           </header>
-          <main>{children}</main>
+          <main>
+            {children}
+            <ChatBot />
+          </main>
           <footer>
             <Footer />
           </footer>

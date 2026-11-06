@@ -59,3 +59,7 @@ Thumbs.db
 # Local tooling / caches
 .eslintcache
 .turbo
+
+# Chatbot Data
+chatbot-knowlege.json
+chatbot-products.json

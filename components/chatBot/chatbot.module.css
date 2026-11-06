@@ -1,0 +1,92 @@
+/*contenedor total del chat*/
+.chatBot {
+  width: 100%;
+  height: 100%;
+  max-width: 450px;
+  max-height: 80%;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  z-index: 1000;
+  overflow: hidden;
+  border: 1px solid var(--color-background-dark);
+  border-radius: 20px;
+  background-color: var(--color-background);
+}
+.chatBotHeader {
+  width: 100%;
+  height: 50px;
+  background-color: var(--color-background-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+  color: var(--color-background-light);
+  font-weight: var(--bold);
+}
+.chatBotCloseButton {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-background-light);
+}
+.chatBotContent {
+  width: 100%;
+  height: calc(100% - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.userMessage {
+  background-color: var(--color-background-dark);
+  color: var(--color-background-light);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px 10px 0px 10px;
+  width: fit-content;
+  max-width: 90%;
+  align-self: flex-end;
+}
+.botMessage {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-light);
+  color: var(--color-text-secondary);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px 10px 10px 0px;
+  width: fit-content;
+  max-width: 90%;
+}
+.chatBotFooter {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+}
+/*botoncito bot*/
+.chatBotContainer button {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  z-index: 2000;
+}
+@media (min-width: 700px) {
+  .chatBot {
+    max-width: 600px;
+    max-height: 60%;
+    bottom: 20px;
+    right: 20px;
+  }
+  .chatBotContainer button {
+    bottom: 20px;
+    right: 20px;
+  }
+}
