@@ -1,5 +1,4 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
 import styles from "./chatbot.module.css";
 import { Button } from "../ui/Button/Button";
 import { motion, AnimatePresence } from "motion/react";
@@ -8,58 +7,30 @@ import Bot from "../icon/Bot";
 import Send from "../icon/Send";
 import { FormField } from "../ui/form/FormField";
 import { Message } from "./Message";
-import type { ChatMessage } from "@/types/forms.ts";
+import { useChatBot } from "./chatbot.hooks";
+import { useAuth } from "../auth/AuthContext";
 
 export const ChatBot = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "1",
-      type: "botMessage",
-      text: "¡Hola! ¿En qué puedo ayudarte?",
-      createdAt: Date.now(),
-    },
-  ]);
-  const chatContentRef = useRef<HTMLDivElement>(null);
-  const [autoScroll, setAutoScroll] = useState(true);
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
-    const newMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      type: "userMessage",
-      text: inputMessage.trim(),
-      createdAt: Date.now(),
-    };
-    setMessages((prev) => [...prev, newMessage]);
-    setInputMessage("");
-  };
+  const { user, loading } = useAuth();
+  const {
+    isOpen,
+    setIsOpen,
+    inputMessage,
+    setInputMessage,
+    messages,
+    chatContentRef,
+    isReady,
+    handleSendMessage,
+    handleScroll,
+  } = useChatBot(user?.id ?? null, loading);
 
-  const handleScroll = () => {
-    const container = chatContentRef.current;
-    if (!container) return;
-    const isAtBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight <
-      40;
-    setAutoScroll(isAtBottom);
-  };
-
-  useEffect(() => {
-    if (autoScroll && chatContentRef.current) {
-      chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
-    }
-  }, [messages, autoScroll]);
   return (
     <>
       <AnimatePresence>
         {isOpen && (
           <motion.div
             className={styles.chatBot}
-            initial={{
-              opacity: 0,
-              scale: 0,
-              transformOrigin: "bottom right",
-            }}
+            initial={{ opacity: 0, scale: 0, transformOrigin: "bottom right" }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
@@ -79,13 +50,28 @@ export const ChatBot = () => {
               ref={chatContentRef}
               onScroll={handleScroll}
             >
-              {messages.map((message) => (
-                <Message
-                  key={message.id}
-                  type={message.type}
-                  text={message.text}
-                />
-              ))}
+              <div className={styles.chatNotice}>
+                <p style={{ textAlign: "center" }}>
+                  Consulta la compatibilidad de tu vehículo con nuestro
+                  catálogo.
+                  <br />
+                  <strong>Tené en cuenta:</strong> esta conversación se guardará
+                  durante <strong>24 horas</strong>.
+                </p>
+              </div>
+
+              {!isReady ? (
+                <p>Cargando conversación...</p>
+              ) : (
+                messages.map(({ id, type, text, products }) => (
+                  <Message
+                    key={id}
+                    type={type}
+                    text={text}
+                    products={products}
+                  />
+                ))
+              )}
             </div>
 
             <div className={styles.chatBotFooter}>
@@ -94,10 +80,9 @@ export const ChatBot = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
+                  if (e.key !== "Enter") return;
+                  e.preventDefault();
+                  handleSendMessage();
                 }}
               />
 

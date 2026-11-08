@@ -6,7 +6,7 @@ type ProductCardProps = {
   id: string | number;
   name: string;
   image: string;
-  price: number;
+  price: string | number;
 };
 
 export default function ProductCard({
