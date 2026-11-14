@@ -5,7 +5,6 @@ import {
 } from "@/services/model/model.service";
 
 import {
-  createModelSchema,
   updateModelSchema,
 } from "@/validators/model/model.schema";
 
@@ -18,6 +17,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/modelos/:id
@@ -49,6 +49,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const body = await request.json();
@@ -93,6 +96,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const model = await deleteModel(id);

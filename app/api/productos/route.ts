@@ -1,6 +1,5 @@
 import {
   createProductSchema,
-  updateProductSchema,
 } from "@/validators/product/product.schema";
 
 import {
@@ -14,6 +13,7 @@ import {
   serverError,
   success,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/productos
@@ -33,6 +33,9 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const body = await request.json();
 
     const validation = createProductSchema.safeParse(body);

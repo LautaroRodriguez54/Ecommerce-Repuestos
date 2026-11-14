@@ -4,8 +4,7 @@ import {
 } from "@/services/category/category.service";
 
 import { 
-  createCategorySchema, 
-  updateCategorySchema 
+  createCategorySchema
 } from "@/validators/category/category.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
@@ -17,6 +16,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/categorias
@@ -38,6 +38,9 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const body = await request.json();
 
     const validation = createCategorySchema.safeParse(body);

@@ -14,6 +14,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/usuarios
@@ -21,6 +22,9 @@ import {
  */
 export async function GET() {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const users = await getAllUsers();
 
     return success(users);
@@ -35,6 +39,9 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const body = await request.json();
 
     const validation = createUserSchema.safeParse(body);

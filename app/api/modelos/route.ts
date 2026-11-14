@@ -5,7 +5,6 @@ import {
 
 import {
   createModelSchema,
-  updateModelSchema,
 } from "@/validators/model/model.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
@@ -18,6 +17,7 @@ import {
   notFound,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/modelos
@@ -39,6 +39,9 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const body = await request.json();
 
     const validation = createModelSchema.safeParse(body);

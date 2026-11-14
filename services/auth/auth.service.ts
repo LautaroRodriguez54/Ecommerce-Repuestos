@@ -7,6 +7,7 @@ import {
 } from "@/repositories/user/user.repository";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
+import { ROLES } from "@/constants/roles";
 
 import { createSession } from "@/services/session/session.service";
 
@@ -29,7 +30,7 @@ export async function registerUser(
     name: data.name,
     email: data.email,
     password: hashedPassword,
-    role: "CLIENT",
+    role: ROLES.CLIENT,
     isActive: true,
   });
 }
@@ -71,4 +72,4 @@ export async function loginUser(
     },
     token: session.token,
 };
-} 
+}

@@ -1,5 +1,4 @@
 import {
-  createProductSchema,
   updateProductSchema,
 } from "@/validators/product/product.schema";
 
@@ -18,6 +17,7 @@ import {
   serverError,
   conflict,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/productos/:id
@@ -53,6 +53,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const body = await request.json();
@@ -91,6 +94,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     await deleteProduct(id);

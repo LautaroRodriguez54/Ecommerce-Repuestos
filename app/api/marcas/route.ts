@@ -4,7 +4,6 @@ import {
 } from "@/services/brand/brand.service";
 
 import { 
-  updateBrandSchema, 
   createBrandSchema 
 } from "@/validators/brand/brand.schema";
 
@@ -17,6 +16,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/marcas
@@ -38,6 +38,9 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const body = await request.json();
 
     const validation = createBrandSchema.safeParse(body);

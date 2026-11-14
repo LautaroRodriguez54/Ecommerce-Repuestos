@@ -1,17 +1,12 @@
-import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
 import {
   getAllOrders,
 } from "@/services/order/order.service";
 
-import { createOrderSchema } from "@/validators/order/order.schema";
-
 import {
   success,
-  created,
-  badRequest,
-  unauthorized,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/orders
@@ -20,11 +15,8 @@ import {
  */
 export async function GET() {
   try {
-    const user = await getAuthenticatedUser();
-
-    if (!user) {
-      return unauthorized("No hay una sesión válida.");
-    }
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
 
     const orders = await getAllOrders();
 
