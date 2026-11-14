@@ -8,6 +8,16 @@ export async function getOrdenes() {
 
   return result.data;
 }
+export async function getOrdenesTotales() {
+  const response = await fetch("/api/ordenes/admin");
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error ?? "No se pudieron obtener las órdenes");
+  }
+
+  return result.data;
+}
 
 export async function getOrden(id: string) {
   const response = await fetch(`/api/ordenes/${id}`);
@@ -36,6 +46,32 @@ export async function createOrden(data: {
 
   if (!response.ok) {
     throw new Error(result.error ?? "No se pudo crear la orden");
+  }
+
+  return result.data;
+}
+export async function updateOrdenStatus(
+  id: string,
+  status:
+    | "PENDING"
+    | "PAID"
+    | "PREPARING"
+    | "SHIPPED"
+    | "DELIVERED"
+    | "CANCELLED"
+) {
+  const response = await fetch(`/api/ordenes/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error ?? "No se pudo actualizar el pedido");
   }
 
   return result.data;

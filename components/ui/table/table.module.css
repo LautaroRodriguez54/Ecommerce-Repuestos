@@ -43,16 +43,3 @@
     font-weight: 600;
   }
 }
-
-.pending {
-  color: #b91c1c;
-}
-.completed {
-  color: #166534;
-}
-.preparing {
-  color: #946200;
-}
-.sent {
-  color: #1d4ed8;
-}

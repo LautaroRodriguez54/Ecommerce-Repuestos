@@ -2,12 +2,20 @@ import {
   createOrderTransaction,
   findOrderById,
   findOrdersByUserId,
+  findAllOrders,
+  updateOrderStatus as updateOrderStatusRepository,
 } from "@/repositories/order/order.repository";
 
 import { getOrCreateCart } from "@/services/cart/cart.service";
 
 import type { CreateOrderInput } from "@/validators/order/order.schema";
 
+/**
+ * Obtiene todas las órdenes del sistema.
+ */
+export async function getAllOrders() {
+  return findAllOrders();
+}
 /**
  * Obtiene una orden por ID.
  */
@@ -131,4 +139,19 @@ export async function createOrder(
       price: Number(item.product.price),
     })),
   });
+}
+/*
+Actualizar estado de una orden
+*/
+export async function updateOrderStatus(
+  id: string,
+  status:
+    | "PENDING"
+    | "PAID"
+    | "PREPARING"
+    | "SHIPPED"
+    | "DELIVERED"
+    | "CANCELLED"
+) {
+  return updateOrderStatusRepository(id, status);
 }
