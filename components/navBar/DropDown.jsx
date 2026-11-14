@@ -1,11 +1,12 @@
+"use client";
 import styles from "./navBar.module.css";
 import Cart from "../icon/Cart.jsx";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
-import { logout } from "../../lib/auth.ts";
+import { logout } from "../../lib/auth";
 import { useAuth } from "../../components/auth/AuthContext";
+import { usePermissions } from "@/components/permission/useUserGuard";
 import { useEffect } from "react";
-import Link from "next/link";
 
 export const DropDown = ({
   carrito = false,
@@ -13,8 +14,12 @@ export const DropDown = ({
   onClickDropDown,
 }) => {
   const { refreshUser } = useAuth();
+  const { isAdmin, loading } = usePermissions();
+
   const router = useRouter();
   const pathname = usePathname();
+
+  const panelPath = isAdmin ? "/admin" : "/panel";
 
   useEffect(() => {
     onClickDropDown();
@@ -23,31 +28,28 @@ export const DropDown = ({
   useEffect(() => {
     if (!dropDownOpen || !carrito) return;
 
-    const timer = setTimeout(async () => {
+    const timer = setTimeout(() => {
       onClickDropDown();
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [dropDownOpen]);
+  }, [dropDownOpen, carrito, onClickDropDown]);
 
   const handleNavigateAndClose = (path) => {
-    router.push(path);
     onClickDropDown();
+    router.push(path);
   };
-  const handlelogOut = async () => {
+
+  const handleLogout = async () => {
     try {
       await logout();
       await refreshUser();
       onClickDropDown();
-      router.push("/");
     } catch (error) {
-      setPopupMessage(
-        error instanceof Error
-          ? `No se pudo cerrar sesión:\n${error.message}`
-          : "No se pudo cerrar sesión",
-      );
+      console.error("Error al cerrar sesión:", error);
     }
   };
+
   return (
     <AnimatePresence>
       {dropDownOpen && (
@@ -64,16 +66,16 @@ export const DropDown = ({
               className={styles.dropDownItem}
               onClick={() => handleNavigateAndClose("/carrito")}
             >
-              <Link className={styles.iconCart} href="/carrito">
-                <Cart />
-              </Link>
+              <Cart />
               Carrito
             </li>
           )}
-          <li onClick={() => handleNavigateAndClose("/panel")}>
-            Panel de usuario
+
+          <li onClick={() => !loading && handleNavigateAndClose(panelPath)}>
+            {isAdmin ? "Panel de administrador" : "Panel de usuario"}
           </li>
-          <li onClick={handlelogOut}>Cerrar sesión</li>
+
+          <li onClick={handleLogout}>Cerrar sesión</li>
         </motion.ul>
       )}
     </AnimatePresence>

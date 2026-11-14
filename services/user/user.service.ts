@@ -1,3 +1,4 @@
+import "server-only";
 import {
   findAllUsers,
   findActiveUsers,
@@ -9,39 +10,52 @@ import {
 } from "@/repositories/user/user.repository";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
+import { requireAdmin } from "@/services/auth/authorization.service";
+
 
 /**
  * Obtiene todos los usuarios.
- * Uso: Panel de administración.
+ * Requiere ADMIN.
  */
 export async function getAllUsers() {
+  await requireAdmin();
+
   return findAllUsers();
 }
 
+
 /**
  * Obtiene únicamente los usuarios activos.
+ * Requiere ADMIN.
  */
 export async function getActiveUsers() {
+  await requireAdmin();
+
   return findActiveUsers();
 }
 
+
 /**
  * Obtiene un usuario por ID.
- *
- * Devuelve null si no existe.
+ * Requiere ADMIN.
  */
 export async function getUserById(id: string) {
+  await requireAdmin();
+
   return findUserById(id);
 }
 
 /**
  * Crea un nuevo usuario.
+ * Requiere ADMIN.
  *
  * El email debe ser único.
  */
 export async function createUser(
   data: Parameters<typeof repositoryCreateUser>[0]
 ) {
+  await requireAdmin();
+
   const existingUser = await findUserByEmail(data.email);
 
   if (existingUser) {
@@ -53,11 +67,13 @@ export async function createUser(
 
 /**
  * Actualiza un usuario existente.
+ * Requiere ADMIN.
  */
 export async function updateUser(
   id: string,
   data: Parameters<typeof repositoryUpdateUser>[1]
 ) {
+  await requireAdmin();
   const user = await findUserById(id);
 
   if (!user) {
@@ -77,8 +93,11 @@ export async function updateUser(
 
 /**
  * Realiza un Soft Delete del usuario.
+ * Requiere ADMIN.
  */
 export async function deleteUser(id: string) {
+  await requireAdmin();
+
   const user = await findUserById(id);
 
   if (!user) {

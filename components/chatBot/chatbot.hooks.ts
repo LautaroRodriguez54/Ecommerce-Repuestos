@@ -1,4 +1,6 @@
+
 "use client";
+
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { ChatMessage, StoredChat } from "@/types/chatbot";
 import { sendChatMessage } from "@/lib/chatbot";
@@ -12,6 +14,9 @@ const getWelcomeMessage = (): ChatMessage => ({
   createdAt: Date.now(),
 });
 
+const getStorageKey = (userId: string | null) =>
+  userId ? `chatbot-history-${userId}` : "chatbot-history-guest";
+
 export const useChatBot = (userId: string | null, authLoading: boolean) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
@@ -22,13 +27,12 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
   const [isReady, setIsReady] = useState(false);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [loadedUserId, setLoadedUserId] = useState<string | null>(null);
+
   const chatContentRef = useRef<HTMLDivElement>(null);
   const expiresAtRef = useRef<number | null>(null);
   const currentUserIdRef = useRef(userId);
 
   currentUserIdRef.current = userId;
-
-  const storageKey = userId ? `chatbot-history-${userId}` : null;
 
   // Cargar conversación
   useEffect(() => {
@@ -41,12 +45,7 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
     expiresAtRef.current = null;
     setAutoScroll(true);
 
-    if (!userId) {
-      setIsReady(true);
-      return;
-    }
-
-    const key = `chatbot-history-${userId}`;
+    const key = getStorageKey(userId);
 
     try {
       const stored = localStorage.getItem(key);
@@ -76,15 +75,17 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
 
   // Guardar conversación
   useEffect(() => {
-    if (!isReady || !userId || loadedUserId !== userId) return;
+    if (!isReady || loadedUserId !== userId) return;
+
+    const key = getStorageKey(userId);
 
     if (expiresAt === null) {
-      localStorage.removeItem(`chatbot-history-${userId}`);
+      localStorage.removeItem(key);
       return;
     }
 
     localStorage.setItem(
-      `chatbot-history-${userId}`,
+      key,
       JSON.stringify({ messages, expiresAt }),
     );
   }, [messages, expiresAt, isReady, userId, loadedUserId]);
@@ -95,19 +96,22 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
     setExpiresAt(null);
     expiresAtRef.current = null;
 
-    if (storageKey) localStorage.removeItem(storageKey);
-  }, [storageKey]);
+    localStorage.removeItem(getStorageKey(userId));
+  }, [userId]);
 
   // Controlar expiración
   useEffect(() => {
     if (expiresAt === null || loadedUserId !== userId) return;
+
     const remainingTime = expiresAt - Date.now();
+
     if (remainingTime <= 0) {
       clearChat();
       return;
     }
 
     const timer = setTimeout(clearChat, remainingTime);
+
     return () => clearTimeout(timer);
   }, [expiresAt, clearChat, loadedUserId, userId]);
 
@@ -118,16 +122,21 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
       expiresAtRef.current = expiration;
       setExpiresAt(expiration);
     }
+
     setMessages((prev) => [...prev, message]);
   };
 
   // Enviar mensaje
   const handleSendMessage = async () => {
     const message = inputMessage.trim();
+
     if (!message || !isReady) return;
+
     const requestUserId = userId;
     const history = messages.filter((item) => item.id !== "welcome");
+
     setInputMessage("");
+
     addMessage({
       id: crypto.randomUUID(),
       type: "user",
@@ -137,7 +146,9 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
 
     try {
       const data = await sendChatMessage(message, history);
+
       if (currentUserIdRef.current !== requestUserId) return;
+
       addMessage({
         id: crypto.randomUUID(),
         type: "bot",
@@ -147,7 +158,9 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
       });
     } catch (error) {
       if (currentUserIdRef.current !== requestUserId) return;
+
       console.error("Error al comunicarse con el chatbot:", error);
+
       addMessage({
         id: crypto.randomUUID(),
         type: "bot",
@@ -160,20 +173,26 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
   // Detectar posición del scroll
   const handleScroll = () => {
     const container = chatContentRef.current;
+
     if (!container) return;
+
     setAutoScroll(
-      container.scrollHeight - container.scrollTop - container.clientHeight <
-        40,
+      container.scrollHeight - container.scrollTop - container.clientHeight < 40,
     );
   };
 
   // Scroll automático
   useEffect(() => {
     if (!isOpen || !autoScroll || !isReady) return;
+
     const frame = requestAnimationFrame(() => {
       const container = chatContentRef.current;
-      if (container) container.scrollTop = container.scrollHeight;
+
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
     });
+
     return () => cancelAnimationFrame(frame);
   }, [messages, autoScroll, isOpen, isReady]);
 

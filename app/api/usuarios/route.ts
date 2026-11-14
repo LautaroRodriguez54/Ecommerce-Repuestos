@@ -1,10 +1,10 @@
+
 import {
   getAllUsers,
   createUser,
 } from "@/services/user/user.service";
 
 import { createUserSchema } from "@/validators/user/user.schema";
-
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 import {
@@ -13,47 +13,47 @@ import {
   badRequest,
   conflict,
   serverError,
+  unauthorized,
+  forbidden,
 } from "@/utils/apiResponse";
 
-/**
- * GET /api/usuarios
- * Obtiene todos los usuarios.
- */
 export async function GET() {
   try {
-    const users = await getAllUsers();
-
-    return success(users);
-  } catch {
+    return success(await getAllUsers());
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar los usuarios.");
+      }
+    }
     return serverError();
   }
 }
 
-/**
- * POST /api/usuarios
- * Crea un nuevo usuario.
- */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-
-    const validation = createUserSchema.safeParse(body);
+    const validation = createUserSchema.safeParse(await request.json());
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);
     }
 
-    const user = await createUser(validation.data);
-
-    return created(user);
+    return created(await createUser(validation.data));
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === ERROR_MESSAGES.USER_ALREADY_EXISTS
-    ) {
-      return conflict(error.message);
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para crear usuarios.");
+      }
+      if (error.message === ERROR_MESSAGES.USER_ALREADY_EXISTS) {
+        return conflict(error.message);
+      }
     }
-
     return serverError();
   }
 }

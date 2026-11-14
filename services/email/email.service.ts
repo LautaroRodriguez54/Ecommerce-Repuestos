@@ -1,7 +1,8 @@
+
+import "server-only";
 import { SMTPClient, Message } from "emailjs";
 
-const user = process.env.ETHEREAL_USER;
-const password = process.env.ETHEREAL_PASSWORD;
+const { ETHEREAL_USER: user, ETHEREAL_PASSWORD: password } = process.env;
 
 if (!user || !password) {
   throw new Error("Faltan las credenciales de Ethereal");
@@ -15,19 +16,12 @@ const client = new SMTPClient({
   tls: true,
 });
 
-export async function sendEmail({
-  subject,
-  text,
-}: {
+type EmailData = {
+  to: string;
   subject: string;
   text: string;
-}) {
-  const message = new Message({
-    from: user,
-    to: user,
-    subject,
-    text,
-  });
+};
 
-  return client.sendAsync(message);
+export async function sendEmail(data: EmailData) {
+  return client.sendAsync(new Message({ from: user, ...data }));
 }

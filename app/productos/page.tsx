@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import { SideBarLayout } from "@/components/ui/sideBarLayout/SideBarLayout";
 import styles from "../../styles/productos.module.css";
 import ProductList from "../../components/products/ProductList";
+import { Pagination } from "@/components/ui/Pagination";
 import ProductFilters, {
   type ProductFiltersValue,
 } from "../../components/products/ProductFilters";
@@ -15,7 +17,6 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-
   const [filters, setFilters] = useState<ProductFiltersValue>({
     brands: [],
     categories: [],
@@ -75,14 +76,17 @@ export default function Page() {
   });
 
   return (
-    <main className={styles.catalogo}>
-      <ProductFilters
-        filters={filters}
-        brands={brands}
-        categories={categories}
-        onChange={setFilters}
-      />
-
+    <SideBarLayout
+      page="client"
+      sidebarChildren={
+        <ProductFilters
+          filters={filters}
+          brands={brands}
+          categories={categories}
+          onChange={setFilters}
+        />
+      }
+    >
       <div>
         <input
           className={styles.buscador}
@@ -100,10 +104,16 @@ export default function Page() {
         ) : filteredProducts.length === 0 ? (
           <p role="status">No se encontraron productos con esos filtros.</p>
         ) : (
-          <ProductList products={filteredProducts} />
+          <Pagination<CatalogProduct>
+            itemsPerPage={16}
+            maxPageButtons={3}
+            data={filteredProducts}
+            totalRecords={filteredProducts.length}
+          >
+            {(currentProducts) => <ProductList products={currentProducts} />}
+          </Pagination>
         )}
       </div>
-    </main>
+    </SideBarLayout>
   );
 }
-

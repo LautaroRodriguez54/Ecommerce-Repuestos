@@ -1,13 +1,11 @@
+
 import {
   getUserById,
   updateUser,
   deleteUser,
 } from "@/services/user/user.service";
 
-import {
-  updateUserSchema,
-} from "@/validators/user/user.schema";
-
+import { updateUserSchema } from "@/validators/user/user.schema";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 import {
@@ -16,45 +14,40 @@ import {
   notFound,
   conflict,
   serverError,
+  unauthorized,
+  forbidden,
 } from "@/utils/apiResponse";
 
-/**
- * GET /api/usuarios/:id
- * Obtiene un usuario por ID.
- */
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const user = await getUserById((await params).id);
 
-    const user = await getUserById(id);
-
-    if (!user) {
-      return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
-    }
+    if (!user) return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
 
     return success(user);
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar este usuario.");
+      }
+    }
     return serverError();
   }
 }
 
-/**
- * PUT /api/usuarios/:id
- * Actualiza un usuario existente.
- */
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-
-    const body = await request.json();
-
-    const validation = updateUserSchema.safeParse(body);
+    const validation = updateUserSchema.safeParse(await request.json());
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);
@@ -62,44 +55,44 @@ export async function PUT(
 
     const user = await updateUser(id, validation.data);
 
-    if (!user) {
-      return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
-    }
+    if (!user) return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
 
     return success(user);
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === ERROR_MESSAGES.USER_ALREADY_EXISTS
-    ) {
-      return conflict(error.message);
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para actualizar usuarios.");
+      }
+      if (error.message === ERROR_MESSAGES.USER_ALREADY_EXISTS) {
+        return conflict(error.message);
+      }
     }
-
     return serverError();
   }
 }
 
-/**
- * DELETE /api/usuarios/:id
- * Elimina un usuario.
- */
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const user = await deleteUser((await params).id);
 
-    const user = await deleteUser(id);
+    if (!user) return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
 
-    if (!user) {
-      return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
+    return success({ message: "Usuario eliminado correctamente." });
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para eliminar usuarios.");
+      }
     }
-
-    return success({
-      message: "Usuario eliminado correctamente.",
-    });
-  } catch {
     return serverError();
   }
 }

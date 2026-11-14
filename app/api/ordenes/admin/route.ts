@@ -1,35 +1,38 @@
-import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
 import {
   getAllOrders,
 } from "@/services/order/order.service";
 
-import { createOrderSchema } from "@/validators/order/order.schema";
-
 import {
   success,
-  created,
-  badRequest,
   unauthorized,
+  forbidden,
   serverError,
 } from "@/utils/apiResponse";
 
+
 /**
- * GET /api/orders
+ * GET /api/ordenes/admin
  *
- * Obtiene las órdenes del usuario autenticado.
+ * Obtiene todas las órdenes del sistema.
+ * Requiere ADMIN.
  */
 export async function GET() {
   try {
-    const user = await getAuthenticatedUser();
-
-    if (!user) {
-      return unauthorized("No hay una sesión válida.");
-    }
-
     const orders = await getAllOrders();
 
     return success(orders);
-  } catch {
+
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar todas las órdenes.");
+      }
+    }
+
     return serverError();
   }
 }

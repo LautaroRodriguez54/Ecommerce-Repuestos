@@ -1,16 +1,23 @@
 .main {
-  padding: calc(var(--menu-height) + 24px) 0 0;
+  height: auto;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+}
+.content {
+  margin-top: var(--menu-height);
 }
 
 .intro {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 350px;
-  margin: 0 auto;
+  grid-template-columns: 1fr 40%;
+  height: clamp(400px, 50vh, 450px);
+  min-height: 0;
   overflow: hidden;
   border-radius: var(--br-general);
   background: var(--color-background-light);
   box-shadow: var(--bottom-shadow);
+  margin: 24px;
 }
 
 .texto {
@@ -18,7 +25,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 16px;
-  padding: 48px;
+  padding: clamp(10px, 4vw, 48px);
 }
 
 .texto h1 {
@@ -37,20 +44,21 @@
   min-height: 350px;
 }
 .cifras {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-around;
+  gap: 10px;
+  color: var(--color-background-light);
   min-height: 180px;
   margin: 16px auto 0;
-  padding: 24px;
+  padding: 0 24px;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("/almacen.webp");
   background-position: center;
   background-size: cover;
-  color: white;
   text-align: center;
+  flex-wrap: wrap;
 }
 
 .cifras div {
@@ -73,24 +81,30 @@
   font-size: var(--head-msm-fz);
 }
 .valores {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  min-height: auto;
-  padding: 20px 24px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 24px;
+  margin: 24px;
+  min-height: 0;
 }
 
 .valores article {
-  min-height: 220px;
-  padding: 28px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 320px;
+  min-height: 320px;
+  padding: 24px;
   border-radius: var(--br-general);
-  background: var(--color-background-light);
+  background-color: var(--color-background-light);
   box-shadow: var(--bottom-shadow);
   text-align: center;
 }
 
 .valores h2 {
-  margin-bottom: 16px;
   color: var(--color-primary);
   font-size: var(--head-msm-fz);
   text-transform: uppercase;
@@ -99,4 +113,12 @@
 .valores p {
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+@media (min-width: 700px) {
+  .content {
+    margin-top: calc(var(--menu-height) + 20px);
+  }
+  .intro {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

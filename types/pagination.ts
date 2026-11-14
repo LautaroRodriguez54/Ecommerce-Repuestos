@@ -17,3 +17,18 @@ export type SelectBoxProps = {
   value?: string;
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
 };
+
+/*Login */
+export type Usuario = {
+  email: string;
+  password: string;
+};
+
+export type ResetStep = "email" | "code" | "password";
+
+export type ResetRequestBody = Record<string, string>;
+
+export type ResetResponse = {
+  message?: string;
+  error?: string;
+};

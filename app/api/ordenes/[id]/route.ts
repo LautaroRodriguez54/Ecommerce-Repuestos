@@ -1,26 +1,37 @@
-import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
-import { getOrderById, updateOrderStatus } from "@/services/order/order.service";
+import {
+  getOrderById,
+  updateOrderStatus,
+} from "@/services/order/order.service";
+
+import type { OrderStatus } from "@/services/order/order.service";
 
 import {
   success,
   unauthorized,
+  forbidden,
   notFound,
   serverError,
   badRequest,
+  conflict,
 } from "@/utils/apiResponse";
-const validStatuses = [
+
+
+const validStatuses: OrderStatus[] = [
   "PENDING",
   "PAID",
   "PREPARING",
   "SHIPPED",
   "DELIVERED",
   "CANCELLED",
-] as const;
+];
+
 
 /**
- * GET /api/orders/:id
+ * GET /api/ordenes/:id
  *
- * Obtiene una orden del usuario autenticado.
+ * Obtiene una orden.
+ * El cliente solo puede consultar sus propias órdenes.
+ * ADMIN puede consultar cualquier orden.
  */
 export async function GET(
   _request: Request,
@@ -29,12 +40,6 @@ export async function GET(
   }
 ) {
   try {
-    const user = await getAuthenticatedUser();
-
-    if (!user) {
-      return unauthorized("No hay una sesión válida.");
-    }
-
     const { id } = await context.params;
 
     const order = await getOrderById(id);
@@ -43,65 +48,80 @@ export async function GET(
       return notFound("Orden no encontrada.");
     }
 
-    /*
-     * Un cliente solamente puede consultar
-     * sus propias órdenes.
-     */
-    if (order.userId !== user.id) {
-      return notFound("Orden no encontrada.");
+    return success(order);
+
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("No hay una sesión válida.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar esta orden.");
+      }
     }
 
-    return success(order);
-  } catch {
     return serverError();
   }
 }
+
+
 /**
  * PATCH /api/ordenes/:id
- * Actualiza el estado de una orden.
+ *
+ * CLIENT:
+ * Solo puede cancelar sus propias órdenes.
+ *
+ * ADMIN:
+ * Puede actualizar cualquier estado excepto CANCELLED.
  */
 export async function PATCH(
   request: Request,
   context: {
     params: Promise<{ id: string }>;
-  },
+  }
 ) {
   try {
-    const user = await getAuthenticatedUser();
-
-    if (!user) {
-      return unauthorized("No hay una sesión válida.");
-    }
-/*
-    if (user.role !== "ADMIN") {
-      return unauthorized("No tenés permisos para modificar pedidos.");
-    }
-*/
     const { id } = await context.params;
+
     const body = await request.json();
 
     if (
       !body ||
       typeof body.status !== "string" ||
-      !validStatuses.includes(
-        body.status as (typeof validStatuses)[number],
-      )
+      !validStatuses.includes(body.status as OrderStatus)
     ) {
       return badRequest("El estado del pedido no es válido.");
     }
 
     const order = await updateOrderStatus(
       id,
-      body.status as (typeof validStatuses)[number],
+      body.status as OrderStatus
     );
 
-    return success(order);
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes("Record to update not found")
-    ) {
+    if (!order) {
       return notFound("Orden no encontrada.");
+    }
+
+    return success(order);
+
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para realizar esta acción.");
+      }
+
+      if (error.message === "ADMIN_CANNOT_CANCEL_ORDER") {
+        return forbidden("El administrador no puede cancelar órdenes.");
+      }
+
+      if (error.message === "ORDER_ALREADY_CANCELLED") {
+        return conflict("Esta orden ya fue cancelada y no puede volver a modificarse por el cliente.");
+      }
     }
 
     return serverError();

@@ -64,7 +64,6 @@
 }
 
 .tarjeta {
-  min-width: 0;
   background-color: var(--color-background-light);
   border-radius: 12px;
   padding: 16px;
@@ -94,6 +93,30 @@
   font-size: var(--caption-fz);
 }
 
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: clamp(200px, 100%, 300px);
+
+  .imagenProducto {
+    height: 50%;
+    margin-bottom: 0;
+  }
+  .foto {
+    object-fit: cover;
+  }
+  p {
+    margin-bottom: 0;
+    overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  }
+  .verDetalle {
+    margin-top: 0;
+  }
+}
+
 /* Escritorios más pequeños */
 @media (max-width: 1200px) {
   .catalogo {
@@ -112,7 +135,6 @@
     grid-template-columns: minmax(0, 1fr);
     padding-top: calc(var(--menu-height) + 24px);
   }
-
   .filtros {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

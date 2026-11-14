@@ -87,7 +87,11 @@ export const OrderContent = () => {
         />
         <Button buttonText={<Brush />} rounded onClick={clearFilters} />
       </div>
-      <AdminTable title={title} data={tableData} totalRecords={tableData.length}/>
+      <AdminTable
+        title={title}
+        data={tableData}
+        totalRecords={tableData.length}
+      />
       {isModalOpen && (
         <AdminModal
           title="ACTUALIZAR PEDIDO"
@@ -98,7 +102,10 @@ export const OrderContent = () => {
           <ComponentData dataArea={stylesAuth.data} areaName="Estado">
             <SelectBox
               option={statusConfig
-                .filter((status) => status.value !== "ALL")
+                .filter(
+                  (status) =>
+                    status.value !== "ALL" && status.value !== "CANCELLED",
+                )
                 .map((status) => status.label)}
               value={
                 statusConfig.find((status) => status.value === formStatus)
@@ -109,7 +116,11 @@ export const OrderContent = () => {
                   (status) => status.label === e.target.value,
                 );
 
-                if (selected && selected.value !== "ALL") {
+                if (
+                  selected &&
+                  selected.value !== "ALL" &&
+                  selected.value !== "CANCELLED"
+                ) {
                   setFormStatus(selected.value);
                 }
               }}

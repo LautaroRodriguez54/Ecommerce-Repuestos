@@ -1,4 +1,5 @@
 import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
+
 import {
   createOrder,
   getOrdersByUserId,
@@ -11,11 +12,13 @@ import {
   created,
   badRequest,
   unauthorized,
+  forbidden,
   serverError,
 } from "@/utils/apiResponse";
 
+
 /**
- * GET /api/orders
+ * GET /api/ordenes
  *
  * Obtiene las órdenes del usuario autenticado.
  */
@@ -30,13 +33,25 @@ export async function GET() {
     const orders = await getOrdersByUserId(user.id);
 
     return success(orders);
-  } catch {
+
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("No hay una sesión válida.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar estas órdenes.");
+      }
+    }
+
     return serverError();
   }
 }
 
+
 /**
- * POST /api/orders
+ * POST /api/ordenes
  *
  * Genera una orden a partir del carrito
  * del usuario autenticado.
@@ -63,9 +78,20 @@ export async function POST(request: Request) {
     );
 
     return created(order);
+
   } catch (error) {
     if (error instanceof Error) {
-      return badRequest(error.message);
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("No hay una sesión válida.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para crear esta orden.");
+      }
+
+      if (error.message === "El carrito está vacío.") {
+        return badRequest(error.message);
+      }
     }
 
     return serverError();
