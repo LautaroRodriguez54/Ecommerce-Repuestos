@@ -42,3 +42,19 @@ export function getRelatedProducts(
     )
     .slice(0, 3);
 }
+
+export function getProductDetailFields(product: Producto) {
+  return [
+    product.model?.brand && { label: "Marca", value: product.model.brand.name },
+    product.model && { label: "Modelo", value: product.model.name },
+    product.compatibleYear != null && {
+      label: "Año compatible",
+      value: String(product.compatibleYear),
+    },
+    { label: "Código SKU", value: product.sku },
+    product.category && { label: "Rubro", value: product.category.name },
+    { label: "Stock", value: String(product.stock) },
+  ].filter(
+    (field): field is { label: string; value: string } => Boolean(field),
+  );
+}

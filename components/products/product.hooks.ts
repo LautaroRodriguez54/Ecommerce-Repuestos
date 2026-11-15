@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { agregarAlCarrito } from "@/lib/carrito";
+import { addItemCarrito } from "@/lib/api/carrito";
 import {
   getProducto,
   getProductosCatalogo,
@@ -80,6 +80,7 @@ export function useProductDetail(id: string) {
   const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cartError, setCartError] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -88,6 +89,7 @@ export function useProductDetail(id: string) {
     async function loadProduct() {
       setLoading(true);
       setError("");
+      setCartError("");
       setProduct(null);
       setRelatedProducts([]);
       setQuantity(1);
@@ -126,13 +128,14 @@ export function useProductDetail(id: string) {
     if (!product) return;
 
     const controller = new AbortController();
+    const currentProduct = product;
 
     async function loadRelatedProducts() {
       try {
         const products = await getProductosCatalogo(controller.signal);
 
         if (!controller.signal.aborted) {
-          setRelatedProducts(getRelatedProducts(products, product));
+          setRelatedProducts(getRelatedProducts(products, currentProduct));
         }
       } catch {
         if (!controller.signal.aborted) {
@@ -155,18 +158,20 @@ export function useProductDetail(id: string) {
     setQuantity((current) => Math.min(product.stock, current + 1));
   }
 
-  function addToCart() {
+  async function addToCart() {
     if (!product || product.stock < 1) return;
 
-    agregarAlCarrito({
-      id: product.id,
-      nombre: product.name,
-      imagen: product.image ?? "",
-      precio: Number(product.price),
-      cantidad: quantity,
-    });
-
-    router.push("/carrito");
+    try {
+      setCartError("");
+      await addItemCarrito(product.id, quantity);
+      router.push("/carrito");
+    } catch (error) {
+      setCartError(
+        error instanceof Error
+          ? error.message
+          : "No se pudo agregar el producto al carrito.",
+      );
+    }
   }
 
   return {
@@ -174,6 +179,7 @@ export function useProductDetail(id: string) {
     relatedProducts,
     loading,
     error,
+    cartError,
     quantity,
     decreaseQuantity,
     increaseQuantity,

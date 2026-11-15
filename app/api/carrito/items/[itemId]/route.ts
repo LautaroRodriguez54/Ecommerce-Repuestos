@@ -7,12 +7,7 @@ import {
 
 import { updateCartItemSchema } from "@/validators/cart/cart.schema";
 
-import {
-  success,
-  badRequest,
-  unauthorized,
-  serverError,
-} from "@/utils/apiResponse";
+import { success, badRequest, unauthorized } from "@/utils/apiResponse";
 
 type RouteContext = {
   params: Promise<{

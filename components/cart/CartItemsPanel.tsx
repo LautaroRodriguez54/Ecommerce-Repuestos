@@ -1,22 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { ItemCarrito } from "@/lib/carrito";
+import type { CartItem } from "@/lib/api/carrito";
 import { priceFormat } from "./cart.constants";
 import styles from "@/styles/carrito.module.css";
 
 type CartItemsPanelProps = {
-  items: ItemCarrito[];
-  selectedIds: string[];
-  onToggleItem: (id: string) => void;
+  items: CartItem[];
   onChangeQuantity: (id: string, change: number) => void;
   onRemoveItem: (id: string) => void;
 };
 
 export default function CartItemsPanel({
   items,
-  selectedIds,
-  onToggleItem,
   onChangeQuantity,
   onRemoveItem,
 }: CartItemsPanelProps) {
@@ -32,7 +28,6 @@ export default function CartItemsPanel({
       ) : (
         <>
           <div className={styles.encabezado}>
-            <span />
             <span>Producto</span>
             <span>Cantidad</span>
             <span>Precio unitario</span>
@@ -41,15 +36,7 @@ export default function CartItemsPanel({
 
           {items.map((item) => (
             <article className={styles.fila} key={item.id}>
-              <input
-                type="checkbox"
-                checked={selectedIds.includes(item.id)}
-                onChange={() => onToggleItem(item.id)}
-                aria-label={`Seleccionar ${item.nombre}, producto ${item.id}`}
-                className={styles.seleccion}
-              />
-
-              <Link href={`/productos/${item.id}`} className={styles.producto}>
+              <Link href={`/productos/${item.productId}`} className={styles.producto}>
                 <Image
                   src={item.imagen}
                   alt={item.nombre}
@@ -59,7 +46,7 @@ export default function CartItemsPanel({
                 />
                 <div>
                   <p>{item.nombre}</p>
-                  <small>Producto {item.id}</small>
+                  <small>Producto {item.productId}</small>
                 </div>
               </Link>
 
@@ -75,6 +62,7 @@ export default function CartItemsPanel({
                 <span>{item.cantidad}</span>
                 <button
                   type="button"
+                  disabled={item.cantidad >= item.stock}
                   onClick={() => onChangeQuantity(item.id, 1)}
                   aria-label="Aumentar cantidad"
                 >
