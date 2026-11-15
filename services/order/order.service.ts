@@ -65,6 +65,58 @@ function calculatePaymentDiscount(
   }
 }
 
+type OrderCartItem = {
+  productId: string;
+  quantity: number;
+  product: {
+    price: unknown;
+  };
+};
+
+/**
+ * Calcula los importes comerciales desde el carrito del servidor.
+ * Esta función se reutiliza para la vista previa y para la orden definitiva,
+ * de modo que el cliente nunca calcula ni decide precios.
+ */
+function calculateOrderAmounts(
+  items: OrderCartItem[],
+  paymentTerm: CreateOrderInput["paymentTerm"],
+) {
+  const netTotal = items.reduce((total, item) => {
+    return total + Number(item.product.price) * item.quantity;
+  }, 0);
+
+  const bonusAmount = netTotal * 0.25;
+  const vatAmount = netTotal * 0.21;
+  const paymentDiscountAmount = calculatePaymentDiscount(
+    netTotal + vatAmount,
+    paymentTerm,
+  );
+  const total = netTotal - bonusAmount + vatAmount - paymentDiscountAmount;
+
+  return {
+    netTotal,
+    bonusAmount,
+    paymentDiscountAmount,
+    vatAmount,
+    total,
+  };
+}
+
+/** Obtiene el resumen que verá el cliente antes de confirmar la orden. */
+export async function getOrderPreview(
+  userId: string,
+  paymentTerm: CreateOrderInput["paymentTerm"],
+) {
+  const cart = await getOrCreateCart(userId);
+
+  if (cart.items.length === 0) {
+    throw new Error("El carrito está vacío.");
+  }
+
+  return calculateOrderAmounts(cart.items, paymentTerm);
+}
+
 /**
  * Crea una orden a partir del carrito del usuario.
  */
@@ -78,50 +130,13 @@ export async function createOrder(
     throw new Error("El carrito está vacío.");
   }
 
-  /*
-   * El precio siempre se obtiene desde Product.price.
-   *
-   * Nunca utilizamos precios enviados por el cliente.
-   */
-  const netTotal = cart.items.reduce((total, item) => {
-    return total + Number(item.product.price) * item.quantity;
-  }, 0);
-
-  /*
-   * Bonificación comercial fija del 25%.
-   */
-  const bonusAmount = netTotal * 0.25;
-
-  /*
-   * IVA del 21% sobre el precio neto.
-   */
-  const vatAmount = netTotal * 0.21;
-
-  /*
-   * El descuento por plazo se calcula sobre:
-   *
-   * precio neto + IVA
-   */
-  const paymentDiscountBase = netTotal + vatAmount;
-
-  const paymentDiscountAmount = calculatePaymentDiscount(
-    paymentDiscountBase,
-    data.paymentTerm
-  );
-
-  /*
-   * Total final:
-   *
-   * neto
-   * - bonificación
-   * + IVA
-   * - descuento por plazo
-   */
-  const total =
-    netTotal -
-    bonusAmount +
-    vatAmount -
-    paymentDiscountAmount;
+  const {
+    netTotal,
+    bonusAmount,
+    paymentDiscountAmount,
+    vatAmount,
+    total,
+  } = calculateOrderAmounts(cart.items, data.paymentTerm);
 
   return createOrderTransaction({
     userId,

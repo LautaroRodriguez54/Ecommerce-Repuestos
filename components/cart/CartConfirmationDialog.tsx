@@ -28,8 +28,8 @@ export default function CartConfirmationDialog({
         ×
       </button>
 
-      <p>¡Tu solicitud está lista!</p>
-      <small>Confirmación de prueba.</small>
+      <p>¡Tu pedido fue generado!</p>
+      <small>Recibirás las novedades del pedido por los canales habituales.</small>
 
       <button
         type="button"

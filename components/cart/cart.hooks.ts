@@ -1,70 +1,110 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
-  guardarCarrito,
-  leerCarrito,
-  type ItemCarrito,
-} from "@/lib/carrito";
-import { getCartSummary } from "./cart.helpers";
+  createOrden,
+  getOrdenResumen,
+  type OrderSummary,
+} from "@/lib/api/ordenes";
+import {
+  getCarrito,
+  removeItemCarrito,
+  updateItemCarrito,
+  type CartItem,
+} from "@/lib/api/carrito";
+import type { PaymentTerm } from "./cart.constants";
 
-export function useCart() {
-  const [items, setItems] = useState<ItemCarrito[]>([]);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+function getErrorMessage(error: unknown) {
+  return error instanceof Error
+    ? error.message
+    : "No se pudo actualizar el carrito. Intentá nuevamente.";
+}
+
+export function useCart(paymentTerm: PaymentTerm) {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [summary, setSummary] = useState<OrderSummary | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const loadCart = useCallback(async () => {
+    try {
+      const cart = await getCarrito();
+      setItems(cart.items);
+
+      if (cart.items.length === 0) {
+        setSummary(null);
+      } else {
+        try {
+          setSummary(await getOrdenResumen(paymentTerm));
+        } catch (error) {
+          setSummary(null);
+          setError(getErrorMessage(error));
+          return;
+        }
+      }
+
+      setError("");
+    } catch (error) {
+      setItems([]);
+      setSummary(null);
+      setError(getErrorMessage(error));
+    } finally {
+      setLoaded(true);
+    }
+  }, [paymentTerm]);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const savedItems = leerCarrito();
-      setItems(savedItems);
-      setSelectedIds(savedItems.map((item) => item.id));
-      setLoaded(true);
-    });
+    void loadCart();
+  }, [loadCart]);
 
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+  async function changeQuantity(id: string, change: number) {
+    const item = items.find((current) => current.id === id);
+    if (!item) return;
 
-  function persistItems(nextItems: ItemCarrito[]) {
-    guardarCarrito(nextItems);
-    setItems(nextItems);
+    try {
+      await updateItemCarrito(id, Math.max(1, item.cantidad + change));
+      await loadCart();
+    } catch (error) {
+      setError(getErrorMessage(error));
+    }
   }
 
-  function changeQuantity(id: string, change: number) {
-    persistItems(
-      items.map((item) =>
-        item.id === id
-          ? { ...item, cantidad: Math.max(1, item.cantidad + change) }
-          : item,
-      ),
-    );
+  async function removeItem(id: string) {
+    try {
+      await removeItemCarrito(id);
+      await loadCart();
+    } catch (error) {
+      setError(getErrorMessage(error));
+    }
   }
 
-  function removeItem(id: string) {
-    persistItems(items.filter((item) => item.id !== id));
-    setSelectedIds((current) => current.filter((selectedId) => selectedId !== id));
-  }
+  async function submitOrder() {
+    if (items.length === 0 || isSubmitting) return false;
 
-  function toggleItem(id: string) {
-    setSelectedIds((current) =>
-      current.includes(id)
-        ? current.filter((selectedId) => selectedId !== id)
-        : [...current, id],
-    );
+    try {
+      setIsSubmitting(true);
+      setError("");
+      await createOrden({ paymentTerm });
+      await loadCart();
+      return true;
+    } catch (error) {
+      setError(getErrorMessage(error));
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
   }
-
-  const summary = useMemo(
-    () => getCartSummary(items, selectedIds),
-    [items, selectedIds],
-  );
 
   return {
     items,
-    selectedIds,
+    summary,
     loaded,
+    isSubmitting,
+    error,
     changeQuantity,
     removeItem,
-    toggleItem,
-    ...summary,
+    submitOrder,
   };
 }

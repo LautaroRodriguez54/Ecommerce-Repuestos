@@ -1,78 +1,86 @@
-export async function getOrdenes() {
-  const response = await fetch("/api/ordenes");
-  const result = await response.json();
+import type { Order, OrderStatus, PaymentTerm } from "@/types/api";
 
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudieron obtener las órdenes");
+export type { PaymentTerm };
+
+export type OrderSummary = {
+  netTotal: number;
+  bonusAmount: number;
+  paymentDiscountAmount: number;
+  vatAmount: number;
+  total: number;
+};
+
+type ApiResponse<T> = {
+  success: boolean;
+  data?: T;
+  message?: string;
+};
+
+async function request<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    ...init,
+  });
+  const result = (await response.json()) as ApiResponse<T>;
+
+  if (!response.ok || !result.success || result.data === undefined) {
+    throw new Error(result.message ?? "No se pudo procesar la orden.");
   }
 
   return result.data;
 }
+
+function toOrderSummary(summary: Record<keyof OrderSummary, number | string>) {
+  return {
+    netTotal: Number(summary.netTotal),
+    bonusAmount: Number(summary.bonusAmount),
+    paymentDiscountAmount: Number(summary.paymentDiscountAmount),
+    vatAmount: Number(summary.vatAmount),
+    total: Number(summary.total),
+  };
+}
+
+export async function getOrdenes() {
+  return request<Order[]>("/api/ordenes");
+}
+
 export async function getOrdenesTotales() {
-  const response = await fetch("/api/ordenes/admin");
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudieron obtener las órdenes");
-  }
-
-  return result.data;
+  return request<Order[]>("/api/ordenes/admin");
 }
 
 export async function getOrden(id: string) {
-  const response = await fetch(`/api/ordenes/${id}`);
-  const result = await response.json();
+  return request<Order>(`/api/ordenes/${id}`);
+}
 
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo obtener la orden");
-  }
+export async function getOrdenResumen(
+  paymentTerm: PaymentTerm,
+): Promise<OrderSummary> {
+  const search = new URLSearchParams({ paymentTerm });
+  const summary = await request<Record<keyof OrderSummary, number | string>>(
+    `/api/ordenes/resumen?${search}`,
+  );
 
-  return result.data;
+  return toOrderSummary(summary);
 }
 
 export async function createOrden(data: {
-  paymentTerm: "DAYS_7" | "DAYS_30" | "DAYS_45" | "DAYS_60";
+  paymentTerm: PaymentTerm;
   comment?: string;
 }) {
-  const response = await fetch("/api/ordenes", {
+  return request<unknown>("/api/ordenes", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo crear la orden");
-  }
-
-  return result.data;
 }
+
 export async function updateOrdenStatus(
   id: string,
-  status:
-    | "PENDING"
-    | "PAID"
-    | "PREPARING"
-    | "SHIPPED"
-    | "DELIVERED"
-    | "CANCELLED"
+  status: OrderStatus,
 ) {
-  const response = await fetch(`/api/ordenes/${id}`, {
+  return request<unknown>(`/api/ordenes/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
   });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo actualizar el pedido");
-  }
-
-  return result.data;
 }

@@ -1,29 +1,35 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import CartConfirmationDialog from "@/components/cart/CartConfirmationDialog";
 import CartItemsPanel from "@/components/cart/CartItemsPanel";
 import CartRelatedProducts from "@/components/cart/CartRelatedProducts";
 import CartShippingNotice from "@/components/cart/CartShippingNotice";
 import CartSummary from "@/components/cart/CartSummary";
+import type { PaymentTerm } from "@/components/cart/cart.constants";
 import { useCart } from "@/components/cart/cart.hooks";
 import styles from "@/styles/carrito.module.css";
 
 export default function Page() {
   const confirmationRef = useRef<HTMLDialogElement>(null);
+  const [paymentTerm, setPaymentTerm] = useState<PaymentTerm>("DAYS_30");
   const {
     items,
-    selectedIds,
     loaded,
+    error,
     changeQuantity,
     removeItem,
-    toggleItem,
-    selectedItems,
-    subtotal,
-    shipping,
-    total,
-  } = useCart();
+    summary,
+    isSubmitting,
+    submitOrder,
+  } = useCart(paymentTerm);
+
+  async function handleSubmitOrder() {
+    if (await submitOrder()) {
+      confirmationRef.current?.showModal();
+    }
+  }
 
   if (!loaded) {
     return <div className={styles.pagina}>Cargando carrito...</div>;
@@ -37,20 +43,20 @@ export default function Page() {
         <div className={styles.columna}>
           <CartItemsPanel
             items={items}
-            selectedIds={selectedIds}
-            onToggleItem={toggleItem}
             onChangeQuantity={changeQuantity}
             onRemoveItem={removeItem}
           />
+          {error && <p role="alert">{error}</p>}
           <CartShippingNotice />
         </div>
 
         <CartSummary
-          subtotal={subtotal}
-          shipping={shipping}
-          total={total}
-          canSubmit={selectedItems.length > 0}
-          onSubmit={() => confirmationRef.current?.showModal()}
+          summary={summary}
+          paymentTerm={paymentTerm}
+          onPaymentTermChange={setPaymentTerm}
+          canSubmit={items.length > 0}
+          isSubmitting={isSubmitting}
+          onSubmit={handleSubmitOrder}
         />
       </div>
 
