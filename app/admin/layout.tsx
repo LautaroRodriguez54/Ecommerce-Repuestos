@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout.jsx";
+import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout";
 import { adminActions } from "@/components/pageData.js";
 import styles from "../../components/admin/admin.module.css";
 import { UserContent } from "@/components/admin/User/UserContent";

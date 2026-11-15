@@ -5,11 +5,8 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { agregarAlCarrito } from "../../../lib/carrito";
-import {
-  fetchProducts,
-  type CatalogProduct,
-} from "../../../services/product/product.api";
 import styles from "../../../styles/detalleProducto.module.css";
+import { getProductImage } from "@/components/product/productImages/getProductImage";
 
 type ProductDetail = {
   id: string;
@@ -46,7 +43,7 @@ export default function Page() {
   const router = useRouter();
 
   const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -59,7 +56,7 @@ export default function Page() {
     setLoading(true);
     setError("");
     setProduct(null);
-    setRelatedProducts([]);
+
     setQuantity(1);
     modalRef.current?.close();
 
@@ -92,7 +89,10 @@ export default function Page() {
         }
 
         if (!controller.signal.aborted) {
-          setProduct(result.data);
+          setProduct({
+            ...result.data,
+            image: getProductImage(result.data.id),
+          });
         }
       } catch (error) {
         if (!controller.signal.aborted) {
@@ -113,40 +113,6 @@ export default function Page() {
 
     return () => controller.abort();
   }, [id]);
-
-  useEffect(() => {
-    if (!product) return;
-
-    const controller = new AbortController();
-    const currentProduct = product;
-
-    async function loadRelatedProducts() {
-      try {
-        const products = await fetchProducts(controller.signal);
-
-        const related = products
-          .filter(
-            (item) =>
-              item.id !== currentProduct.id &&
-              item.category === currentProduct.category?.name,
-          )
-          .slice(0, 3);
-
-        if (!controller.signal.aborted) {
-          setRelatedProducts(related);
-        }
-      } catch {
-        // El detalle puede funcionar aunque fallen los relacionados.
-        if (!controller.signal.aborted) {
-          setRelatedProducts([]);
-        }
-      }
-    }
-
-    loadRelatedProducts();
-
-    return () => controller.abort();
-  }, [product]);
 
   function addProduct() {
     if (!product || product.stock < 1) return;
@@ -329,33 +295,6 @@ export default function Page() {
           </div>
         </div>
       </article>
-
-      {relatedProducts.length > 0 && (
-        <div className={styles.relacionados}>
-          <h2>Artículos relacionados</h2>
-
-          <div className={styles.grillaRelacionados}>
-            {relatedProducts.map((item) => (
-              <Link
-                href={`/productos/${item.id}`}
-                className={styles.relacionado}
-                key={item.id}
-              >
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={180}
-                  height={160}
-                  className={styles.fotoRelacionada}
-                />
-
-                <p>{item.name}</p>
-                <span>Ver detalle →</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

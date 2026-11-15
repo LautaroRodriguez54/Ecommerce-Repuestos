@@ -17,3 +17,9 @@ export type SelectBoxProps = {
   value?: string;
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
 };
+export type ProductCardProps = {
+  id: string | number;
+  name: string;
+  image: string;
+  price: number;
+};

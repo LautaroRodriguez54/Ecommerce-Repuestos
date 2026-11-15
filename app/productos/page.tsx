@@ -1,14 +1,26 @@
 "use client";
 import { useEffect, useState } from "react";
+import { SideBarLayout } from "@/components/ui/sideBarLayout/SideBarLayout";
+import { SearchBox } from "@/components/ui/form/SearchBox";
 import styles from "../../styles/productos.module.css";
-import ProductList from "../../components/products/ProductList";
+import ProductList from "../../components/product/ProductList";
+import { Pagination } from "@/components/ui/Pagination";
 import ProductFilters, {
   type ProductFiltersValue,
-} from "../../components/products/ProductFilters";
-import {
-  fetchProducts,
-  type CatalogProduct,
-} from "../../services/product/product.api";
+} from "../../components/product/ProductFilters";
+import { getProductos } from "@/lib/api/productos";
+import type { CatalogProduct } from "../../services/product/product.api";
+import { getProductImage } from "@/components/product/productImages/getProductImage";
+
+
+type ApiProduct = {
+  id: string;
+  name: string;
+  image: string | null;
+  price: string | number;
+  model?: { brand?: { name: string } | null } | null;
+  category?: { name: string } | null;
+};
 
 export default function Page() {
   const [products, setProducts] = useState<CatalogProduct[]>([]);
@@ -26,10 +38,19 @@ export default function Page() {
 
     async function loadProducts() {
       try {
-        const data = await fetchProducts(controller.signal);
+        const data: ApiProduct[] = await getProductos();
 
         if (!controller.signal.aborted) {
-          setProducts(data);
+          setProducts(
+            data.map((product) => ({
+              id: product.id,
+              name: product.name,
+              image: getProductImage(product.id),
+              price: Number(product.price),
+              brand: product.model?.brand?.name ?? "",
+              category: product.category?.name ?? "",
+            })),
+          );
         }
       } catch (error) {
         if (!controller.signal.aborted) {
@@ -75,14 +96,17 @@ export default function Page() {
   });
 
   return (
-    <main className={styles.catalogo}>
-      <ProductFilters
-        filters={filters}
-        brands={brands}
-        categories={categories}
-        onChange={setFilters}
-      />
-
+    <SideBarLayout
+      page="client"
+      sidebarChildren={
+        <ProductFilters
+          filters={filters}
+          brands={brands}
+          categories={categories}
+          onChange={setFilters}
+        />
+      }
+    >
       <div>
         <input
           className={styles.buscador}
@@ -100,10 +124,16 @@ export default function Page() {
         ) : filteredProducts.length === 0 ? (
           <p role="status">No se encontraron productos con esos filtros.</p>
         ) : (
-          <ProductList products={filteredProducts} />
+          <Pagination<CatalogProduct>
+            itemsPerPage={16}
+            maxPageButtons={3}
+            data={filteredProducts}
+            totalRecords={filteredProducts.length}
+          >
+            {(currentProducts) => <ProductList products={currentProducts} />}
+          </Pagination>
         )}
       </div>
-    </main>
+    </SideBarLayout>
   );
 }
-
