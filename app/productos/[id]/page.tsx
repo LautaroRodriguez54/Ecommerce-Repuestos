@@ -2,165 +2,26 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { agregarAlCarrito } from "../../../lib/carrito";
-import {
-  fetchProducts,
-  type CatalogProduct,
-} from "../../../services/product/product.api";
-import styles from "../../../styles/detalleProducto.module.css";
-
-type ProductDetail = {
-  id: string;
-  name: string;
-  description: string | null;
-  image: string | null;
-  price: string | number;
-  sku: string;
-  stock: number;
-  compatibleYear: number | null;
-  category: {
-    name: string;
-  } | null;
-  model: {
-    name: string;
-    brand: {
-      name: string;
-    } | null;
-  } | null;
-};
-
-type ProductResponse = {
-  success: boolean;
-  data?: ProductDetail;
-};
-
-const priceFormat = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-});
+import { useParams } from "next/navigation";
+import { useRef } from "react";
+import { priceFormat } from "@/components/products/product.constants";
+import { useProductDetail } from "@/components/products/product.hooks";
+import styles from "@/styles/detalleProducto.module.css";
 
 export default function Page() {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
-
-  const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const {
+    product,
+    relatedProducts,
+    loading,
+    error,
+    quantity,
+    decreaseQuantity,
+    increaseQuantity,
+    addToCart,
+  } = useProductDetail(id);
 
   const modalRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    setError("");
-    setProduct(null);
-    setRelatedProducts([]);
-    setQuantity(1);
-    modalRef.current?.close();
-
-    async function loadProduct() {
-      try {
-        const response = await fetch(
-          `/api/productos/${encodeURIComponent(id)}`,
-          {
-            signal: controller.signal,
-            cache: "no-store",
-          },
-        );
-
-        if (response.status === 404) {
-          throw new Error("Producto no encontrado.");
-        }
-
-        if (!response.ok) {
-          throw new Error("No se pudo cargar el producto.");
-        }
-
-        const result: ProductResponse = await response.json();
-
-        if (
-          !result.success ||
-          !result.data ||
-          !Number.isFinite(Number(result.data.price))
-        ) {
-          throw new Error("La respuesta del producto no es válida.");
-        }
-
-        if (!controller.signal.aborted) {
-          setProduct(result.data);
-        }
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          setError(
-            error instanceof Error
-              ? error.message
-              : "Ocurrió un error al cargar el producto.",
-          );
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadProduct();
-
-    return () => controller.abort();
-  }, [id]);
-
-  useEffect(() => {
-    if (!product) return;
-
-    const controller = new AbortController();
-    const currentProduct = product;
-
-    async function loadRelatedProducts() {
-      try {
-        const products = await fetchProducts(controller.signal);
-
-        const related = products
-          .filter(
-            (item) =>
-              item.id !== currentProduct.id &&
-              item.category === currentProduct.category?.name,
-          )
-          .slice(0, 3);
-
-        if (!controller.signal.aborted) {
-          setRelatedProducts(related);
-        }
-      } catch {
-        // El detalle puede funcionar aunque fallen los relacionados.
-        if (!controller.signal.aborted) {
-          setRelatedProducts([]);
-        }
-      }
-    }
-
-    loadRelatedProducts();
-
-    return () => controller.abort();
-  }, [product]);
-
-  function addProduct() {
-    if (!product || product.stock < 1) return;
-
-    agregarAlCarrito({
-      id: product.id,
-      nombre: product.name,
-      imagen: product.image ?? "",
-      precio: Number(product.price),
-      cantidad: quantity,
-    });
-
-    router.push("/carrito");
-  }
 
   if (loading) {
     return (
@@ -301,7 +162,7 @@ export default function Page() {
                 type="button"
                 aria-label="Disminuir cantidad"
                 disabled={quantity <= 1}
-                onClick={() => setQuantity((current) => current - 1)}
+                onClick={decreaseQuantity}
               >
                 −
               </button>
@@ -312,7 +173,7 @@ export default function Page() {
                 type="button"
                 aria-label="Aumentar cantidad"
                 disabled={quantity >= product.stock}
-                onClick={() => setQuantity((current) => current + 1)}
+                onClick={increaseQuantity}
               >
                 +
               </button>
@@ -321,7 +182,7 @@ export default function Page() {
             <button
               type="button"
               className={styles.agregar}
-              onClick={addProduct}
+              onClick={addToCart}
               disabled={product.stock < 1}
             >
               {product.stock > 0 ? "Agregar al carrito" : "Sin stock"}
