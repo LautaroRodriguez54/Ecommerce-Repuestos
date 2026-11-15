@@ -1,14 +1,24 @@
 "use client";
 import { useClientGuard } from "@/components/permission/useUserGuard";
 import { PermissionGate } from "@/components/permission/PermissionGate";
-
+import { PanelFooter } from "@/components/panel/PanelFooter";
+import { OrdersPanel } from "@/components/panel/orders/OrdersPanel";
+import styles from "@/components/panel/panel.module.css";
+import { ContentSection } from "@/components/ui/ContentSection";
 export default function Page() {
   const { authorized, loading } = useClientGuard();
 
   return (
     <PermissionGate loading={loading} authorized={authorized}>
-      <div>
-        <h1>MI PANEL</h1>
+      <div className={styles.containerPanel}>
+        <ContentSection title="PANEL DE USUARIO">
+          <div className={styles.panelWrapper}>
+            <section className={styles.orders}>
+              <OrdersPanel />
+            </section>
+            <PanelFooter />
+          </div>
+        </ContentSection>
       </div>
     </PermissionGate>
   );

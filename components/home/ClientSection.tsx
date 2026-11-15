@@ -2,15 +2,15 @@
 
 import styles from "./home.module.css";
 import { motion } from "motion/react";
-import { Button } from "../ui/Button/Button.jsx";
+import { Button } from "../ui/Button/Button";
 import { FormField } from "../ui/form/FormField";
 import { useState, type SubmitEvent } from "react";
-import { Form } from "../ui/form/Form.jsx";
-import { ComponentData } from "../ui/form/ComponentData.jsx";
+import { Form } from "../ui/form/Form";
+import { ComponentData } from "../ui/form/ComponentData";
 import "../../app/home.css";
 import { arrayForm } from "../pageData.js";
 import { sendContactForm } from "@/lib/contact";
-import { PopUp } from "../ui/modal/PopUp.jsx";
+import { PopUp } from "../ui/modal/PopUp";
 
 export const ClientSection = () => {
   const [showForm, setShowForm] = useState(false);
@@ -20,14 +20,13 @@ export const ClientSection = () => {
   async function handleSubmitCompany(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    
-  if (loading) return;
+    if (loading) return;
 
-  const form = event.currentTarget;
+    const form = event.currentTarget;
 
-  setLoading(true);
+    setLoading(true);
 
-  const formData = new FormData(form);
+    const formData = new FormData(form);
 
     const companyData = {
       tipo: "client",

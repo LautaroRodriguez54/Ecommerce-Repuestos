@@ -149,13 +149,11 @@ export async function POST(request: Request) {
               },
               update: {
                 quantity: totalQuantity,
-                price: product.price,
               },
               create: {
                 cartId: cart.id,
                 productId: product.id,
                 quantity: totalQuantity,
-                price: product.price,
               },
               include: {
                 product: true,

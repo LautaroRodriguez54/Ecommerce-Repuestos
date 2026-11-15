@@ -1,6 +1,19 @@
 import Link from "next/link";
 
-export const InfoBlock = ({ title, texts = [], links = [] }) => {
+interface InfoBlockProps {
+  title: string;
+  texts?: string[];
+  links?: {
+    href: string;
+    text: string;
+  }[];
+}
+
+export const InfoBlock = ({
+  title,
+  texts = [],
+  links = [],
+}: InfoBlockProps) => {
   return (
     <div>
       <h1>{title}</h1>
@@ -17,4 +30,3 @@ export const InfoBlock = ({ title, texts = [], links = [] }) => {
     </div>
   );
 };
-

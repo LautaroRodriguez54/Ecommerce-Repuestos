@@ -1,15 +1,15 @@
 "use client";
 import styles from "./home.module.css";
-import { Button } from "../ui/Button/Button.jsx";
-import { ContentSection } from "../ui/ContentSection.jsx";
+import { Button } from "../ui/Button/Button";
+import { ContentSection } from "../ui/ContentSection";
 import { FormField } from "../ui/form/FormField";
 import { useState, type SubmitEvent } from "react";
-import { Form } from "../ui/form/Form.jsx";
-import { ComponentData } from "../ui/form/ComponentData.jsx";
+import { Form } from "../ui/form/Form";
+import { ComponentData } from "../ui/form/ComponentData";
 import "../../app/home.css";
 import { arrayForm } from "../pageData.js";
 import { sendContactForm } from "@/lib/contact";
-import { PopUp } from "../ui/modal/PopUp.jsx";
+import { PopUp } from "../ui/modal/PopUp";
 
 export const QuestionSection = () => {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export const QuestionSection = () => {
       setPopupMessage(
         error instanceof Error
           ? `Error al enviar el formulario:\n${error.message}`
-          : "Error al enviar el formulario"
+          : "Error al enviar el formulario",
       );
     } finally {
       setLoading(false);
@@ -88,10 +88,7 @@ export const QuestionSection = () => {
                     ))}
                   </ComponentData>
 
-                  <ComponentData
-                    dataArea={styles.message}
-                    areaName={"Mensaje"}
-                  >
+                  <ComponentData dataArea={styles.message} areaName={"Mensaje"}>
                     <FormField
                       element="textarea"
                       placeHolder={arrayForm[arrayForm.length - 1].placeHolder}
@@ -114,10 +111,7 @@ export const QuestionSection = () => {
       </ContentSection>
 
       {popupMessage && (
-        <PopUp
-          message={popupMessage}
-          onClose={() => setPopupMessage(null)}
-        />
+        <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
       )}
     </section>
   );

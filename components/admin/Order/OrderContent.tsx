@@ -100,32 +100,28 @@ export const OrderContent = () => {
           submitText={isUpdating ? "Actualizando..." : "Actualizar"}
         >
           <ComponentData dataArea={stylesAuth.data} areaName="Estado">
-            <SelectBox
-              option={statusConfig
-                .filter(
-                  (status) =>
-                    status.value !== "ALL" && status.value !== "CANCELLED",
-                )
-                .map((status) => status.label)}
-              value={
-                statusConfig.find((status) => status.value === formStatus)
-                  ?.label ?? ""
-              }
-              onChange={(e) => {
-                const selected = statusConfig.find(
-                  (status) => status.label === e.target.value,
-                );
+  <SelectBox
+    option={statusConfig
+      .filter(
+        (status) =>
+          status.value !== "ALL" &&
+          status.value !== "CANCELLED",
+      )
+      .map((status) => status.label)}
+    value={
+      statusConfig.find((status) => status.value === formStatus)?.label ?? ""
+    }
+    onChange={(e) => {
+      const selected = statusConfig.find(
+        (status) => status.label === e.target.value,
+      );
 
-                if (
-                  selected &&
-                  selected.value !== "ALL" &&
-                  selected.value !== "CANCELLED"
-                ) {
-                  setFormStatus(selected.value);
-                }
-              }}
-            />
-          </ComponentData>
+      if (selected && selected.value !== "ALL" && selected.value !== "CANCELLED") {
+        setFormStatus(selected.value);
+      }
+    }}
+  />
+</ComponentData>
         </AdminModal>
       )}
       {selectedOrderItems && (

@@ -6,7 +6,7 @@ import styles from "../../components/auth/auth.module.css";
 import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
 import { Button } from "../../components/ui/Button/Button";
-import { PopUp } from "../../components/ui/modal/PopUp.jsx";
+import { PopUp } from "../../components/ui/modal/PopUp";
 import { AdminModal } from "../../components/admin/AdminModal";
 import { PermissionGate } from "@/components/permission/PermissionGate";
 

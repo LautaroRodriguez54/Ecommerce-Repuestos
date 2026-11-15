@@ -8,7 +8,7 @@ import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
 import { Button } from "../../components/ui/Button/Button";
 import { register } from "../../lib/auth";
-import { PopUp } from "../../components/ui/modal/PopUp.jsx";
+import { PopUp } from "../../components/ui/modal/PopUp";
 import { useAdminGuard } from "@/components/permission/useUserGuard";
 import { RedirectPage } from "@/components/permission/RedirectPage";
 

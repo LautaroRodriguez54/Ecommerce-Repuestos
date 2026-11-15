@@ -1,4 +1,6 @@
 .tableContainer {
+  width: 100%;
+  min-width: 0;
   border-radius: var(--container-radius);
   overflow: hidden;
   box-shadow: var(--general-shadow);

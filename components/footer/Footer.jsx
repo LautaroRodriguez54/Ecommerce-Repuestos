@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./footer.module.css";
-import { InfoBlock } from "./InfoBlock.jsx";
+import { InfoBlock } from "./InfoBlock";
 import { contactData, linksData, socialMedia } from "../pageData.js";
 import { useAuth } from "@/components/auth/AuthContext";
 

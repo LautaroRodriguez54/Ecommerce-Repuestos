@@ -28,7 +28,7 @@ export default function Page() {
     async function loadProducts() {
       try {
         const data = await fetchProducts(controller.signal);
-
+        console.log(data)
         if (!controller.signal.aborted) {
           setProducts(data);
         }

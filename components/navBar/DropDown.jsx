@@ -66,7 +66,9 @@ export const DropDown = ({
               className={styles.dropDownItem}
               onClick={() => handleNavigateAndClose("/carrito")}
             >
-              <Cart />
+              <div className={styles.iconCart}>
+                <Cart />
+              </div>
               Carrito
             </li>
           )}
