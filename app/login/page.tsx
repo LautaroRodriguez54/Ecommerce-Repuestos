@@ -9,7 +9,8 @@ import { useState, type SubmitEvent } from "react";
 import { login } from "../../lib/auth";
 import { PopUp } from "../../components/ui/modal/PopUp.jsx";
 import { useAuth } from "../../components/auth/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ROLES } from "@/constants/roles";
 
 type Usuario = {
   email: string;
@@ -21,6 +22,7 @@ export default function Page() {
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const { refreshUser } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,9 +33,16 @@ export default function Page() {
       password: formData.get("password") as string,
     };
     try {
-      await login(usuario.email, usuario.password);
+      const result = await login(usuario.email, usuario.password);
       await refreshUser();
-      router.push("/");
+
+      const next = searchParams.get("next");
+      const safeNext =
+        next?.startsWith("/") && !next.startsWith("//") ? next : null;
+
+      router.push(
+        safeNext ?? (result.user.role === ROLES.ADMIN ? "/admin" : "/"),
+      );
     } catch (error) {
       setPopupMessage(
         error instanceof Error

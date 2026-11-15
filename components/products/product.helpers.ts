@@ -1,0 +1,44 @@
+import type { CatalogProduct, Producto } from "@/lib/api/productos";
+import type { ProductFiltersValue } from "./product.constants";
+
+export function getProductFilterOptions(products: CatalogProduct[]) {
+  return {
+    brands: Array.from(
+      new Set(products.map((product) => product.brand).filter(Boolean)),
+    ).sort(),
+    categories: Array.from(
+      new Set(products.map((product) => product.category).filter(Boolean)),
+    ).sort(),
+  };
+}
+
+export function filterProducts(
+  products: CatalogProduct[],
+  search: string,
+  filters: ProductFiltersValue,
+) {
+  const normalizedSearch = search.trim().toLowerCase();
+
+  return products.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(normalizedSearch);
+    const matchesBrand =
+      filters.brands.length === 0 || filters.brands.includes(product.brand);
+    const matchesCategory =
+      filters.categories.length === 0 ||
+      filters.categories.includes(product.category);
+
+    return matchesSearch && matchesBrand && matchesCategory;
+  });
+}
+
+export function getRelatedProducts(
+  products: CatalogProduct[],
+  product: Producto,
+) {
+  return products
+    .filter(
+      (item) =>
+        item.id !== product.id && item.category === product.category?.name,
+    )
+    .slice(0, 3);
+}

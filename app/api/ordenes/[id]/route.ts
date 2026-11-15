@@ -8,6 +8,7 @@ import {
   serverError,
   badRequest,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 const validStatuses = [
   "PENDING",
   "PAID",
@@ -67,16 +68,9 @@ export async function PATCH(
   },
 ) {
   try {
-    const user = await getAuthenticatedUser();
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
 
-    if (!user) {
-      return unauthorized("No hay una sesión válida.");
-    }
-/*
-    if (user.role !== "ADMIN") {
-      return unauthorized("No tenés permisos para modificar pedidos.");
-    }
-*/
     const { id } = await context.params;
     const body = await request.json();
 

@@ -1,76 +1,94 @@
-export async function getProductos() {
-  const response = await fetch("/api/productos");
+export type Producto = {
+  id: string;
+  name: string;
+  sku: string;
+  description: string | null;
+  price: string | number;
+  stock: number;
+  image: string | null;
+  compatibleYear: number | null;
+  category: { name: string } | null;
+  model: {
+    name: string;
+    brand: { name: string } | null;
+  } | null;
+};
 
-  if (!response.ok) {
-    throw new Error("No se pudieron obtener los productos");
+export type CatalogProduct = {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  brand: string;
+  category: string;
+};
+
+type ApiResponse<T> = {
+  success: boolean;
+  data?: T;
+  message?: string;
+};
+
+async function request<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, {
+    ...options,
+    credentials: "same-origin",
+  });
+  const result: ApiResponse<T> = await response.json();
+
+  if (!response.ok || !result.success || result.data === undefined) {
+    throw new Error(result.message ?? "No se pudo procesar la solicitud.");
   }
-
-  const result = await response.json();
 
   return result.data;
 }
 
-export async function getProducto(id: string) {
-  const response = await fetch(`/api/productos/${id}`);
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo obtener el producto");
-  }
-
-  return result.data;
+export function getProductos(signal?: AbortSignal) {
+  return request<Producto[]>("/api/productos", {
+    signal,
+    cache: "no-store",
+  });
 }
 
-export async function createProducto(data: unknown) {
-  const response = await fetch("/api/productos", {
+export async function getProductosCatalogo(signal?: AbortSignal) {
+  const products = await getProductos(signal);
+
+  return products.map<CatalogProduct>((product) => ({
+    id: product.id,
+    name: product.name,
+    image: product.image ?? "/horquilla1.webp",
+    price: Number(product.price),
+    brand: product.model?.brand?.name ?? "",
+    category: product.category?.name ?? "",
+  }));
+}
+
+export function getProducto(id: string, signal?: AbortSignal) {
+  return request<Producto>(`/api/productos/${encodeURIComponent(id)}`, {
+    signal,
+    cache: "no-store",
+  });
+}
+
+export function createProducto(data: unknown) {
+  return request<Producto>("/api/productos", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo crear el producto");
-  }
-
-  return result.data;
 }
 
-export async function updateProducto(
-  id: string,
-  data: unknown
-) {
-  const response = await fetch(`/api/productos/${id}`, {
+export function updateProducto(id: string, data: unknown) {
+  return request<Producto>(`/api/productos/${encodeURIComponent(id)}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo actualizar el producto");
-  }
-
-  return result.data;
 }
 
-export async function deleteProducto(id: string) {
-  const response = await fetch(`/api/productos/${id}`, {
-    method: "DELETE",
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error ?? "No se pudo eliminar el producto");
-  }
-
-  return result.data;
+export function deleteProducto(id: string) {
+  return request<{ message: string }>(
+    `/api/productos/${encodeURIComponent(id)}`,
+    { method: "DELETE" },
+  );
 }
