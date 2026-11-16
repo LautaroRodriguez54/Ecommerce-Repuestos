@@ -20,7 +20,7 @@ export const SideBarLayout = ({
   selectedButton,
 }: SideBarLayoutProps) => {
   return (
-    <div className={styles.container} data-scroll-behavior="smooth">
+    <div className={styles.container}>
       <div className={styles.layout}>
         <SideNavBar
           page={page}

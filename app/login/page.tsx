@@ -9,7 +9,6 @@ import { Button } from "../../components/ui/Button/Button";
 import { PopUp } from "../../components/ui/modal/PopUp";
 import { AdminModal } from "../../components/admin/AdminModal";
 import { PermissionGate } from "@/components/permission/PermissionGate";
-
 import { useLoginPage } from "@/components/auth/login/login.hooks";
 import {
   resetTitle,
@@ -17,6 +16,7 @@ import {
 } from "@/components/auth/login/login.constants";
 
 export default function Page() {
+
   const {
     email,
     setEmail,

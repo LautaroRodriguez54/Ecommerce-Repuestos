@@ -16,9 +16,11 @@ import {
   unauthorized,
   forbidden,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 export async function GET() {
   try {
+
     return success(await getAllUsers());
   } catch (error) {
     if (error instanceof Error) {
@@ -29,6 +31,7 @@ export async function GET() {
         return forbidden("No tenés permisos para consultar los usuarios.");
       }
     }
+
     return serverError();
   }
 }
@@ -36,7 +39,6 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const validation = createUserSchema.safeParse(await request.json());
-
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);
     }

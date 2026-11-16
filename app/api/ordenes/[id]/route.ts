@@ -15,8 +15,8 @@ import {
   conflict,
 } from "@/utils/apiResponse";
 
-
 const validStatuses: OrderStatus[] = [
+
   "PENDING",
   "PAID",
   "PREPARING",

@@ -66,6 +66,62 @@ function calculatePaymentDiscount(
   }
 }
 
+
+type OrderCartItem = {
+  productId: string;
+  quantity: number;
+  product: {
+    price: unknown;
+  };
+};
+
+/**
+ * Calcula los importes comerciales desde el carrito del servidor.
+ * Esta función se reutiliza para la vista previa y para la orden definitiva,
+ * de modo que el cliente nunca calcula ni decide precios.
+ */
+function calculateOrderAmounts(
+  items: OrderCartItem[],
+  paymentTerm: CreateOrderInput["paymentTerm"],
+) {
+  const netTotal = items.reduce((total, item) => {
+    return total + Number(item.product.price) * item.quantity;
+  }, 0);
+
+  const bonusAmount = netTotal * 0.25;
+  const vatAmount = netTotal * 0.21;
+  const paymentDiscountAmount = calculatePaymentDiscount(
+    netTotal + vatAmount,
+    paymentTerm,
+  );
+  const total = netTotal - bonusAmount + vatAmount - paymentDiscountAmount;
+
+  return {
+    netTotal,
+    bonusAmount,
+    paymentDiscountAmount,
+    vatAmount,
+    total,
+  };
+}
+
+/** Obtiene el resumen que verá el cliente antes de confirmar la orden. */
+export async function getOrderPreview(
+  userId: string,
+  paymentTerm: CreateOrderInput["paymentTerm"],
+) {
+  const cart = await getOrCreateCart(userId);
+
+  if (cart.items.length === 0) {
+    throw new Error("El carrito está vacío.");
+  }
+
+  return calculateOrderAmounts(cart.items, paymentTerm);
+}
+
+/**
+ * Crea una orden a partir del carrito del usuario.
+ */
 export async function createOrder(
   userId: string,
   data: CreateOrderInput
@@ -77,20 +133,14 @@ export async function createOrder(
   const cart = await getOrCreateCart(userId);
   if (!cart.items.length) throw new Error("El carrito está vacío.");
 
-  // Los precios siempre se obtienen de la base de datos.
-  const netTotal = cart.items.reduce(
-    (total, item) => total + Number(item.product.price) * item.quantity,
-    0
-  );
+  const {
+    netTotal,
+    bonusAmount,
+    paymentDiscountAmount,
+    vatAmount,
+    total,
+  } = calculateOrderAmounts(cart.items, data.paymentTerm);
 
-  const bonusAmount = netTotal * 0.25;
-  const vatAmount = netTotal * 0.21;
-  const paymentDiscountAmount = calculatePaymentDiscount(
-    netTotal + vatAmount,
-    data.paymentTerm
-  );
-
-  const total = netTotal - bonusAmount + vatAmount - paymentDiscountAmount;
 
   return createOrderTransaction({
     userId,
@@ -139,4 +189,3 @@ export async function updateOrderStatus(
 
   return updateOrderStatusRepository(id, "CANCELLED");
 }
-

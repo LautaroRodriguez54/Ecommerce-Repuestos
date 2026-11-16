@@ -1,4 +1,3 @@
-
 import { updateProductSchema } from "@/validators/product/product.schema";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
@@ -17,6 +16,7 @@ import {
   unauthorized,
   forbidden,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 export async function GET(
   _request: Request,
@@ -38,6 +38,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
     const validation = updateProductSchema.safeParse(await request.json());
 
@@ -72,7 +75,6 @@ export async function DELETE(
 ) {
   try {
     const product = await deleteProduct((await params).id);
-
     if (!product) return notFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
     return success({ message: "Producto eliminado correctamente." });

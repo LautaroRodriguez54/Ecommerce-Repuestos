@@ -1,11 +1,9 @@
 "use client";
 
 import styles from "../../styles/productos.module.css";
+import type { ProductFiltersValue } from "./product.constants";
 
-export type ProductFiltersValue = {
-  brands: string[];
-  categories: string[];
-};
+export type { ProductFiltersValue } from "./product.constants";
 
 type ProductFiltersProps = {
   filters: ProductFiltersValue;

@@ -5,7 +5,6 @@ import {
 } from "@/services/category/category.service";
 
 import { 
-  createCategorySchema, 
   updateCategorySchema 
 } from "@/validators/category/category.schema";
   
@@ -18,6 +17,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/categorias/:id
@@ -51,6 +51,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const body = await request.json();
@@ -89,6 +92,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const category = await deleteCategory(id);

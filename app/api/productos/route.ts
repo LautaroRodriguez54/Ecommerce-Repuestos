@@ -19,6 +19,7 @@ import {
   forbidden,
   conflict,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 export async function GET() {
   try {
@@ -31,7 +32,6 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const validation = createProductSchema.safeParse(await request.json());
-
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);
     }

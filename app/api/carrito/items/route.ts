@@ -4,13 +4,7 @@ import { addItem } from "@/services/cart/cart.service";
 
 import { addCartItemSchema } from "@/validators/cart/cart.schema";
 
-import {
-  success,
-  created,
-  badRequest,
-  unauthorized,
-  serverError,
-} from "@/utils/apiResponse";
+import { badRequest, created, unauthorized } from "@/utils/apiResponse";
 
 export async function POST(request: Request) {
   try {

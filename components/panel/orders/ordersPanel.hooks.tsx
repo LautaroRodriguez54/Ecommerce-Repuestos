@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { getOrdenes, updateOrdenStatus } from "@/lib/api/ordenes";
 import type { Order } from "@/types/api";

@@ -3,7 +3,7 @@ import styles from "../../styles/nosotros.module.css";
 import { usDescriptions, cifras } from "@/components/pageData";
 export default function Page() {
   return (
-    <div className={styles.main} data-scroll-behavior="smooth">
+    <div className={styles.main}>
       <div className={styles.content}>
         <section className={styles.intro}>
           <div className={styles.texto}>

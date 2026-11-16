@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ROLES } from "@/constants/roles";
 
 /**
  * Schema base de usuario.
@@ -27,7 +28,7 @@ export const userSchema = z.object({
     .min(8, "La contraseña debe tener al menos 8 caracteres.")
     .max(100, "La contraseña no puede superar los 100 caracteres."),
 
-  role: z.enum(["CLIENT", "ADMIN"], {
+  role: z.enum([ROLES.CLIENT, ROLES.ADMIN], {
     error: "El rol seleccionado no es válido.",
   }),
 

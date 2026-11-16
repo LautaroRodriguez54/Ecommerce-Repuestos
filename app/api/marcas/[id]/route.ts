@@ -6,7 +6,6 @@ import {
 
 import { 
   updateBrandSchema, 
-  createBrandSchema 
 } from "@/validators/brand/brand.schema";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
@@ -18,6 +17,7 @@ import {
   conflict,
   serverError,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 /**
  * GET /api/marcas/:id
@@ -49,6 +49,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const body = await request.json();
@@ -86,6 +89,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
 
     const brand = await deleteBrand(id);

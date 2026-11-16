@@ -17,6 +17,7 @@ import {
   unauthorized,
   forbidden,
 } from "@/utils/apiResponse";
+import { requireAdmin } from "@/utils/adminAuthorization";
 
 export async function GET(
   _request: Request,
@@ -24,7 +25,6 @@ export async function GET(
 ) {
   try {
     const user = await getUserById((await params).id);
-
     if (!user) return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
 
     return success(user);
@@ -46,6 +46,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authorizationError = await requireAdmin();
+    if (authorizationError) return authorizationError;
+
     const { id } = await params;
     const validation = updateUserSchema.safeParse(await request.json());
 
@@ -80,7 +83,6 @@ export async function DELETE(
 ) {
   try {
     const user = await deleteUser((await params).id);
-
     if (!user) return notFound(ERROR_MESSAGES.USER_NOT_FOUND);
 
     return success({ message: "Usuario eliminado correctamente." });

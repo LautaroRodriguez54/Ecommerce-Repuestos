@@ -9,6 +9,7 @@ import {
 } from "@/repositories/user/user.repository";
 
 import { ERROR_MESSAGES } from "@/constants/messages";
+
 import { requireAdmin } from "@/services/auth/authorization.service";
 import {
   createSession,
@@ -34,6 +35,7 @@ export async function registerUser(data: {
     ...data,
     password: await bcrypt.hash(data.password, 12),
     role: "CLIENT",
+
     isActive: true,
   });
 }
@@ -59,6 +61,7 @@ export async function loginUser(data: {
       role: user.role,
       isActive: user.isActive,
     },
+
     token: (await createSession(user.id)).token,
   };
 }
@@ -111,4 +114,5 @@ export async function verifyPasswordResetCode(code: string) {
   }
 
   return true;
+
 }
