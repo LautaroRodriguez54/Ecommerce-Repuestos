@@ -1,46 +1,61 @@
 "use client";
+
 import styles from "./home.module.css";
 import { motion } from "motion/react";
-import { Button } from "../ui/Button/Button.jsx";
+import { Button } from "../ui/Button/Button";
 import { FormField } from "../ui/form/FormField";
 import { useState, type SubmitEvent } from "react";
-import { Form } from "../ui/form/Form.jsx";
-import { ComponentData } from "../ui/form/ComponentData.jsx";
+import { Form } from "../ui/form/Form";
+import { ComponentData } from "../ui/form/ComponentData";
 import "../../app/home.css";
-import {arrayForm } from "../pageData.js";
+import { arrayForm } from "../pageData.js";
 import { sendContactForm } from "@/lib/contact";
-import { PopUp } from "../ui/modal/PopUp.jsx";
+import { PopUp } from "../ui/modal/PopUp";
 
 export const ClientSection = () => {
-    const [showForm, setShowForm] = useState(false);
-    const [popupMessage, setPopupMessage] = useState<string | null>(null);
-     async function handleSubmitCompany(event: SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
-    
-        const formData = new FormData(event.currentTarget);
-    
-        const companyData = {
-          tipo: "client",
-          nombre: formData.get("name"),
-          telefono: formData.get("phone"),
-          empresa: formData.get("company"),
-          cuit: formData.get("cuit"),
-          localidad: formData.get("locality"),
-          direccion: formData.get("address"),
-          mensaje: formData.get("message"),
-        };
-    
-        try {
-          const result = await sendContactForm(companyData);
-          result && setPopupMessage(result.message ?? "Formulario enviado con éxito");
-        } catch (error) {
-          setPopupMessage(
-            error instanceof Error
-              ? `Error al enviar el formulario:\n${error.message}`
-              : "Error al enviar el formulario",
-          );
-        }
-      }
+  const [showForm, setShowForm] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmitCompany(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (loading) return;
+
+    const form = event.currentTarget;
+
+    setLoading(true);
+
+    const formData = new FormData(form);
+
+    const companyData = {
+      tipo: "client",
+      nombre: formData.get("name"),
+      telefono: formData.get("phone"),
+      empresa: formData.get("company"),
+      cuit: formData.get("cuit"),
+      localidad: formData.get("locality"),
+      direccion: formData.get("address"),
+      mensaje: formData.get("message"),
+    };
+
+    try {
+      const result = await sendContactForm(companyData);
+
+      setPopupMessage(result?.message ?? "Formulario enviado con éxito");
+
+      form.reset();
+    } catch (error) {
+      setPopupMessage(
+        error instanceof Error
+          ? `Error al enviar el formulario:\n${error.message}`
+          : "Error al enviar el formulario",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section id="cliente" className={`dotted ${styles.client}`}>
       <motion.div
@@ -56,18 +71,21 @@ export const ClientSection = () => {
         <div className={styles.viewClient}>
           <h1>¿QUERÉS SER CLIENTE?</h1>
           <p>¡Contáctate con nosotros y accede a descuentos exclusivos!</p>
+
           <Button
             buttonText="Quiero ser Cliente"
             variant={"accent"}
             onClick={() => setShowForm(true)}
           />
         </div>
+
         <div className={styles.formClient}>
           <p>
             En esta sección usted podrá ingresar sus datos para solicitar la
             visita de uno de nuestros vendedores. Recordá que es importante
             rellenar todos los campos antes de enviar tu solicitud.
           </p>
+
           <div className={styles.modalWrap}>
             <Form title={"Datos de la empresa"}>
               <form onSubmit={handleSubmitCompany}>
@@ -99,6 +117,7 @@ export const ClientSection = () => {
                       />
                     ))}
                   </ComponentData>
+
                   <ComponentData dataArea={styles.message} areaName={"Mensaje"}>
                     <FormField
                       element="textarea"
@@ -114,7 +133,11 @@ export const ClientSection = () => {
                       variant={"outline"}
                       onClick={() => setShowForm(false)}
                     />
-                    <Button buttonText="Enviar" variant={"primary"} />
+
+                    <Button
+                      buttonText={loading ? "Enviando..." : "Enviar"}
+                      variant={"primary"}
+                    />
                   </div>
                 </div>
               </form>
@@ -122,6 +145,7 @@ export const ClientSection = () => {
           </div>
         </div>
       </motion.div>
+
       {popupMessage && (
         <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
       )}

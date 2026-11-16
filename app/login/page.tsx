@@ -1,83 +1,169 @@
 "use client";
+
+import Link from "next/link";
 import { Auth } from "../../components/auth/Auth";
 import styles from "../../components/auth/auth.module.css";
 import { ComponentData } from "../../components/ui/form/ComponentData";
 import { FormField } from "../../components/ui/form/FormField";
-import Link from "next/link";
 import { Button } from "../../components/ui/Button/Button";
-import { useState, type SubmitEvent } from "react";
-import { login } from "../../lib/auth";
-import { PopUp } from "../../components/ui/modal/PopUp.jsx";
-import { useAuth } from "../../components/auth/AuthContext";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ROLES } from "@/constants/roles";
-
-type Usuario = {
-  email: string;
-  password: string;
-};
+import { PopUp } from "../../components/ui/modal/PopUp";
+import { AdminModal } from "../../components/admin/AdminModal";
+import { PermissionGate } from "@/components/permission/PermissionGate";
+import { useLoginPage } from "@/components/auth/login/login.hooks";
+import {
+  resetTitle,
+  resetButtonText,
+} from "@/components/auth/login/login.constants";
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
-  const [popupMessage, setPopupMessage] = useState<string | null>(null);
-  const { refreshUser } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
-    const formData = new FormData(event.currentTarget);
-    const usuario: Usuario = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
-    try {
-      const result = await login(usuario.email, usuario.password);
-      await refreshUser();
+  const {
+    email,
+    setEmail,
+    loading,
+    handleSubmit,
+    popupMessage,
+    setPopupMessage,
+    isResetOpen,
+    resetStep,
+    resetEmail,
+    setResetEmail,
+    resetCode,
+    setResetCode,
+    newPassword,
+    setNewPassword,
+    confirmPassword,
+    setConfirmPassword,
+    isResetLoading,
+    openResetModal,
+    closeResetModal,
+    handleResetSubmit,
+    authLoading,
+    user,
+  } = useLoginPage();
 
-      const next = searchParams.get("next");
-      const safeNext =
-        next?.startsWith("/") && !next.startsWith("//") ? next : null;
-
-      router.push(
-        safeNext ?? (result.user.role === ROLES.ADMIN ? "/admin" : "/"),
-      );
-    } catch (error) {
-      setPopupMessage(
-        error instanceof Error
-          ? `No se pudo iniciar sesión:\n${error.message}`
-          : "No se pudo iniciar sesión",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
-    <Auth title={"INICIAR SESIÓN"} subtitle={"Ingresá tus datos"}>
-      <form className={styles.form} action="" onSubmit={handleSubmit}>
-        <ComponentData dataArea={styles.data} areaName={"E-mail"}>
-          <FormField type={"email"} placeHolder={""} name={"email"} required />
-        </ComponentData>
-        <ComponentData dataArea={styles.data} areaName={"Contraseña"}>
-          <FormField
-            type={"password"}
-            placeHolder={""}
-            name={"password"}
-            required
-          />
-        </ComponentData>
-        <Link href={"#"}>¿Olvidaste tu contraseña?</Link>
-        <div className={styles.buttonZone}>
-          <Button
-            buttonText={loading ? "Ingresando..." : "Enviar"}
-            variant={"primary"}
-          />
-        </div>
-      </form>
-      {popupMessage && (
-        <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
-      )}
-    </Auth>
+    <PermissionGate
+      loading={authLoading}
+      authorized={!!user}
+      requireAuth={false}
+      status={403}
+      title="SESIÓN ACTIVA"
+      message="Ya tenés una sesión iniciada. Cerrá sesión para ingresar con otra cuenta."
+      redirectBack
+    >
+      <Auth title="INICIAR SESIÓN" subtitle="Ingresá tus datos">
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <ComponentData dataArea={styles.data} areaName="E-mail">
+            <FormField
+              type="email"
+              placeHolder=""
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </ComponentData>
+
+          <ComponentData dataArea={styles.data} areaName="Contraseña">
+            <FormField
+              type="password"
+              placeHolder=""
+              name="password"
+              required
+            />
+          </ComponentData>
+
+          <Link
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              openResetModal();
+            }}
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
+
+          <div className={styles.buttonZone}>
+            <Button
+              buttonText={loading ? "Ingresando..." : "Enviar"}
+              variant="primary"
+            />
+          </div>
+        </form>
+
+        {isResetOpen && (
+          <AdminModal
+            title={resetTitle[resetStep]}
+            onClose={closeResetModal}
+            onSubmit={handleResetSubmit}
+            submitText={
+              isResetLoading ? "Procesando..." : resetButtonText[resetStep]
+            }
+          >
+            {resetStep === "email" && (
+              <ComponentData dataArea={styles.data} areaName="E-mail">
+                <FormField
+                  type="email"
+                  name="resetEmail"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                />
+              </ComponentData>
+            )}
+
+            {resetStep === "code" && (
+              <ComponentData
+                dataArea={styles.data}
+                areaName="Código de recuperación"
+              >
+                <FormField
+                  type="text"
+                  name="resetCode"
+                  value={resetCode}
+                  onChange={(e) => setResetCode(e.target.value)}
+                  required
+                />
+              </ComponentData>
+            )}
+
+            {resetStep === "password" && (
+              <>
+                <ComponentData
+                  dataArea={styles.data}
+                  areaName="Nueva contraseña"
+                >
+                  <FormField
+                    type="password"
+                    name="newPassword"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </ComponentData>
+
+                <ComponentData
+                  dataArea={styles.data}
+                  areaName="Confirmar contraseña"
+                >
+                  <FormField
+                    type="password"
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </ComponentData>
+              </>
+            )}
+          </AdminModal>
+        )}
+
+        {popupMessage && (
+          <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
+        )}
+      </Auth>
+    </PermissionGate>
   );
 }

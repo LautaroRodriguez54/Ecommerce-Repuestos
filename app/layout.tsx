@@ -30,9 +30,11 @@ export default function RootLayout({
     <html
       lang="es-AR"
       className={`${inter.variable} ${oswald.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <AuthProviderWrapper>
         <body>
+          <div className='appShell'>
           <header>
             <NavBar />
           </header>
@@ -40,9 +42,10 @@ export default function RootLayout({
             {children}
             <ChatBot />
           </main>
+          </div>
           <footer>
             <Footer />
-          </footer>
+          </footer>         
         </body>
       </AuthProviderWrapper>
     </html>

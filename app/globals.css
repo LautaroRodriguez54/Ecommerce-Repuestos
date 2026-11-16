@@ -116,3 +116,12 @@ textarea {
   width: 100%;
   z-index: 1000;
 }
+.appShell {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+}

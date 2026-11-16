@@ -4,24 +4,37 @@ import {
 
 import {
   success,
+  unauthorized,
+  forbidden,
+
   serverError,
 } from "@/utils/apiResponse";
 import { requireAdmin } from "@/utils/adminAuthorization";
 
+
 /**
- * GET /api/orders
+ * GET /api/ordenes/admin
  *
- * Obtiene las órdenes del usuario autenticado.
+ * Obtiene todas las órdenes del sistema.
+ * Requiere ADMIN.
  */
 export async function GET() {
   try {
-    const authorizationError = await requireAdmin();
-    if (authorizationError) return authorizationError;
-
     const orders = await getAllOrders();
 
     return success(orders);
-  } catch {
+
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para consultar todas las órdenes.");
+      }
+    }
+
     return serverError();
   }
 }

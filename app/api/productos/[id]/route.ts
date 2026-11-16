@@ -1,14 +1,11 @@
-import {
-  updateProductSchema,
-} from "@/validators/product/product.schema";
-
+import { updateProductSchema } from "@/validators/product/product.schema";
 import { ERROR_MESSAGES } from "@/constants/messages";
+
 import {
   getProductById,
   updateProduct,
   deleteProduct,
 } from "@/services/product/product.service";
-
 
 import {
   success,
@@ -16,38 +13,26 @@ import {
   notFound,
   serverError,
   conflict,
+  unauthorized,
+  forbidden,
 } from "@/utils/apiResponse";
 import { requireAdmin } from "@/utils/adminAuthorization";
 
-/**
- * GET /api/productos/:id
- * Obtiene un producto por ID.
- */
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const product = await getProductById((await params).id);
 
-    const product = await getProductById(id);
-
-    if (!product) {
-      return notFound("Producto no encontrado.");
-    }
+    if (!product) return notFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
     return success(product);
-  } catch (error) {
-  console.error(error);
-
-  return serverError();
-    }
+  } catch {
+    return serverError();
+  }
 }
 
-/**
- * PUT /api/productos/:id
- * Actualiza un producto existente.
- */
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -57,10 +42,7 @@ export async function PUT(
     if (authorizationError) return authorizationError;
 
     const { id } = await params;
-
-    const body = await request.json();
-
-    const validation = updateProductSchema.safeParse(body);
+    const validation = updateProductSchema.safeParse(await request.json());
 
     if (!validation.success) {
       return badRequest(validation.error.issues[0].message);
@@ -68,50 +50,43 @@ export async function PUT(
 
     const product = await updateProduct(id, validation.data);
 
-    if (!product) {
-      return notFound("Producto no encontrado.");
-    }
+    if (!product) return notFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
     return success(product);
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === ERROR_MESSAGES.PRODUCT_ALREADY_EXISTS
-    ) {
-      return conflict(error.message);
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para actualizar productos.");
+      }
+      if (error.message === ERROR_MESSAGES.PRODUCT_ALREADY_EXISTS) {
+        return conflict(error.message);
+      }
     }
-
     return serverError();
   }
 }
 
-/**
- * DELETE /api/productos/:id
- * Soft Delete.
- */
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authorizationError = await requireAdmin();
-    if (authorizationError) return authorizationError;
+    const product = await deleteProduct((await params).id);
+    if (!product) return notFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
-    const { id } = await params;
-
-    await deleteProduct(id);
-
-    return success({
-      message: "Producto eliminado correctamente.",
-    });
+    return success({ message: "Producto eliminado correctamente." });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND
-    ) {
-      return notFound(error.message);
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        return unauthorized("Debés iniciar sesión.");
+      }
+      if (error.message === "FORBIDDEN") {
+        return forbidden("No tenés permisos para eliminar productos.");
+      }
     }
-
     return serverError();
   }
 }

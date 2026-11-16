@@ -2,7 +2,7 @@ import Location from "./icon/Location.jsx";
 import Instagram from "./icon/Instagram.jsx";
 import Gmail from "./icon/Gmail.jsx";
 import Facebook from "./icon/Facebook.jsx";
-import Users from '../components/icon/Users.jsx';
+import Users from "../components/icon/Users.jsx";
 import Order from "../components/icon/Order.jsx";
 
 export const arrayMessages = [
@@ -40,18 +40,18 @@ export const linksData = [
   {
     title: "NOSOTROS",
     links: [
-      { text: "Nuestra Empresa", href: "#" },
-      { text: "Catalogos", href: "#" },
-      { text: "Revista", href: "#" },
+      { text: "Nuestra Empresa", href: "/nosotros" },
+      { text: "Catalogos", href: "/productos" },
+      { text: "Revista", href: "/revista" },
     ],
   },
   {
     title: "CLIENTES",
-    links: [{ text: "Quiero ser cliente", href: "#" }],
+    links: [{ text: "Quiero ser cliente", href: "/#cliente" }],
   },
   {
     title: "INFORMACIÓN",
-    links: [{ text: "Contacto", href: "#" }],
+    links: [{ text: "Contacto", href: "/#contacto" }],
   },
 ];
 
@@ -126,11 +126,40 @@ export const Banks = [
   },
 ];
 export const adminActions = [
-  { id:'orders', buttonName: "Pedidos", type: "admin",  Icon: Order },
-  { id:'users', buttonName: "Usuarios", type: "admin", Icon: Users },
+  { id: "orders", buttonName: "Pedidos", type: "admin", Icon: Order },
+  { id: "users", buttonName: "Usuarios", type: "admin", Icon: Users },
 ];
 export const magazineOptions = [
-  { buttonName: "Precios", type: "client",  Icon: Users },
-  { buttonName: "Nuevos Ingresos", type: "client",  Icon: Users },
-  { buttonName: "Catálogo de Juntas", type: "client",  Icon: Users },
-]
+  { buttonName: "Precios", type: "client", Icon: Users },
+  { buttonName: "Nuevos Ingresos", type: "client", Icon: Users },
+  { buttonName: "Catálogo de Juntas", type: "client", Icon: Users },
+];
+export const usDescriptions = [
+  {
+    title: "Nuestra empresa",
+    description:
+      "Somos una empresa dedicada a la importación y distribución de repuestos automotrices con una amplia trayectoria en el mercado y clientes que nos respaldan, abasteciendo a más de 6000 negocios en las 24 provincias con un stock de mas de 13.000 artículos nacionales e importados.",
+  },
+  {
+    title: "Experiencia",
+    description:
+      "Estamos orgullosos de contar con una larga trayectoria de más de 40 años de experiencia en el mercado, convirtiendonos en referentes de calidad, eficacia y profesionalismo, manteniendo los valores con los que iniciamos nuestra empresa y trabajando exitosamente con más de 6000 clientes satisfechos a lo largo de nuestra historia.",
+  },
+  {
+    title: "Calidad",
+    description:
+      "En nuestra empresa tenemos la responsabilidad de llevarle a nuestros clientes los productos de la mejor calidad, es por eso que contamos con proveedores nacionales e internacionales con estándares de fabricación que garantizan la durabilidad y calidad de cada uno de nuestros artículos.",
+  },
+  {
+    title: "Variedad",
+    description:
+      "Contamos con un stock en constante crecimiento de más de 13.000 artículos de origen nacional e internacional, abarcando las principales marcas de autos y una amplia variedad de piezas y autopartes con una red de distribución que nos permite llegar a todos los rincones de nuestro país.",
+  },
+];
+export const cifras=[
+  {amount:13000, statics:'Artículos en stock'},
+  {amount:30, statics:'Viajantes'},
+  {amount:24, statics:'Provincias'},
+  {amount:6000, statics:'Clientes'},
+  {amount:40, statics:'Años de experiencia'},
+];

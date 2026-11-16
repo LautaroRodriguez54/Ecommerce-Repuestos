@@ -65,3 +65,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+.tableWrapper {
+  width: 100%;
+  min-width: 0;
+}

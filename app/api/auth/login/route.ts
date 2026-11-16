@@ -1,9 +1,7 @@
 import { loginUser } from "@/services/auth/auth.service";
-
 import { loginUserSchema } from "@/validators/user/user.schema";
-
 import { ERROR_MESSAGES } from "@/constants/messages";
-
+import { getAuthenticatedUser } from "@/services/auth/authenticated-user.service";
 import {
   success,
   badRequest,
@@ -23,6 +21,13 @@ export async function POST(request: Request) {
       return badRequest(validation.error.issues[0].message);
     }
 
+    const currentUser = await getAuthenticatedUser();
+
+    if (currentUser) {
+      return unauthorized(
+        "Ya tenés una sesión iniciada. Cerrá sesión antes de ingresar con otra cuenta.",
+      );
+    }
     const result = await loginUser(validation.data);
 
     const cookieStore = await cookies();

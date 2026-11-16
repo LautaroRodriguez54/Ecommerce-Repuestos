@@ -4,6 +4,7 @@ import { Button } from "../Button/Button";
 export const SideNavBar = ({
   page,
   buttons,
+  children,
   onButtonClick,
   selectedButton,
 }) => {
@@ -11,9 +12,9 @@ export const SideNavBar = ({
     <div
       className={page === "admin" ? styles.adminSideBar : styles.clientSideBar}
     >
-      {buttons.map((item, i) => (
+      {children ?? buttons?.map((item) => (
         <Button
-          key={i}
+          key={item.id}
           buttonText={item.buttonName}
           Icon={item.Icon}
           type={item.type}

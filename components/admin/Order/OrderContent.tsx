@@ -87,7 +87,11 @@ export const OrderContent = () => {
         />
         <Button buttonText={<Brush />} rounded onClick={clearFilters} />
       </div>
-      <AdminTable title={title} data={tableData} totalRecords={tableData.length}/>
+      <AdminTable
+        title={title}
+        data={tableData}
+        totalRecords={tableData.length}
+      />
       {isModalOpen && (
         <AdminModal
           title="ACTUALIZAR PEDIDO"
@@ -96,25 +100,28 @@ export const OrderContent = () => {
           submitText={isUpdating ? "Actualizando..." : "Actualizar"}
         >
           <ComponentData dataArea={stylesAuth.data} areaName="Estado">
-            <SelectBox
-              option={statusConfig
-                .filter((status) => status.value !== "ALL")
-                .map((status) => status.label)}
-              value={
-                statusConfig.find((status) => status.value === formStatus)
-                  ?.label ?? ""
-              }
-              onChange={(e) => {
-                const selected = statusConfig.find(
-                  (status) => status.label === e.target.value,
-                );
+  <SelectBox
+    option={statusConfig
+      .filter(
+        (status) =>
+          status.value !== "ALL" &&
+          status.value !== "CANCELLED",
+      )
+      .map((status) => status.label)}
+    value={
+      statusConfig.find((status) => status.value === formStatus)?.label ?? ""
+    }
+    onChange={(e) => {
+      const selected = statusConfig.find(
+        (status) => status.label === e.target.value,
+      );
 
-                if (selected && selected.value !== "ALL") {
-                  setFormStatus(selected.value);
-                }
-              }}
-            />
-          </ComponentData>
+      if (selected && selected.value !== "ALL" && selected.value !== "CANCELLED") {
+        setFormStatus(selected.value);
+      }
+    }}
+  />
+</ComponentData>
         </AdminModal>
       )}
       {selectedOrderItems && (

@@ -1,22 +1,27 @@
 "use client";
 import styles from "./home.module.css";
-import { Button } from "../ui/Button/Button.jsx";
-import { ContentSection } from "../ui/ContentSection.jsx";
+import { Button } from "../ui/Button/Button";
+import { ContentSection } from "../ui/ContentSection";
 import { FormField } from "../ui/form/FormField";
 import { useState, type SubmitEvent } from "react";
-import { Form } from "../ui/form/Form.jsx";
-import { ComponentData } from "../ui/form/ComponentData.jsx";
+import { Form } from "../ui/form/Form";
+import { ComponentData } from "../ui/form/ComponentData";
 import "../../app/home.css";
-import {arrayForm } from "../pageData.js";
+import { arrayForm } from "../pageData.js";
 import { sendContactForm } from "@/lib/contact";
-import { PopUp } from "../ui/modal/PopUp.jsx";
+import { PopUp } from "../ui/modal/PopUp";
 
 export const QuestionSection = () => {
-    const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   async function handleSubmitContact(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    if (loading) return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     const contactData = {
       tipo: "contact",
@@ -27,78 +32,87 @@ export const QuestionSection = () => {
       mensaje: formData.get("message"),
     };
 
+    setLoading(true);
+
     try {
       const result = await sendContactForm(contactData);
-      result && setPopupMessage("Formulario enviado con éxito");
+
+      if (result) {
+        setPopupMessage("Formulario enviado con éxito");
+        form.reset();
+      }
     } catch (error) {
       setPopupMessage(
         error instanceof Error
           ? `Error al enviar el formulario:\n${error.message}`
           : "Error al enviar el formulario",
       );
+    } finally {
+      setLoading(false);
     }
   }
-    return(
-         <section id='contacto' className={`dotted ${styles.client}`}>
-        <ContentSection title={"¿ALGUNA DUDA?"}>
-          <div className={styles.formClient}>
-            <div className={styles.modalWrap}>
-              <Form title={"Envíanos un mensaje"}>
-                <form onSubmit={handleSubmitContact}>
-                  <div className={styles.formContainerWrap}>
-                    <ComponentData
-                      dataArea={styles.personalData}
-                      areaName={"Tus datos"}
-                    >
-                      {arrayForm.slice(0, 2).map((item, index) => (
-                        <FormField
-                          key={index}
-                          placeHolder={item.placeHolder}
-                          name={item.name}
-                          required
-                        />
-                      ))}
-                    </ComponentData>
 
-                    <ComponentData
-                      dataArea={styles.companyData}
-                      areaName={"Datos de la Empresa"}
-                    >
-                      {[arrayForm[2], arrayForm[3]].map((item, index) => (
-                        <FormField
-                          key={index}
-                          placeHolder={item.placeHolder}
-                          name={item.name}
-                          required
-                        />
-                      ))}
-                    </ComponentData>
-                    <ComponentData
-                      dataArea={styles.message}
-                      areaName={"Mensaje"}
-                    >
+  return (
+    <section id="contacto" className={`dotted ${styles.client}`}>
+      <ContentSection title={"¿ALGUNA DUDA?"}>
+        <div className={styles.formClient}>
+          <div className={styles.modalWrap}>
+            <Form title={"Envíanos un mensaje"}>
+              <form onSubmit={handleSubmitContact}>
+                <div className={styles.formContainerWrap}>
+                  <ComponentData
+                    dataArea={styles.personalData}
+                    areaName={"Tus datos"}
+                  >
+                    {arrayForm.slice(0, 2).map((item, index) => (
                       <FormField
-                        element="textarea"
-                        placeHolder={
-                          arrayForm[arrayForm.length - 1].placeHolder
-                        }
-                        name={arrayForm[arrayForm.length - 1].name}
+                        key={index}
+                        placeHolder={item.placeHolder}
+                        name={item.name}
                         required
                       />
-                    </ComponentData>
+                    ))}
+                  </ComponentData>
 
-                    <div className={styles.buttonZone}>
-                      <Button buttonText="Enviar" variant={"primary"} />
-                    </div>
+                  <ComponentData
+                    dataArea={styles.companyData}
+                    areaName={"Datos de la Empresa"}
+                  >
+                    {[arrayForm[2], arrayForm[3]].map((item, index) => (
+                      <FormField
+                        key={index}
+                        placeHolder={item.placeHolder}
+                        name={item.name}
+                        required
+                      />
+                    ))}
+                  </ComponentData>
+
+                  <ComponentData dataArea={styles.message} areaName={"Mensaje"}>
+                    <FormField
+                      element="textarea"
+                      placeHolder={arrayForm[arrayForm.length - 1].placeHolder}
+                      name={arrayForm[arrayForm.length - 1].name}
+                      required
+                    />
+                  </ComponentData>
+
+                  <div className={styles.buttonZone}>
+                    <Button
+                      buttonText={loading ? "Enviando..." : "Enviar"}
+                      variant={"primary"}
+                    />
                   </div>
-                </form>
-              </Form>
-            </div>
+                </div>
+              </form>
+            </Form>
           </div>
-        </ContentSection>
-        {popupMessage && (
+        </div>
+      </ContentSection>
+
+      {popupMessage && (
         <PopUp message={popupMessage} onClose={() => setPopupMessage(null)} />
       )}
-      </section>
-    );
-}
+    </section>
+  );
+};

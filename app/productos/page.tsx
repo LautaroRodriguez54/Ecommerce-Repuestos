@@ -1,4 +1,9 @@
 "use client";
+import { SideBarLayout } from "@/components/ui/sideBarLayout/SideBarLayout";
+import { Pagination } from "@/components/ui/Pagination";
+import {
+  type CatalogProduct,
+} from "../../services/product/product.api";
 
 import ProductFilters from "@/components/products/ProductFilters";
 import ProductList from "@/components/products/ProductList";
@@ -18,15 +23,19 @@ export default function Page() {
     categories,
   } = useProductsCatalog();
 
-  return (
-    <main className={styles.catalogo}>
-      <ProductFilters
-        filters={filters}
-        brands={brands}
-        categories={categories}
-        onChange={setFilters}
-      />
 
+  return (
+    <SideBarLayout
+      page="client"
+      sidebarChildren={
+        <ProductFilters
+          filters={filters}
+          brands={brands}
+          categories={categories}
+          onChange={setFilters}
+        />
+      }
+    >
       <div>
         <input
           className={styles.buscador}
@@ -44,9 +53,16 @@ export default function Page() {
         ) : filteredProducts.length === 0 ? (
           <p role="status">No se encontraron productos con esos filtros.</p>
         ) : (
-          <ProductList products={filteredProducts} />
+          <Pagination<CatalogProduct>
+            itemsPerPage={16}
+            maxPageButtons={3}
+            data={filteredProducts}
+            totalRecords={filteredProducts.length}
+          >
+            {(currentProducts) => <ProductList products={currentProducts} />}
+          </Pagination>
         )}
       </div>
-    </main>
+    </SideBarLayout>
   );
 }

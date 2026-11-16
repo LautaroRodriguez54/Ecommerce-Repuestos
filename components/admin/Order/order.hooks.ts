@@ -36,16 +36,24 @@ export const useOrders = () => {
   }, [showPopUp]);
 
   const handleEdit = (order: Order) => {
-    setSelectedOrder(order);
-    setFormStatus(order.status);
-    setIsModalOpen(true);
-  };
+  setSelectedOrder(order);
+
+  setFormStatus(
+    order.status === "CANCELLED" ? "PENDING" : order.status
+  );
+
+  setIsModalOpen(true);
+};
 
   const handleUpdate = async (e: SubmitEvent<HTMLFormElement>) => {
   e.preventDefault();
   if (!selectedOrder) return;
   setIsUpdating(true);
   try {
+    console.log({
+  currentStatus: selectedOrder.status,
+  newStatus: formStatus,
+});
     await updateOrdenStatus(selectedOrder.id, formStatus);
 
     setOrders((prev) =>

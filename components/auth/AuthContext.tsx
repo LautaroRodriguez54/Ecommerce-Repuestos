@@ -1,5 +1,4 @@
 "use client";
-
 import {
   createContext,
   useCallback,
@@ -10,12 +9,13 @@ import {
 } from "react";
 
 import { getCurrentUser } from "@/lib/auth";
+import type { UserRole } from "../permission/useUserGuard";
 
 export type CurrentUser = {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: UserRole;
   isActive: boolean;
 };
 

@@ -8,6 +8,7 @@ import { getSessionByToken } from "@/services/session/session.service";
  * La API mantiene su propia validación de rol: este guard sólo controla la
  * navegación y no sustituye la autorización de los endpoints.
  */
+
 export async function protectAdminRoute(request: NextRequest) {
   const token = request.cookies.get("session")?.value;
 

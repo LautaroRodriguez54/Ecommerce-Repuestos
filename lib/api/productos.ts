@@ -1,3 +1,4 @@
+
 export type Producto = {
   id: string;
   name: string;
@@ -12,6 +13,7 @@ export type Producto = {
     name: string;
     brand: { name: string } | null;
   } | null;
+  createdAt: string;
 };
 
 export type CatalogProduct = {
@@ -38,6 +40,7 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
 
   if (!response.ok || !result.success || result.data === undefined) {
     throw new Error(result.message ?? "No se pudo procesar la solicitud.");
+
   }
 
   return result.data;
@@ -90,5 +93,13 @@ export function deleteProducto(id: string) {
   return request<{ message: string }>(
     `/api/productos/${encodeURIComponent(id)}`,
     { method: "DELETE" },
+  );
+}
+export async function getProductsLastMonth() {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 1);
+
+  return (await getProductos()).filter(
+    (product) => new Date(product.createdAt) >= date
   );
 }
