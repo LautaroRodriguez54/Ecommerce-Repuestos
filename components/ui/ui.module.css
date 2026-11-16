@@ -75,7 +75,7 @@
   border: 1px solid var(--color-background-dark);
 }
 .contentWrapper {
-  height: calc(100vh - var(--menu-height) - 20px);
+  min-height: calc(100vh - var(--menu-height) - 20px);
   width: 100%;
   display: grid;
   grid-template-rows: auto 1fr;

@@ -13,9 +13,9 @@ export default function Page() {
       <div className={styles.containerPanel}>
         <ContentSection title="PANEL DE USUARIO">
           <div className={styles.panelWrapper}>
-            <section className={styles.orders}>
+            <div className={styles.orders}>
               <OrdersPanel />
-            </section>
+            </div>
             <PanelFooter />
           </div>
         </ContentSection>

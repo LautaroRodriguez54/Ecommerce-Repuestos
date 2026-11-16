@@ -1,5 +1,5 @@
 .containerPanel {
-  scroll-snap-align: start;
+  scroll-snap-align: end;
   margin-top: var(--menu-height);
   min-height: calc(100vh - var(--menu-height));
   display: flex;
