@@ -1,24 +1,25 @@
 "use client";
+
 import styles from "./navBar.module.css";
 import Cart from "../icon/Cart.jsx";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 import { logout } from "../../lib/auth";
 import { useAuth } from "../../components/auth/AuthContext";
-import { usePermissions } from "@/components/permission/useUserGuard";
-import { useEffect } from "react";
 
 export const DropDown = ({
   carrito = false,
   dropDownOpen,
   onClickDropDown,
 }) => {
-  const { refreshUser } = useAuth();
-  const { isAdmin, loading } = usePermissions();
+  const { user, loading, refreshUser } = useAuth();
 
   const router = useRouter();
   const pathname = usePathname();
 
+  const isAdmin = user?.role === "ADMIN";
   const panelPath = isAdmin ? "/admin" : "/panel";
 
   useEffect(() => {
@@ -45,6 +46,18 @@ export const DropDown = ({
       await logout();
       await refreshUser();
       onClickDropDown();
+      const isProtectedPage =
+        pathname === panelPath ||
+        pathname.startsWith(`${panelPath}/`) ||
+        (isAdmin &&
+          (pathname === "/register" || pathname.startsWith("/register/")));
+
+      if (isProtectedPage) {
+        router.replace("/");
+      } else {
+        await refreshUser();
+        router.refresh();
+      }
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -73,7 +86,11 @@ export const DropDown = ({
             </li>
           )}
 
-          <li onClick={() => !loading && handleNavigateAndClose(panelPath)}>
+          <li
+            onClick={() =>
+              !loading && user && handleNavigateAndClose(panelPath)
+            }
+          >
             {isAdmin ? "Panel de administrador" : "Panel de usuario"}
           </li>
 

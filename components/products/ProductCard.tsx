@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../../styles/productos.module.css";
-import { usePermissions } from "@/components/permission/useUserGuard";
+import { useAuth } from "@/components/auth/AuthContext";
 
 type ProductCardProps = {
   id: string | number;
@@ -19,14 +19,10 @@ export default function ProductCard({
   price,
   variant = "catalog",
 }: ProductCardProps) {
-  const { isAuthenticated, loading } = usePermissions();
+  const { user, loading } = useAuth();
 
   const hasPrice =
-    isAuthenticated &&
-    !loading &&
-    price !== undefined &&
-    price !== null &&
-    price !== "";
+    !loading && !!user && price !== undefined && price !== null && price !== "";
 
   return (
     <article className={`${styles.tarjeta} ${styles[variant]}`}>
@@ -44,11 +40,9 @@ export default function ProductCard({
         />
       </Link>
       <p>{name}</p>
-      {hasPrice && (
-        <strong>
-          $ {Number(price).toLocaleString("es-AR")}
-        </strong>
-      )}
+
+      {hasPrice && <strong>$ {Number(price).toLocaleString("es-AR")}</strong>}
+
       <Link href={`/productos/${id}`} className={styles.verDetalle}>
         Ver detalle →
       </Link>
