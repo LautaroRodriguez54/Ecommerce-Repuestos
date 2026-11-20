@@ -9,10 +9,18 @@ import type {
   ChatHistoryMessage,
 } from "@/types/chatbot";
 
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) throw new Error("No se encontró GEMINI_API_KEY.");
+import "server-only";
 
-const ai = new GoogleGenAI({ apiKey });
+function getGeminiClient() {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("No se encontró GEMINI_API_KEY.");
+  }
+
+  return new GoogleGenAI({ apiKey });
+}
+
 const GEMINI_MODEL = "gemini-3.5-flash-lite";
 
 const automotiveKnowledge = automotiveKnowledgeJson as AutomotiveKnowledge[];
@@ -81,6 +89,7 @@ const extractVehicleRequest = async (
     { role: "user" as const, parts: [{ text: message }] },
   ];
 
+  const ai = getGeminiClient();
   const response = await ai.models.generateContent({
     model: GEMINI_MODEL,
     config: {

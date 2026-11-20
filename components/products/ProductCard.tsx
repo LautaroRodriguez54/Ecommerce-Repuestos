@@ -7,7 +7,7 @@ import { usePermissions } from "@/components/permission/useUserGuard";
 type ProductCardProps = {
   id: string | number;
   name: string;
-  image: string;
+  image: string | null;
   price?: string | number;
   variant?: "catalog" | "featured";
 };
@@ -28,6 +28,8 @@ export default function ProductCard({
     price !== null &&
     price !== "";
 
+    const imageSrc = image || "/images/product-placeholder.png";
+
   return (
     <article className={`${styles.tarjeta} ${styles[variant]}`}>
       <Link
@@ -36,7 +38,7 @@ export default function ProductCard({
         aria-label={`Ver detalle de ${name}, producto ${id}`}
       >
         <Image
-          src={image}
+          src={imageSrc}
           alt={name}
           fill
           sizes="250px"

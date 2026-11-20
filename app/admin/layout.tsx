@@ -1,4 +1,7 @@
+
 "use client";
+
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout";
 import { adminActions } from "@/components/pageData.js";
@@ -13,6 +16,14 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <Suspense fallback={<div>Cargando panel de administración...</div>}>
+      <AdminLayoutContent />
+    </Suspense>
+  );
+}
+
+function AdminLayoutContent() {
   const { authorized, loading } = useAdminGuard();
 
   const router = useRouter();
