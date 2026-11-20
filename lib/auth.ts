@@ -20,7 +20,9 @@ export async function login(email: string, password: string) {
 }
 
 export async function getCurrentUser() {
-  const response = await fetch("/api/auth/me");
+  const response = await fetch("/api/auth/me", {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     return null;

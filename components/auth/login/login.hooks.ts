@@ -7,7 +7,7 @@ import type { Usuario, ResetStep } from "@/types/pagination";
 
 export function useLoginPage() {
   const router = useRouter();
-  const { user, loading: authLoading, refreshUser } = useAuth();
+  const {refreshUser } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -29,31 +29,42 @@ export function useLoginPage() {
       behavior: "instant",
     });
   }, []);
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
+  
+async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setLoading(true);
+  const formData = new FormData(event.currentTarget);
+  const usuario: Usuario = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
 
-    const formData = new FormData(event.currentTarget);
+  try {
+    await login(usuario.email, usuario.password);
+    await refreshUser();
 
-    const usuario: Usuario = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next");
 
-    try {
-      await login(usuario.email, usuario.password);
-      await refreshUser();
-      router.push("/");
-    } catch (error) {
-      setPopupMessage(
-        error instanceof Error
-          ? `No se pudo iniciar sesión:\n${error.message}`
-          : "No se pudo iniciar sesión",
-      );
-    } finally {
-      setLoading(false);
-    }
+    const safeNext =
+      next?.startsWith("/") &&
+      !next.startsWith("//") &&
+      !next.startsWith("/\\")
+        ? next
+        : "/";
+
+    router.replace(safeNext);
+  } catch (error) {
+    setPopupMessage(
+      error instanceof Error
+        ? `No se pudo iniciar sesión:\n${error.message}`
+        : "No se pudo iniciar sesión",
+    );
+  } finally {
+    setLoading(false);
   }
+}
+
 
   function openResetModal() {
     setResetEmail(email.trim().toLowerCase());
@@ -156,8 +167,6 @@ export function useLoginPage() {
     openResetModal,
     closeResetModal,
     handleResetSubmit,
-
-    authLoading,
-    user,
+    
   };
 }

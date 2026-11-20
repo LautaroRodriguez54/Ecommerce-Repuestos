@@ -2,6 +2,7 @@
 
 import { useState, type SubmitEvent } from "react";
 import { useRouter } from "next/navigation";
+
 import { Auth } from "../../components/auth/Auth";
 import styles from "../../components/auth/auth.module.css";
 import { ComponentData } from "../../components/ui/form/ComponentData";
@@ -9,8 +10,6 @@ import { FormField } from "../../components/ui/form/FormField";
 import { Button } from "../../components/ui/Button/Button";
 import { register } from "../../lib/auth";
 import { PopUp } from "../../components/ui/modal/PopUp";
-import { useAdminGuard } from "@/components/permission/useUserGuard";
-import { RedirectPage } from "@/components/permission/RedirectPage";
 
 type Usuario = {
   name: string;
@@ -20,7 +19,6 @@ type Usuario = {
 
 export default function Page() {
   const router = useRouter();
-  const { authorized, loading: authLoading } = useAdminGuard();
 
   const [loading, setLoading] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
@@ -68,19 +66,6 @@ export default function Page() {
     if (registrationSuccess) {
       router.back();
     }
-  }
-
-  if (authLoading) {
-    return (
-      <div className={styles.guardLoading}>
-        <div className={styles.guardLoader}></div>
-        <p>Verificando permisos...</p>
-      </div>
-    );
-  }
-
-  if (!authorized) {
-    return <RedirectPage redirectBack status={403}/>;
   }
 
   return (

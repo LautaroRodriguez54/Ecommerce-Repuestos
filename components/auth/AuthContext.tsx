@@ -7,9 +7,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-
 import { getCurrentUser } from "@/lib/auth";
-import type { UserRole } from "../permission/useUserGuard";
+
+export type UserRole = "ADMIN" | "CLIENT";
 
 export type CurrentUser = {
   id: string;
@@ -32,6 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
+    setLoading(true);
+
     try {
       const currentUser = await getCurrentUser();
       setUser(currentUser);
