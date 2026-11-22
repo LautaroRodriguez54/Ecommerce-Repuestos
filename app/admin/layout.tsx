@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout";
 import { adminActions } from "@/components/pageData.js";
-import styles from "../../components/admin/admin.module.css";
+import styles from "../../components/ui/ui.module.css";
 import { UserContent } from "@/components/admin/User/UserContent";
 import { OrderContent } from "@/components/admin/Order/OrderContent";
 
@@ -30,12 +30,12 @@ export default function AdminLayout({
       onButtonClick={handleButtonClick}
       selectedButton={selectedButton}
     >
-      <div className={styles.contentWrapper}>
+      <div className={styles.contentWrapperSideBar}>
         <h1 className={styles.title}>
           GESTIÓN DE {selectedButton === "users" ? "USUARIOS" : "PEDIDOS"}
         </h1>
 
-        <div className={styles.content}>
+        <div className={styles.contentSideBar}>
           {selectedButton === "users" && <UserContent />}
           {selectedButton === "orders" && <OrderContent />}
         </div>

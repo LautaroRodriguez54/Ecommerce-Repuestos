@@ -4,6 +4,7 @@ import Gmail from "./icon/Gmail.jsx";
 import Facebook from "./icon/Facebook.jsx";
 import Users from "../components/icon/Users.jsx";
 import Order from "../components/icon/Order.jsx";
+import Magazine from "../components/icon/Magazine.jsx";
 
 export const arrayMessages = [
   "HORARIO DE ATENCIÓN: LUNES A VIERNES DE 7:30 A 17:00 HORAS",
@@ -129,11 +130,7 @@ export const adminActions = [
   { id: "orders", buttonName: "Pedidos", type: "admin", Icon: Order },
   { id: "users", buttonName: "Usuarios", type: "admin", Icon: Users },
 ];
-export const magazineOptions = [
-  { buttonName: "Precios", type: "client", Icon: Users },
-  { buttonName: "Nuevos Ingresos", type: "client", Icon: Users },
-  { buttonName: "Catálogo de Juntas", type: "client", Icon: Users },
-];
+
 export const usDescriptions = [
   {
     title: "Nuestra empresa",
@@ -156,10 +153,28 @@ export const usDescriptions = [
       "Contamos con un stock en constante crecimiento de más de 13.000 artículos de origen nacional e internacional, abarcando las principales marcas de autos y una amplia variedad de piezas y autopartes con una red de distribución que nos permite llegar a todos los rincones de nuestro país.",
   },
 ];
-export const cifras=[
-  {amount:13000, statics:'Artículos en stock'},
-  {amount:30, statics:'Viajantes'},
-  {amount:24, statics:'Provincias'},
-  {amount:6000, statics:'Clientes'},
-  {amount:40, statics:'Años de experiencia'},
+export const cifras = [
+  { amount: 13000, statics: "Artículos en stock" },
+  { amount: 30, statics: "Viajantes" },
+  { amount: 24, statics: "Provincias" },
+  { amount: 6000, statics: "Clientes" },
+  { amount: 40, statics: "Años de experiencia" },
+];
+export const MagazineActions = [
+  {
+    id: "nuevos-ingresos",
+    buttonName: "Nuevos Ingresos",
+    title: "Nuevos Ingresos",
+    type: "button",
+    file: "/documents/OFERTA NUEVOS INGRESOS-.pdf",
+    Icon: Magazine,
+  },
+  {
+    id: "catalogo-juntas",
+    buttonName: "Catálogo de juntas",
+    title: "Catálogo de juntas",
+    type: "button",
+    file: "/documents/CatalogoJuntas.pdf",
+    Icon: Magazine,
+  },
 ];

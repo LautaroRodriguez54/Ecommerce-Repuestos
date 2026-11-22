@@ -63,3 +63,6 @@ Thumbs.db
 # Chatbot Data
 chatbot-knowlege.json
 chatbot-products.json
+
+# Public documents
+/public/documents/

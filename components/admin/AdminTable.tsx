@@ -1,5 +1,5 @@
 import { Table } from "../ui/table/Table";
-import { Pagination } from "../ui/Pagination";
+import { Pagination } from "../ui/pagination/Pagination";
 import type { TableRow } from "@/types/pagination";
 
 interface Props {

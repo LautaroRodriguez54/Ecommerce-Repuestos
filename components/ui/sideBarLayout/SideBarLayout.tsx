@@ -3,7 +3,7 @@ import { SideNavBar } from "./SideNavBar";
 import styles from "./sideBarLayout.module.css";
 
 interface SideBarLayoutProps {
-  page: string;
+  page?: string;
   buttons?: any[];
   sidebarChildren?: ReactNode;
   children?: ReactNode;
@@ -12,7 +12,7 @@ interface SideBarLayoutProps {
 }
 
 export const SideBarLayout = ({
-  page,
+  page = "",
   buttons,
   sidebarChildren,
   children,
@@ -31,9 +31,7 @@ export const SideBarLayout = ({
           {sidebarChildren}
         </SideNavBar>
 
-        <div className={styles.contentLayout}>
-          {children}
-        </div>
+        <div className={styles.contentLayout}>{children}</div>
       </div>
     </div>
   );

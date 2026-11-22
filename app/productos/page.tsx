@@ -1,6 +1,6 @@
 "use client";
 import { SideBarLayout } from "@/components/ui/sideBarLayout/SideBarLayout";
-import { Pagination } from "@/components/ui/Pagination";
+import { Pagination } from "@/components/ui/pagination/Pagination";
 import {
   type CatalogProduct,
 } from "../../services/product/product.api";
