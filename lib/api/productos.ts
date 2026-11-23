@@ -1,4 +1,3 @@
-
 export type Producto = {
   id: string;
   name: string;
@@ -19,8 +18,10 @@ export type Producto = {
 export type CatalogProduct = {
   id: string;
   name: string;
-  image: string;
+  sku: string;
+  image: string | null;
   price: number;
+  stock: number;
   brand: string;
   category: string;
 };
@@ -59,8 +60,10 @@ export async function getProductosCatalogo(signal?: AbortSignal) {
   return products.map<CatalogProduct>((product) => ({
     id: product.id,
     name: product.name,
+    sku: product.sku,
     image: product.image ?? "/horquilla1.webp",
     price: Number(product.price),
+    stock: product.stock,
     brand: product.model?.brand?.name ?? "",
     category: product.category?.name ?? "",
   }));

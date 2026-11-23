@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { addItemCarrito } from "@/lib/api/carrito";
 import {
@@ -75,7 +74,6 @@ export function useProductsCatalog() {
 }
 
 export function useProductDetail(id: string) {
-  const router = useRouter();
   const [product, setProduct] = useState<Producto | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -164,7 +162,6 @@ export function useProductDetail(id: string) {
     try {
       setCartError("");
       await addItemCarrito(product.id, quantity);
-      router.push("/carrito");
     } catch (error) {
       setCartError(
         error instanceof Error

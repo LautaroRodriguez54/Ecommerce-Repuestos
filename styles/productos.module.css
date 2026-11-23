@@ -69,6 +69,82 @@
   padding: 16px;
 }
 
+/* Contenido de las tarjetas del catálogo */
+.nombreProducto {
+  margin: 0 0 6px;
+  font-weight: 500;
+  line-height: 1.4;
+  min-height: 2.8em;
+  overflow-wrap: anywhere;
+}
+
+.skuProducto {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.precioProducto {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Botón de compra */
+.botonCarrito {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 42px;
+  margin-top: auto;
+  padding: 10px 12px;
+  background-color: #e5c92d;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+
+.botonCarrito:hover:not(:disabled) {
+  background-color: #d5b91f;
+  transform: translateY(-1px);
+}
+
+.botonCarrito:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.botonCarrito:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Confirmaciones y errores */
+.mensajeCarrito {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.exitoCarrito {
+  color: #21843a;
+}
+
+.errorCarrito {
+  color: #c62828;
+}
+
 .imagenProducto {
   position: relative;
   display: block;
@@ -196,3 +272,5 @@
 .catalogo {
   scroll-snap-type: none;
 }
+
+
