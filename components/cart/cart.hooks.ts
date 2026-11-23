@@ -56,6 +56,7 @@ export function useCart(paymentTerm: PaymentTerm) {
   }, [paymentTerm]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- loadCart realiza peticiones asíncronas y actualiza el estado al recibir sus respuestas.
     void loadCart();
   }, [loadCart]);
 

@@ -1,10 +1,7 @@
 "use client";
 import { SideBarLayout } from "@/components/ui/sideBarLayout/SideBarLayout";
 import { Pagination } from "@/components/ui/Pagination";
-import {
-  type CatalogProduct,
-} from "../../services/product/product.api";
-
+import type { CatalogProduct } from "@/lib/api/productos";
 import ProductFilters from "@/components/products/ProductFilters";
 import ProductList from "@/components/products/ProductList";
 import { useProductsCatalog } from "@/components/products/product.hooks";
@@ -58,6 +55,7 @@ export default function Page() {
             maxPageButtons={3}
             data={filteredProducts}
             totalRecords={filteredProducts.length}
+            resetKey={`${search}-${JSON.stringify(filters)}`}
           >
             {(currentProducts) => <ProductList products={currentProducts} />}
           </Pagination>

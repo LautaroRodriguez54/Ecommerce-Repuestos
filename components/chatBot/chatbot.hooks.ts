@@ -32,45 +32,59 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
   const expiresAtRef = useRef<number | null>(null);
   const currentUserIdRef = useRef(userId);
 
-  currentUserIdRef.current = userId;
+  // Mantener actualizado el usuario actual
+  useEffect(() => {
+    currentUserIdRef.current = userId;
+  }, [userId]);
 
   // Cargar conversación
   useEffect(() => {
     if (authLoading) return;
 
-    setIsReady(false);
-    setLoadedUserId(null);
-    setMessages([getWelcomeMessage()]);
-    setExpiresAt(null);
-    expiresAtRef.current = null;
-    setAutoScroll(true);
+    let cancelled = false;
 
-    const key = getStorageKey(userId);
+    const timer = setTimeout(() => {
+      if (cancelled) return;
 
-    try {
-      const stored = localStorage.getItem(key);
+      setIsReady(false);
+      setLoadedUserId(null);
+      setMessages([getWelcomeMessage()]);
+      setExpiresAt(null);
+      expiresAtRef.current = null;
+      setAutoScroll(true);
 
-      if (stored) {
-        const chat: StoredChat = JSON.parse(stored);
+      const key = getStorageKey(userId);
 
-        if (
-          Array.isArray(chat.messages) &&
-          typeof chat.expiresAt === "number" &&
-          chat.expiresAt > Date.now()
-        ) {
-          setMessages(chat.messages);
-          setExpiresAt(chat.expiresAt);
-          expiresAtRef.current = chat.expiresAt;
-        } else {
-          localStorage.removeItem(key);
+      try {
+        const stored = localStorage.getItem(key);
+
+        if (stored) {
+          const chat: StoredChat = JSON.parse(stored);
+
+          if (
+            Array.isArray(chat.messages) &&
+            typeof chat.expiresAt === "number" &&
+            chat.expiresAt > Date.now()
+          ) {
+            setMessages(chat.messages);
+            setExpiresAt(chat.expiresAt);
+            expiresAtRef.current = chat.expiresAt;
+          } else {
+            localStorage.removeItem(key);
+          }
         }
+      } catch {
+        localStorage.removeItem(key);
       }
-    } catch {
-      localStorage.removeItem(key);
-    }
 
-    setLoadedUserId(userId);
-    setIsReady(true);
+      setLoadedUserId(userId);
+      setIsReady(true);
+    }, 0);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [userId, authLoading]);
 
   // Guardar conversación
@@ -106,8 +120,8 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
     const remainingTime = expiresAt - Date.now();
 
     if (remainingTime <= 0) {
-      clearChat();
-      return;
+      const timer = setTimeout(clearChat, 0);
+      return () => clearTimeout(timer);
     }
 
     const timer = setTimeout(clearChat, remainingTime);
@@ -130,7 +144,14 @@ export const useChatBot = (userId: string | null, authLoading: boolean) => {
   const handleSendMessage = async () => {
     const message = inputMessage.trim();
 
-    if (!message || !isReady) return;
+    if (
+      !message ||
+      !isReady ||
+      loadedUserId !== userId ||
+      authLoading
+    ) {
+      return;
+    }
 
     const requestUserId = userId;
     const history = messages.filter((item) => item.id !== "welcome");

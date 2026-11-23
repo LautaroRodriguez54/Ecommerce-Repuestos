@@ -3,15 +3,17 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./home.module.css";
 import ProductCard from "../products/ProductCard";
-import { getProductsLastMonth } from "@/lib/api/productos";
+import { getProductsLastMonth, type Producto } from "@/lib/api/productos";
 import ChevronLeft from "../icon/ChevronLeft";
 import ChevronRight from "../icon/ChevronRight";
 
 export const NewSection = () => {
   const productsContainerRef = useRef<HTMLDivElement>(null);
   const [productsPerPage, setProductsPerPage] = useState(5);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Producto[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const productsPerPageRef = useRef(5);
 
   useEffect(() => {
     const container = productsContainerRef.current;
@@ -26,18 +28,20 @@ export const NewSection = () => {
         1,
         Math.floor((containerWidth + gap) / (cardWidth + gap)),
       );
-      setProductsPerPage(quantity);
+
+      if (productsPerPageRef.current !== quantity) {
+        productsPerPageRef.current = quantity;
+        setProductsPerPage(quantity);
+        setCurrentPage(0);
+      }
     };
+    
     const observer = new ResizeObserver(updateProductsPerPage);
     observer.observe(container);
     updateProductsPerPage();
 
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [productsPerPage]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -105,7 +109,7 @@ export const NewSection = () => {
             <ProductCard
               id={product.id}
               name={product.name}
-              image={product.image}
+              image={product.image ?? "/images/product-placeholder.png"}
               price={product.price}
               variant="featured"
             />

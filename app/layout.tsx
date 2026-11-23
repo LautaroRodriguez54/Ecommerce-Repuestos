@@ -32,22 +32,22 @@ export default function RootLayout({
       className={`${inter.variable} ${oswald.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
-      <AuthProviderWrapper>
-        <body>
-          <div className='appShell'>
-          <header>
-            <NavBar />
-          </header>
-          <main>
-            {children}
-            <ChatBot />
-          </main>
+      <body>
+        <AuthProviderWrapper>
+          <div className="appShell">
+            <header>
+              <NavBar />
+            </header>
+            <main>
+              {children}
+              <ChatBot />
+            </main>
           </div>
           <footer>
             <Footer />
-          </footer>         
-        </body>
-      </AuthProviderWrapper>
+          </footer>
+        </AuthProviderWrapper>
+      </body>
     </html>
   );
 }

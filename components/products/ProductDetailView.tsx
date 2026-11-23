@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import type { Producto } from "@/lib/api/productos";
 import { priceFormat } from "./product.constants";
 import { getProductDetailFields } from "./product.helpers";
@@ -28,13 +27,23 @@ export default function ProductDetailView({
   const modalRef = useRef<HTMLDialogElement>(null);
   const detailFields = getProductDetailFields(product);
 
+  const placeholder = "/images/product-placeholder.webp";
+
+  const [imageSrc, setImageSrc] = useState(product.image || placeholder);
+
+  useEffect(() => {
+    setImageSrc(product.image || placeholder);
+  }, [product.id, product.image]);
+
+  const hasRealImage = Boolean(product.image) && imageSrc === product.image;
+
   useEffect(() => {
     modalRef.current?.close();
   }, [product.id]);
 
   return (
     <>
-      {product.image && (
+      {imageSrc && (
         <dialog
           ref={modalRef}
           className={styles.modal}
@@ -55,11 +64,12 @@ export default function ProductDetailView({
             </button>
 
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.name}
               fill
               sizes="90vw"
               className={styles.fotoZoom}
+              onError={() => setImageSrc(placeholder)}
             />
           </div>
         </dialog>
@@ -69,11 +79,12 @@ export default function ProductDetailView({
         <div className={styles.miniaturas}>
           {product.image && (
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.name}
               width={90}
               height={90}
               className={styles.miniatura}
+              onError={() => setImageSrc(placeholder)}
             />
           )}
         </div>
@@ -86,13 +97,14 @@ export default function ProductDetailView({
           aria-label={`Ampliar foto de ${product.name}`}
           aria-haspopup="dialog"
         >
-          {product.image && (
+          {imageSrc && (
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.name}
               fill
               sizes="400px"
               className={styles.foto}
+              onError={() => setImageSrc(placeholder)}
             />
           )}
         </button>

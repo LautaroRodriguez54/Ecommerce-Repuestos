@@ -1,20 +1,19 @@
+
 "use client";
+
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout";
 import { adminActions } from "@/components/pageData.js";
 import styles from "../../components/admin/admin.module.css";
 import { UserContent } from "@/components/admin/User/UserContent";
 import { OrderContent } from "@/components/admin/Order/OrderContent";
-import { useAdminGuard } from "@/components/permission/useUserGuard";
-import { PermissionGate } from "@/components/permission/PermissionGate";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { authorized, loading } = useAdminGuard();
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,24 +27,22 @@ export default function AdminLayout({
   };
 
   return (
-    <PermissionGate loading={loading} authorized={authorized}>
-      <SideBarLayout
-        page="admin"
-        buttons={adminActions}
-        onButtonClick={handleButtonClick}
-        selectedButton={selectedButton}
-      >
-        <div className={styles.contentWrapper}>
-          <h1 className={styles.title}>
-            GESTIÓN DE {selectedButton === "users" ? "USUARIOS" : "PEDIDOS"}
-          </h1>
+    <SideBarLayout
+      page="admin"
+      buttons={adminActions}
+      onButtonClick={handleButtonClick}
+      selectedButton={selectedButton}
+    >
+      <div className={styles.contentWrapper}>
+        <h1 className={styles.title}>
+          GESTIÓN DE {selectedButton === "users" ? "USUARIOS" : "PEDIDOS"}
+        </h1>
 
-          <div className={styles.content}>
-            {selectedButton === "users" && <UserContent />}
-            {selectedButton === "orders" && <OrderContent />}
-          </div>
+        <div className={styles.content}>
+          {selectedButton === "users" && <UserContent />}
+          {selectedButton === "orders" && <OrderContent />}
         </div>
-      </SideBarLayout>
-    </PermissionGate>
+      </div>
+    </SideBarLayout>
   );
 }
