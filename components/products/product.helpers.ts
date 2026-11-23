@@ -18,11 +18,22 @@ export function filterProducts(
   filters: ProductFiltersValue,
 ) {
   const normalizedSearch = search.trim().toLowerCase();
+  function normalizeText(text: string): string {
+    return text
+      .toLocaleLowerCase("es")
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .trim();
+  }
 
   return products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(normalizedSearch);
+    const matchesSearch =
+      normalizeText(product.name).includes(normalizedSearch) ||
+      normalizeText(product.sku).includes(normalizedSearch);
+
     const matchesBrand =
       filters.brands.length === 0 || filters.brands.includes(product.brand);
+      
     const matchesCategory =
       filters.categories.length === 0 ||
       filters.categories.includes(product.category);

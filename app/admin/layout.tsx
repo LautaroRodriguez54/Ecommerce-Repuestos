@@ -1,4 +1,7 @@
+
 "use client";
+
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SideBarLayout } from "../../components/ui/sideBarLayout/SideBarLayout";
 import { adminActions } from "@/components/pageData.js";

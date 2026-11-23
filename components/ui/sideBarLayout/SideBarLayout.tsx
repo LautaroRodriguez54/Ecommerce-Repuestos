@@ -1,10 +1,17 @@
-import { ReactNode } from "react";
 import { SideNavBar } from "./SideNavBar";
 import styles from "./sideBarLayout.module.css";
+import type { ComponentType, ReactNode } from "react";
+
+interface SideBarButton {
+  id: string;
+  buttonName: string;
+  type?: string;
+  Icon?: ComponentType;
+}
 
 interface SideBarLayoutProps {
-  page?: string;
-  buttons?: any[];
+  page: string;
+  buttons?: SideBarButton[];
   sidebarChildren?: ReactNode;
   children?: ReactNode;
   onButtonClick?: (id: string) => void;

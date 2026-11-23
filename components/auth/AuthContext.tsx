@@ -45,8 +45,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    void refreshUser();
-  }, [refreshUser]);
+  let active = true;
+
+  getCurrentUser()
+    .then((currentUser) => {
+      if (active) setUser(currentUser);
+    })
+    .catch(() => {
+      if (active) setUser(null);
+    })
+    .finally(() => {
+      if (active) setLoading(false);
+    });
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   return (
     <AuthContext.Provider value={{ user, loading, refreshUser }}>

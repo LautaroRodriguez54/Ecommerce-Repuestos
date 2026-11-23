@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChevronLeft from "../../icon/ChevronLeft";
 import ChevronRight from "../../icon/ChevronRight";
 import ChevronLeftDouble from "../../icon/ChevronLeftDouble";
@@ -12,9 +12,7 @@ type PaginationProps<T> = {
   maxPageButtons: number;
   data: T[];
   totalRecords?: number;
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
-  showOddPagesOnly?: boolean;
+  resetKey?: string | number;
   children: (currentData: T[]) => React.ReactNode;
 };
 
@@ -23,96 +21,100 @@ export function Pagination<T>({
   maxPageButtons,
   data,
   totalRecords,
-  currentPage: externalPage,
-  onPageChange,
-  showOddPagesOnly = false,
+  resetKey,
   children,
 }: PaginationProps<T>) {
-  const [internalPage, setInternalPage] = useState(1);
+  const safeItemsPerPage = Math.max(1, itemsPerPage);
+  const safeMaxPageButtons = Math.max(1, maxPageButtons);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const controlled = externalPage !== undefined;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const availablePages = Array.from(
-    { length: totalPages },
-    (_, index) => index + 1,
-  ).filter((page) => !showOddPagesOnly || page % 2 !== 0);
-
-  const requestedPage = controlled ? externalPage : internalPage;
-  const currentPage = availablePages.reduce(
-    (closest, page) =>
-      Math.abs(page - requestedPage) < Math.abs(closest - requestedPage)
-        ? page
-        : closest,
-    availablePages[0] ?? 1,
+  const totalPages = Math.ceil(data.length / safeItemsPerPage);
+  const validCurrentPage = Math.min(
+    Math.max(currentPage, 1),
+    Math.max(totalPages, 1),
   );
 
-  const currentIndex = availablePages.indexOf(currentPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [resetKey]);
 
-  const changePage = (page: number) => {
-    if (!availablePages.length) return;
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
 
-    const nextPage = availablePages.reduce(
-      (closest, item) =>
-        Math.abs(item - page) < Math.abs(closest - page) ? item : closest,
-      availablePages[0],
-    );
+    if (totalPages === 0 && currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [currentPage, totalPages]);
 
-    if (!controlled) setInternalPage(nextPage);
-    onPageChange?.(nextPage);
-  };
+  const startIndex = (validCurrentPage - 1) * safeItemsPerPage;
+  const currentData = data.slice(
+    startIndex,
+    startIndex + safeItemsPerPage,
+  );
 
   const startPage = Math.max(
-    0,
+    1,
     Math.min(
-      currentIndex - Math.floor(maxPageButtons / 2),
-      availablePages.length - maxPageButtons,
+      validCurrentPage - Math.floor(safeMaxPageButtons / 2),
+      totalPages - safeMaxPageButtons + 1,
     ),
   );
 
-  const pageNumbers = availablePages.slice(
-    startPage,
-    startPage + maxPageButtons,
+  const endPage = Math.min(
+    totalPages,
+    startPage + safeMaxPageButtons - 1,
   );
 
-  const currentData = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+  const pageNumbers = Array.from(
+    { length: Math.max(0, endPage - startPage + 1) },
+    (_, index) => startPage + index,
   );
+
+  const isFirstPage = validCurrentPage <= 1;
+  const isLastPage = validCurrentPage >= totalPages;
 
   const paginationButtons = [
     {
       id: "first",
       buttonText: <ChevronLeftDouble />,
-      onClick: () => changePage(availablePages[0] ?? 1),
+      onClick: () => setCurrentPage(1),
       isSelected: false,
+      disabled: isFirstPage,
     },
     {
       id: "previous",
       buttonText: <ChevronLeft />,
-      onClick: () => changePage(availablePages[currentIndex - 1] ?? 1),
+      onClick: () => setCurrentPage((page) => Math.max(1, page - 1)),
       variant: "outline" as const,
       isSelected: false,
+      disabled: isFirstPage,
     },
     ...pageNumbers.map((page) => ({
       id: `page-${page}`,
       buttonText: String(page),
-      onClick: () => changePage(page),
+      onClick: () => setCurrentPage(page),
       variant: "outline" as const,
-      isSelected: currentPage === page,
+      isSelected: validCurrentPage === page,
+      disabled: false,
     })),
     {
       id: "next",
       buttonText: <ChevronRight />,
-      onClick: () => changePage(availablePages[currentIndex + 1] ?? 1),
+      onClick: () =>
+        setCurrentPage((page) => Math.min(totalPages, page + 1)),
       variant: "outline" as const,
       isSelected: false,
+      disabled: isLastPage,
     },
     {
       id: "last",
       buttonText: <ChevronRightDouble />,
-      onClick: () => changePage(availablePages[availablePages.length - 1] ?? 1),
+      onClick: () => setCurrentPage(totalPages),
       isSelected: false,
+      disabled: isLastPage,
     },
   ];
 
@@ -136,6 +138,7 @@ export function Pagination<T>({
               isButton
               variant={button.variant}
               isSelected={button.isSelected}
+              disabled={button.disabled}
               onClick={button.onClick}
             />
           ))}

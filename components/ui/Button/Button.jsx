@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import styles from "../ui.module.css";
 
@@ -11,7 +12,8 @@ export const Button = ({
   squared = false,
   Icon = null,
   isSelected = false,
-  type='',
+  type = "",
+  disabled = false,
   onClick = () => {},
 }) => {
   const buttonVariant = isSelected
@@ -29,10 +31,10 @@ export const Button = ({
       : "";
 
   const baseClass = isMobile
-  ? buttonText === "Iniciar Sesión"
-    ? styles.loginButton
-    : styles.clientButton
-  : styles[buttonVariant];
+    ? buttonText === "Iniciar Sesión"
+      ? styles.loginButton
+      : styles.clientButton
+    : styles[buttonVariant];
 
   const className = `${baseClass} ${shapeClass}`;
 
@@ -48,7 +50,11 @@ export const Button = ({
   );
 
   return isButton ? (
-    <button className={className} onClick={onClick}>
+    <button
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {content}
     </button>
   ) : (

@@ -8,7 +8,8 @@
   align-items: center;
 }
 .footer,
-.form .modalBackground,
+.form,
+.modalBackground,
 .root,
 .overlay,
 .viewport,

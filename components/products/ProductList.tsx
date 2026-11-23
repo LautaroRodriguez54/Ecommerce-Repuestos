@@ -1,15 +1,9 @@
 import ProductCard from "./ProductCard";
 import styles from "../../styles/productos.module.css";
-
-type Product = {
-  id: string | number;
-  name: string;
-  image: string;
-  price: number;
-};
+import type { CatalogProduct } from "@/lib/api/productos";
 
 type ProductListProps = {
-  products: Product[];
+  products: CatalogProduct[];
 };
 
 export default function ProductList({ products }: ProductListProps) {
@@ -20,8 +14,10 @@ export default function ProductList({ products }: ProductListProps) {
           key={product.id}
           id={product.id}
           name={product.name}
+          sku={product.sku}
           image={product.image}
           price={product.price}
+          stock={product.stock}
         />
       ))}
     </div>
